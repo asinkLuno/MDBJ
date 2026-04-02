@@ -41,7 +41,7 @@ def bayer_dither_2bit(img_gray: np.ndarray) -> np.ndarray:
 
 
 def main(size: tuple[int, int] | None = (300, 300)):
-    input_path = "09.jpg"
+    input_path = "01.jpg"
     output_path = "output_2bit_bayer.png"
 
     img = Image.open(input_path).convert("L")  # 转为灰度
