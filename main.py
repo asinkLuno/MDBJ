@@ -74,14 +74,16 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
 @click.option(
     "--size", "-s", type=str, default="300x400", help="Target size as WxH, e.g. 300x400"
 )
-def main(input_path: str, output: str | None, size: str):
+@click.option("--pad", is_flag=True, default=False, help="Pad image to 3:4 ratio")
+def main(input_path: str, output: str | None, size: str, pad: bool):
     w, h = map(int, size.split("x")) if size else (None, None)
     size_tuple: tuple[int, int] | None = (w, h) if w and h else None
 
     output_path = output or input_path.rsplit(".", 1)[0] + "_dithered.png"
 
     img = Image.open(input_path).convert("L")  # 转为灰度
-    img = pad_to_3x4(img)
+    if pad:
+        img = pad_to_3x4(img)
     if size_tuple is not None:
         img = img.resize(size_tuple, Image.Resampling.LANCZOS)
     arr = np.array(img)
