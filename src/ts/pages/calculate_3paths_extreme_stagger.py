@@ -49,9 +49,9 @@ all_labels = [
 ]
 
 paths = [
-    [(0, 500), (400, 450), (900, 250), (1300, 100)],  # Path A: 8 planes
+    [(0, 500), (400, 550), (900, 350), (1300, 100)],  # Path A: 8 planes
     [(50, 920), (500, 850), (1000, 450), (1300, 100)],  # Path B: 10 planes
-    [(650, 940), (850, 900), (1150, 500), (1300, 100)],  # Path C: 6 planes
+    [(650, 940), (850, 900), (1150, 600), (1300, 100)],  # Path C: 6 planes
 ]
 
 counts = [8, 10, 6]
@@ -78,7 +78,7 @@ for p_idx, p in enumerate(paths):
         nx, ny = -ty / mag, tx / mag
 
         # INCREASED STAGGER: 90px
-        stagger = 60 if i % 2 == 0 else -60
+        stagger = 80 if i % 2 == 0 else -80
 
         # Converge stagger as t approaches 1
         current_stagger = stagger * (1 - (t * 0.5))
@@ -94,7 +94,7 @@ for p_idx, p in enumerate(paths):
         rot = int(angle + 180)
 
         results.append(
-            f"  {{ file: PLANE, label: '{label}', x: {int(bx):4}, y: {int(by):4}, w: 165, rot: {rot:3} }},"
+            f"  {{ file: PLANE, label: '{label}', x: {int(bx):4}, y: {int(by):4}, w: 185, rot: {rot:3} }},"
         )
 
 print("const planes: SpreadPhotoLayout[] = [")
