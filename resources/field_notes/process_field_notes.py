@@ -27,7 +27,11 @@ def extract_content(path):
 
     crop_data = data[rmin : rmax + 1, cmin : cmax + 1].astype(np.uint8)
     result = np.full_like(crop_data, 255)
-    result[filled] = crop_data[filled]
+    # 4. 提取并调浅颜色 (通过与白色混合)
+    content_pixels = crop_data[filled].astype(float)
+    # alpha=0.7 表示保留70%原色，30%白色，使绿色看起来更浅/淡
+    lightened = (content_pixels * 0.6 + 255 * 0.4).astype(np.uint8)
+    result[filled] = lightened
     return Image.fromarray(result)
 
 
