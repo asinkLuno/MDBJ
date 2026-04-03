@@ -36,25 +36,32 @@ all_labels = [
     "雪梨",
     "拉斯維加斯",
     "天津",
+    "香港",
     "杭州",
     "哈爾濱",
-    "台北",
+    "臺北",
     "北京",
+    "上海",
     "貴陽",
     "長沙",
     "鄭州",
     "廈門",
+    "上海",
     "廣州",
+    "台中",
     "馬來西亞",
+    "香港",
+    "北京",
+    "臺北",
 ]
 
 paths = [
-    [(0, 500), (400, 550), (900, 350), (1300, 100)],  # Path A: 8 planes
-    [(50, 920), (500, 850), (1000, 450), (1300, 100)],  # Path B: 10 planes
-    [(650, 940), (850, 900), (1150, 600), (1300, 100)],  # Path C: 6 planes
+    [(0, 550), (400, 600), (900, 300), (1300, 100)],  # Path A: 10 planes
+    [(50, 920), (500, 950), (1000, 450), (1300, 100)],  # Path B: 13 planes
+    [(750, 940), (850, 900), (1150, 600), (1300, 100)],  # Path C: 8 planes
 ]
 
-counts = [8, 10, 6]
+counts = [10, 14, 7]
 t_maxs = [0.75, 0.98, 0.65]
 
 results = []
@@ -78,7 +85,7 @@ for p_idx, p in enumerate(paths):
         nx, ny = -ty / mag, tx / mag
 
         # INCREASED STAGGER: 90px
-        stagger = 80 if i % 2 == 0 else -80
+        stagger = 85 if i % 2 == 0 else -85
 
         # Converge stagger as t approaches 1
         current_stagger = stagger * (1 - (t * 0.5))
