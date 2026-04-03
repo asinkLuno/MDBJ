@@ -1,3 +1,4 @@
+import click
 from PIL import Image
 import numpy as np
 
@@ -40,13 +41,42 @@ def bayer_dither_2bit(img_gray: np.ndarray) -> np.ndarray:
     return output
 
 
-def main(size: tuple[int, int] | None = (300, 300)):
-    input_path = "01.jpg"
-    output_path = "output_2bit_bayer.png"
+def pad_to_3x4(img: Image.Image) -> Image.Image:
+    """将图像补白边至 3:4 比例（宽:高）"""
+    w, h = img.size
+    target_w = max(w, h * 3 // 4)
+    target_h = max(h, w * 4 // 3)
+    if target_w * 4 > target_h * 3:
+        target_h = target_w * 4 // 3
+    else:
+        target_w = target_h * 3 // 4
+
+    if target_w == w and target_h == h:
+        return img
+
+    new_img = Image.new(img.mode, (target_w, target_h), 255)
+    offset_x = (target_w - w) // 2
+    offset_y = (target_h - h) // 2
+    new_img.paste(img, (offset_x, offset_y))
+    return new_img
+
+
+@click.command("dither")
+@click.argument("input_path", type=click.Path(exists=True))
+@click.option("--output", "-o", type=click.Path(), default=None, help="Output file path")
+@click.option(
+    "--size", "-s", type=str, default="300x400", help="Target size as WxH, e.g. 300x400"
+)
+def main(input_path: str, output: str | None, size: str):
+    w, h = map(int, size.split("x")) if size else (None, None)
+    size_tuple: tuple[int, int] | None = (w, h) if w and h else None
+
+    output_path = output or input_path.rsplit(".", 1)[0] + "_dithered.png"
 
     img = Image.open(input_path).convert("L")  # 转为灰度
-    if size is not None:
-        img = img.resize(size, Image.LANCZOS)
+    img = pad_to_3x4(img)
+    if size_tuple is not None:
+        img = img.resize(size_tuple, Image.LANCZOS)
     arr = np.array(img)
 
     result = bayer_dither_2bit(arr)
