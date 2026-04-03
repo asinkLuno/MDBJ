@@ -29,6 +29,15 @@ export interface PhotoLayout {
   tapes: TapeConfig[];
 }
 
+export interface Annotation {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+  connectToLeftIdx?: number; // index of photo in leftPhotos
+}
+
 export interface LeftText {
   text: string;
   x: number;
@@ -43,5 +52,7 @@ export interface PageConfig {
   leftPhotos: PhotoLayout[];
   leftTexts?: LeftText[];
   rightSections: Section[];
+  rightPhotos?: PhotoLayout[];
+  annotations?: Annotation[];
   toTraditional?: boolean;
 }

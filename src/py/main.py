@@ -53,8 +53,8 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
 
 
 def main():
-    input_path = "resources/鸟巢.jpg"
-    output_path = "resources/鸟巢_dithered.png"
+    input_path = "resources/虾片/ashin.png"
+    output_path = "resources/mayday_3d_dithered.png"
     pad = False
 
     img = Image.open(input_path).convert("L")

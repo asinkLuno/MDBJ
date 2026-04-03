@@ -1,23 +1,80 @@
 import type { PageConfig } from '../lib/types';
 
 const page: PageConfig = {
-  id: 'page-01',
+  id: 'page-02',
   toTraditional: true,
   leftPhotos: [
-    { file: 'resources/虾片/ashin.png',   x: 25,  y: 320, w: 160, rot:  2, tape: 1, tapeOffsetX:  0.03 },
-    { file: 'resources/虾片/masa.png',    x: 240, y: 305, w: 158, rot: -5, tape: 5, tapeOffsetX: -0.04 },
-    { file: 'resources/虾片/ming.png',    x: 462, y: 330, w: 155, rot:  3, tape: 2, tapeOffsetX:  0.02 },
-    { file: 'resources/虾片/monster.png', x: 55,  y: 545, w: 158, rot: -3, tape: 7, tapeOffsetX: -0.03 },
-    { file: 'resources/虾片/stone.png',   x: 375, y: 530, w: 162, rot:  5, tape: 4, tapeOffsetX:  0.05 },
+    {
+      file: 'resources/虾片/ashin.png',
+      x: 30,
+      y: 60,
+      w: 160,
+      rot: 2,
+      tapes: [{ idx: 1, offsetX: 0.05 }],
+    },
+    {
+      file: 'resources/虾片/masa.png',
+      x: 30,
+      y: 250,
+      w: 160,
+      rot: -3,
+      tapes: [{ idx: 5, offsetX: -0.05 }],
+    },
+    {
+      file: 'resources/虾片/ming.png',
+      x: 30,
+      y: 440,
+      w: 160,
+      rot: 4,
+      tapes: [{ idx: 2, offsetX: 0.02 }],
+    },
+    {
+      file: 'resources/虾片/monster.png',
+      x: 30,
+      y: 630,
+      w: 160,
+      rot: -2,
+      tapes: [{ idx: 7, offsetX: -0.03 }],
+    },
+    {
+      file: 'resources/虾片/stone.png',
+      x: 30,
+      y: 820,
+      w: 160,
+      rot: 3,
+      tapes: [{ idx: 4, offsetX: 0.04 }],
+    },
+  ],
+  rightPhotos: [
+    {
+      file: 'resources/虾片/mayday_3d.jpg',
+      x: 100,
+      y: 180,
+      w: 520,
+      rot: 0,
+      tapes: [],
+    },
+  ],
+  annotations: [
+    // Estimated face locations in mayday_3d.jpg (relative to its own placement)
+    // right page w: 680, h: 1036. photo: x: 100, y: 180, w: 520, h: 650
+    { x: 510, y: 252, w: 70, h: 80, label: 'ashin', connectToLeftIdx: 0 }, // Ashin
+    { x: 420, y: 252, w: 70, h: 80, label: 'ming', connectToLeftIdx: 2 }, // Ming
+    { x: 340, y: 260, w: 70, h: 80, label: 'monster', connectToLeftIdx: 3 }, // Monster
+    { x: 240, y: 260, w: 70, h: 80, label: 'masa', connectToLeftIdx: 1 }, // Masa
+    { x: 120, y: 260, w: 70, h: 80, label: 'stone', connectToLeftIdx: 4 }, // Stone
   ],
   rightSections: [
     {
-      text: '十八时三十分，\n有一段震耳欲聋的航空器引擎\n随着机械涡轮的轰鸣骤然切断，人声、吉他、鼓精准切入。',
-      options: { fontSize: 32, color: '#1a1a1a', x: 70, y: 190, lineHeight: 38, letterSpacing: -4 },
-    },
-    {
-      text: '[异常]：频谱仪底部呈现出大面积真空态——\n完全未捕捉到贝斯波形。经研究员反复拍打并重启设备，\n确认仪器运作正常。',
-      options: { fontSize: 32, color: '#8b0000', x: 70, gap: 32, lineHeight: 38, letterSpacing: -4 },
+      text: '数字结构化扫描：五人组生命特征比对。',
+      options: {
+        fontSize: 24,
+        color: '#00ff00',
+        x: 60,
+        y: 880,
+        lineHeight: 34,
+        letterSpacing: -1,
+      },
     },
   ],
 };

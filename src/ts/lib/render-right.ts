@@ -1,6 +1,6 @@
-import { createCanvas } from '@napi-rs/canvas';
+import { createCanvas, loadImage } from '@napi-rs/canvas';
 import OpenCC from 'opencc';
-import type { Section } from './types';
+import type { Section, PhotoLayout } from './types';
 import type { SharedAssets } from './assets';
 
 const converter = new OpenCC('s2t.json');
@@ -12,12 +12,56 @@ async function toTrad(s: string): Promise<string> {
 export async function renderRight(
   sections: Section[],
   assets: SharedAssets,
-  toTraditional = true
+  toTraditional = true,
+  photos?: PhotoLayout[]
 ) {
-  const { bgRight, fontName } = assets;
+  const { bgRight, fontName, texture, tapes } = assets;
   const canvas = createCanvas(bgRight.width, bgRight.height);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(bgRight, 0, 0);
+
+  // Draw photos if any
+  if (photos) {
+    for (const photoConfig of photos) {
+      const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
+      const photo = await loadImage(file);
+      const h = Math.round(w * photo.height / photo.width);
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+      const angle = (rot * Math.PI) / 180;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+
+      ctx.drawImage(photo, -w / 2, -h / 2, w, h);
+
+      // Wrinkle texture overlay
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(-w / 2, -h / 2, w, h);
+      ctx.clip();
+      (ctx as any).globalCompositeOperation = 'overlay';
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(texture, -w / 2, -h / 2, w, h);
+      (ctx as any).globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      // Tapes
+      for (const tc of photoTapes) {
+        const t = tapes[tc.idx % tapes.length];
+        const tw = Math.round(w * 0.6);
+        const th = Math.round(tw * t.height / t.width);
+        const tox = tc.offsetX ?? 0;
+        ctx.globalAlpha = 0.9;
+        ctx.drawImage(t, tox * w - tw / 2, -h / 2 - th * 0.4, tw, th);
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.restore();
+    }
+  }
 
   let nextY = 100;
 

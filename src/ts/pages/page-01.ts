@@ -6,18 +6,17 @@ const page: PageConfig = {
   leftPhotos: [
     {
       file: 'resources/虾片/wuguanzhong_gjtyc.jpg',
-      x: 120, // (680 - 440) / 2
-      y: 300, // Slightly higher than middle
+      x: 120,
+      y: 300,
       w: 440,
       rot: -1.5,
-      tape: 1,
-      tapeOffsetX: 0,
+      tapes: [{ idx: 1, offsetX: 0 }],
     },
   ],
   leftTexts: [
     {
       text: "39° 59' 34.5660'' N, 116° 23' 47.2056'' E",
-      x: 60, // Align with right side x
+      x: 60,
       y: 840,
       fontSize: 32,
       color: '#8b2500',

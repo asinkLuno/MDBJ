@@ -22,7 +22,8 @@ export async function renderLeft(
     }
   }
 
-  for (const { file, x, y, w, rot, tape: tapeIdx, tapeOffsetX = 0 } of photos) {
+  for (const photoConfig of photos) {
+    const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
     const photo = await loadImage(file);
     const h = Math.round(w * photo.height / photo.width);
     const cx = x + w / 2;
@@ -41,19 +42,22 @@ export async function renderLeft(
     ctx.rect(-w / 2, -h / 2, w, h);
     ctx.clip();
     (ctx as any).globalCompositeOperation = 'overlay';
-    ctx.globalAlpha = 0.5; // Increased from 0.35
+    ctx.globalAlpha = 0.5;
     ctx.drawImage(texture, -w / 2, -h / 2, w, h);
     (ctx as any).globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
     ctx.restore();
 
-    // Tape
-    const t = tapes[tapeIdx % tapes.length];
-    const tw = Math.round(w * 0.6);
-    const th = Math.round(tw * t.height / t.width);
-    ctx.globalAlpha = 0.9;
-    ctx.drawImage(t, tapeOffsetX * w - tw / 2, -h / 2 - th * 0.4, tw, th);
-    ctx.globalAlpha = 1;
+    // Tapes
+    for (const tc of photoTapes) {
+      const t = tapes[tc.idx % tapes.length];
+      const tw = Math.round(w * 0.6);
+      const th = Math.round(tw * t.height / t.width);
+      const tox = tc.offsetX ?? 0;
+      ctx.globalAlpha = 0.9;
+      ctx.drawImage(t, tox * w - tw / 2, -h / 2 - th * 0.4, tw, th);
+      ctx.globalAlpha = 1;
+    }
 
     ctx.restore();
   }
