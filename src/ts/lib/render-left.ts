@@ -1,15 +1,26 @@
 import { createCanvas, loadImage } from '@napi-rs/canvas';
-import type { PhotoLayout } from './types';
+import type { PhotoLayout, LeftText } from './types';
 import type { SharedAssets } from './assets';
 
 export async function renderLeft(
   photos: PhotoLayout[],
+  leftTexts: LeftText[] | undefined,
   assets: SharedAssets
 ) {
-  const { bgLeft, tapes, texture } = assets;
+  const { bgLeft, tapes, texture, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(bgLeft, 0, 0);
+
+  // Render left texts
+  if (leftTexts) {
+    for (const lt of leftTexts) {
+      ctx.font = `${lt.fontSize || 22}px ${fontName}`;
+      ctx.letterSpacing = `${lt.letterSpacing || 0}px`;
+      ctx.fillStyle = lt.color || '#1a1a1a';
+      ctx.fillText(lt.text, lt.x, lt.y);
+    }
+  }
 
   for (const { file, x, y, w, rot, tape: tapeIdx, tapeOffsetX = 0 } of photos) {
     const photo = await loadImage(file);
@@ -30,7 +41,7 @@ export async function renderLeft(
     ctx.rect(-w / 2, -h / 2, w, h);
     ctx.clip();
     (ctx as any).globalCompositeOperation = 'overlay';
-    ctx.globalAlpha = 0.35;
+    ctx.globalAlpha = 0.5; // Increased from 0.35
     ctx.drawImage(texture, -w / 2, -h / 2, w, h);
     (ctx as any).globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;

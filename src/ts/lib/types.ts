@@ -7,11 +7,17 @@ export interface TextOptions {
   y?: number;
   gap?: number;
   bold?: boolean;
+  wrapWidth?: number; // auto-wrap text within this pixel width
 }
 
 export interface Section {
   text: string;
   options?: TextOptions;
+}
+
+export interface TapeConfig {
+  idx: number;       // tape index
+  offsetX?: number;  // horizontal offset as fraction of photo width (default 0)
 }
 
 export interface PhotoLayout {
@@ -20,13 +26,22 @@ export interface PhotoLayout {
   y: number;
   w: number;
   rot: number;
-  tape: number;
-  tapeOffsetX?: number;
+  tapes: TapeConfig[];
+}
+
+export interface LeftText {
+  text: string;
+  x: number;
+  y: number;
+  fontSize?: number;
+  color?: string;
+  letterSpacing?: number;
 }
 
 export interface PageConfig {
   id: string;
   leftPhotos: PhotoLayout[];
+  leftTexts?: LeftText[];
   rightSections: Section[];
   toTraditional?: boolean;
 }

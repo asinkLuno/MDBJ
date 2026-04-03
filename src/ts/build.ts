@@ -11,7 +11,7 @@ const OUTPUT_DIR = 'resources/field_notes/output';
 
 async function buildPage(config: PageConfig, assets: SharedAssets) {
   const [leftCanvas, rightCanvas] = await Promise.all([
-    renderLeft(config.leftPhotos, assets),
+    renderLeft(config.leftPhotos, config.leftTexts, assets),
     renderRight(config.rightSections, assets, config.toTraditional ?? true),
   ]);
 
