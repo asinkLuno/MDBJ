@@ -1,0 +1,28 @@
+[project]
+name = "mdbj"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.4.4",
+    "pillow>=12.2.0",
+    "click>=8.1.0",
+]
+
+[project.scripts]
+mdbj = "main:main"
+
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple"
+default = true
+
+[tool.pyright]
+reportAny = false
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.39.0",
+    "isort>=8.0.1",
+    "radon>=6.0.1",
+]

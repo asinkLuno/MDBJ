@@ -1,15 +1,20 @@
 import click
-from PIL import Image
 import numpy as np
-
+from PIL import Image
 
 # 4x4 Bayer 矩阵（归一化到 0~1）
-BAYER_4X4 = np.array([
-    [ 0,  8,  2, 10],
-    [12,  4, 14,  6],
-    [ 3, 11,  1,  9],
-    [15,  7, 13,  5],
-], dtype=np.float32) / 16.0
+BAYER_4X4 = (
+    np.array(
+        [
+            [0, 8, 2, 10],
+            [12, 4, 14, 6],
+            [3, 11, 1, 9],
+            [15, 7, 13, 5],
+        ],
+        dtype=np.float32,
+    )
+    / 16.0
+)
 
 
 def bayer_dither_2bit(img_gray: np.ndarray) -> np.ndarray:
@@ -22,7 +27,7 @@ def bayer_dither_2bit(img_gray: np.ndarray) -> np.ndarray:
       - 加上 Bayer 矩阵的扰动（范围 ±1/levels），再量化到最近的级别
     """
     levels = 4  # 2-bit = 4 级
-    h, w = img_gray.shape
+    h, w = img_gray.shape  # type: ignore[reportAny]
 
     # 将 Bayer 矩阵平铺到图像大小
     bayer_tiled = np.tile(BAYER_4X4, (h // 4 + 1, w // 4 + 1))[:h, :w]
@@ -63,7 +68,9 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
 
 @click.command("dither")
 @click.argument("input_path", type=click.Path(exists=True))
-@click.option("--output", "-o", type=click.Path(), default=None, help="Output file path")
+@click.option(
+    "--output", "-o", type=click.Path(), default=None, help="Output file path"
+)
 @click.option(
     "--size", "-s", type=str, default="300x400", help="Target size as WxH, e.g. 300x400"
 )
@@ -76,7 +83,7 @@ def main(input_path: str, output: str | None, size: str):
     img = Image.open(input_path).convert("L")  # 转为灰度
     img = pad_to_3x4(img)
     if size_tuple is not None:
-        img = img.resize(size_tuple, Image.LANCZOS)
+        img = img.resize(size_tuple, Image.Resampling.LANCZOS)
     arr = np.array(img)
 
     result = bayer_dither_2bit(arr)
