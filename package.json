@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "collage-left": "npx tsx scripts/collage-left.ts",
-    "text-overlay": "npx tsx scripts/text-overlay.ts",
-    "text-overlay:custom": "npx tsx scripts/text-overlay.ts scripts/text-overlay.custom.json",
-    "build": "npm run collage-left && npm run text-overlay"
+    "process-stickers": "npx tsx src/ts/process-stickers.ts",
+    "build": "npx tsx src/ts/build.ts"
   },
   "repository": {
     "type": "git",
