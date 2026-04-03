@@ -54,9 +54,23 @@ export async function renderLeft(
       const tw = Math.round(w * 0.6);
       const th = Math.round(tw * t.height / t.width);
       const tox = tc.offsetX ?? 0;
+      const tx = tox * w - tw / 2;
+      const ty = -h / 2 - th * 0.4;
+
       ctx.globalAlpha = 0.9;
-      ctx.drawImage(t, tox * w - tw / 2, -h / 2 - th * 0.4, tw, th);
+      ctx.drawImage(t, tx, ty, tw, th);
       ctx.globalAlpha = 1;
+
+      if (tc.label) {
+        ctx.save();
+        ctx.fillStyle = '#1a1a1a';
+        ctx.font = `32px "${fontName}"`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        // Draw centered on tape, slightly offset
+        ctx.fillText(tc.label, tx + tw / 2, ty + th / 2);
+        ctx.restore();
+      }
     }
 
     ctx.restore();

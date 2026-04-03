@@ -4,7 +4,7 @@ import { loadSharedAssets } from './lib/assets';
 import { renderLeft } from './lib/render-left';
 import { renderRight } from './lib/render-right';
 import { pages } from './pages';
-import type { PageConfig } from './lib/types';
+import type { PageConfig, Annotation } from './lib/types';
 import type { SharedAssets } from './lib/assets';
 
 const OUTPUT_DIR = 'resources/field_notes/output';
@@ -25,16 +25,17 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   // Draw Annotations and Connections
   if (config.annotations) {
     for (const ann of config.annotations) {
-      const ax = leftCanvas.width + ann.x;
+      const pageOffset = (ann as any).page === 'left' ? 0 : leftCanvas.width;
+      const ax = pageOffset + ann.x;
       const ay = ann.y;
 
-      // Draw bounding box (digital style - Red)
-      ctx.strokeStyle = '#ff0000';
-      ctx.lineWidth = 2; // Slightly thicker
+      // Draw bounding box (digital style - Green)
+      ctx.strokeStyle = '#00ff00';
+      ctx.lineWidth = 1; // Thinner line
       ctx.strokeRect(ax, ay, ann.w, ann.h);
 
-      // Label background (Red)
-      ctx.fillStyle = '#ff0000';
+      // Label background (Green)
+      ctx.fillStyle = '#00ff00';
       const labelText = ann.label.toUpperCase();
 
       // Use system Heiti for "HUMAN" label
@@ -42,27 +43,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       const labelW = ctx.measureText(labelText).width + 8;
       ctx.fillRect(ax, ay + ann.h, labelW, 16);
 
-      // Label text (White for better contrast on red)
-      ctx.fillStyle = '#ffffff';
+      // Label text (Black for better contrast on green)
+      ctx.fillStyle = '#000000';
       ctx.fillText(labelText, ax + 4, ay + ann.h + 12);
-
-      // Draw connection line (Thicker Red)
-      if (ann.connectToLeftIdx !== undefined) {
-        const photo = config.leftPhotos[ann.connectToLeftIdx];
-        if (photo) {
-          const px = photo.x + photo.w; // right edge of sticker
-          const py = photo.y + 40; // near the top/middle of sticker
-
-          ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.lineTo(ax, ay + ann.h / 2);
-          ctx.setLineDash([8, 6]); // Larger dash for thicker line
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2; // Thicker line
-          ctx.stroke();
-          ctx.setLineDash([]);
-        }
-      }
     }
   }
 

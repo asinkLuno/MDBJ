@@ -18,6 +18,7 @@ export interface Section {
 export interface TapeConfig {
   idx: number;       // tape index
   offsetX?: number;  // horizontal offset as fraction of photo width (default 0)
+  label?: string;    // text to draw on the tape
 }
 
 export interface PhotoLayout {
@@ -36,6 +37,7 @@ export interface Annotation {
   h: number;
   label: string;
   connectToLeftIdx?: number; // index of photo in leftPhotos
+  page?: 'left' | 'right';
 }
 
 export interface LeftText {
