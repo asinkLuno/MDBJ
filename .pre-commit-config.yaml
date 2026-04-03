@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: pyright
         name: basedpyright
-        entry: basedpyright --pythonversion 3.11
+        entry: basedpyright --pythonversion 3.13
         language: system
         pass_filenames: false
 

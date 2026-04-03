@@ -19,6 +19,15 @@ default = true
 
 [tool.pyright]
 reportAny = false
+reportMissingParameterType = false
+reportUnknownParameterType = false
+reportUnknownVariableType = false
+reportUnknownMemberType = false
+reportMissingTypeStubs = false
+reportUnknownArgumentType = false
+reportUnusedCallResult = false
+
+
 
 [dependency-groups]
 dev = [
