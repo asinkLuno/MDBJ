@@ -51,11 +51,11 @@ export async function renderLeft(
     // Tapes
     for (const tc of photoTapes) {
       const t = tapes[tc.idx % tapes.length];
-      const tw = Math.round(w * 0.6);
+      const tw = Math.round(w * (tc.tapeWidth ?? 0.6));
       const th = Math.round(tw * t.height / t.width);
       const tox = tc.offsetX ?? 0;
       const tx = tox * w - tw / 2;
-      const ty = -h / 2 - th * 0.4;
+      const ty = tc.side === 'bottom' ? h / 2 - th * 0.6 : -h / 2 - th * 0.4;
 
       ctx.globalAlpha = 0.9;
       ctx.drawImage(t, tx, ty, tw, th);

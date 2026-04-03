@@ -10,7 +10,12 @@ const page: PageConfig = {
       y: 180,
       w: 520,
       rot: 0,
-      tapes: [],
+      tapes: [
+        { idx: 0, offsetX: -0.38, side: 'top',    tapeWidth: 0.22 }, // top-left
+        { idx: 3, offsetX:  0.38, side: 'top',    tapeWidth: 0.22 }, // top-right
+        { idx: 8, offsetX: -0.38, side: 'bottom', tapeWidth: 0.22 }, // bottom-left
+        { idx: 2, offsetX:  0.38, side: 'bottom', tapeWidth: 0.22 }, // bottom-right
+      ],
     },
   ],
   rightPhotos: [
@@ -58,11 +63,11 @@ const page: PageConfig = {
   annotations: [
     // Estimated face locations in mayday_3d_dithered.png (relative to its own placement on LEFT page)
     // left page w: 680, h: 1036. photo: x: 80, y: 180, w: 520, h: 650
-    { x: 510 - 20, y: 252, w: 70, h: 80, label: 'ashin', page: 'left' }, // Ashin
-    { x: 420 - 20, y: 252, w: 70, h: 80, label: 'ming', page: 'left' }, // Ming
-    { x: 340 - 20, y: 260, w: 70, h: 80, label: 'monster', page: 'left' }, // Monster
-    { x: 240 - 20, y: 260, w: 70, h: 80, label: 'masa', page: 'left' }, // Masa
-    { x: 120 - 20, y: 260, w: 70, h: 80, label: 'stone', page: 'left' }, // Stone
+    { x: 510 - 20, y: 252, w: 70, h: 80, label: 'ashin', color: '#00aaff', page: 'left' }, // Ashin
+    { x: 420 - 20, y: 252, w: 70, h: 80, label: 'ming', color: '#ff8800', page: 'left' }, // Ming
+    { x: 340 - 20, y: 260, w: 70, h: 80, label: 'monster', color: '#ff0000', page: 'left' }, // Monster
+    { x: 240 - 20, y: 260, w: 70, h: 80, label: 'masa', color: '#ffff00', page: 'left' }, // Masa
+    { x: 120 - 20, y: 260, w: 70, h: 80, label: 'stone', color: '#00ff00', page: 'left' }, // Stone
   ],
   rightSections: [],
 };

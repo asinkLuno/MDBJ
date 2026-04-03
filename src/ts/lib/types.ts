@@ -19,6 +19,8 @@ export interface TapeConfig {
   idx: number;       // tape index
   offsetX?: number;  // horizontal offset as fraction of photo width (default 0)
   label?: string;    // text to draw on the tape
+  side?: 'top' | 'bottom'; // which edge to attach tape (default 'top')
+  tapeWidth?: number; // tape width as fraction of photo width (default 0.6)
 }
 
 export interface PhotoLayout {
@@ -36,6 +38,7 @@ export interface Annotation {
   w: number;
   h: number;
   label: string;
+  color?: string;
   connectToLeftIdx?: number; // index of photo in leftPhotos
   page?: 'left' | 'right';
 }
@@ -49,6 +52,42 @@ export interface LeftText {
   letterSpacing?: number;
 }
 
+export interface TrajectoryPath {
+  points: Array<{ x: number; y: number }>;  // polyline control points on spread canvas
+  color?: string;
+  dash?: number[];        // e.g. [5, 4]
+  lineWidth?: number;
+  arrowEnd?: boolean;
+}
+
+export interface TrackingLabel {
+  x: number;             // top-left of box on spread canvas
+  y: number;
+  label: string;
+  sublabel?: string;
+  data?: string[];       // additional data lines
+  color?: string;        // accent color, default '#88ccff'
+  lineToX?: number;      // draw a connecting line to this point
+  lineToY?: number;
+}
+
+export interface SpreadPhotoLayout {
+  file: string;
+  x: number;          // center X on combined spread canvas
+  y: number;          // center Y on combined spread canvas
+  w: number;          // display width
+  rot: number;        // rotation in degrees
+  shadowBlur?: number;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  shadowColor?: string;
+  tapes?: TapeConfig[];
+  label?: string;     // text drawn centered on the plane
+  labelColor?: string;
+  scaleY?: number;    // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
+  blur?: number;      // motion/depth-of-field blur in pixels
+}
+
 export interface PageConfig {
   id: string;
   leftPhotos: PhotoLayout[];
@@ -56,5 +95,8 @@ export interface PageConfig {
   rightSections: Section[];
   rightPhotos?: PhotoLayout[];
   annotations?: Annotation[];
+  spreadPhotos?: SpreadPhotoLayout[];
+  trajectories?: TrajectoryPath[];
+  trackingLabels?: TrackingLabel[];
   toTraditional?: boolean;
 }
