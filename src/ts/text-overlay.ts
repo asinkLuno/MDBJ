@@ -1,5 +1,6 @@
 import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
 import { writeFileSync, readFileSync } from 'fs';
+import * as path from 'path';
 import OpenCC from 'opencc';
 
 interface TextOptions {
@@ -42,9 +43,9 @@ function loadConfig(): Config {
     return JSON.parse(configData);
   } catch {
     return {
-      background: 'field_notes/left_collage.png',
-      backgroundRight: 'field_notes/b_final.png',
-      font: 'ChenYuluoyan-2.0-Thin.ttf',
+      background: 'resources/field_notes/left_collage.png',
+      backgroundRight: 'resources/field_notes/b_final.png',
+      font: 'resources/ChenYuluoyan-2.0-Thin.ttf',
       toTraditional: true,
       sections: [
         {
@@ -56,7 +57,7 @@ function loadConfig(): Config {
           options: { fontSize: 32, color: '#8b0000', x: 70, gap: 32, lineHeight: 38, letterSpacing: -4 }
         }
       ],
-      output: 'field_notes/test_handwriting_ts.png'
+      output: 'resources/field_notes/test_handwriting_ts.png'
     };
   }
 }
@@ -105,7 +106,7 @@ async function renderRight(config: Config, fontName: string): Promise<ReturnType
 async function main() {
   const config = loadConfig();
 
-  const fontName = config.font.replace('.ttf', '').replace('-2.0-Thin', '');
+  const fontName = path.basename(config.font).replace('.ttf', '').replace('-2.0-Thin', '');
   GlobalFonts.registerFromPath(config.font, fontName);
 
   // Step 1: left page — background only

@@ -1,4 +1,3 @@
-import click
 import numpy as np
 from PIL import Image
 
@@ -20,26 +19,13 @@ BAYER_4X4 = (
 def bayer_dither_2bit(img_gray: np.ndarray) -> np.ndarray:
     """
     2-bit Bayer 有序抖动：将灰度图量化为 4 级灰（0, 85, 170, 255）
-
-    原理：
-      - 2-bit 有 4 个灰度级，每级跨度为 255/3 ≈ 85
-      - 先将像素归一化到 [0, 1]
-      - 加上 Bayer 矩阵的扰动（范围 ±1/levels），再量化到最近的级别
     """
-    levels = 4  # 2-bit = 4 级
-    h, w = img_gray.shape  # type: ignore[reportAny]
+    levels = 4
+    h, w = img_gray.shape
 
-    # 将 Bayer 矩阵平铺到图像大小
     bayer_tiled = np.tile(BAYER_4X4, (h // 4 + 1, w // 4 + 1))[:h, :w]
-
-    # 归一化到 [0, 1]
     normalized = img_gray.astype(np.float32) / 255.0
-
-    # 加入 Bayer 抖动扰动：范围是 [-0.5/levels, +0.5/levels] 的偏移
-    # bayer 值在 [0, 1)，减去 0.5 后映射到 [-0.5, 0.5)，再除以 levels 缩放
     dithered = normalized + (bayer_tiled - 0.5) / levels
-
-    # 量化到 4 级，再映射回 [0, 255]
     quantized = np.clip(np.round(dithered * (levels - 1)), 0, levels - 1)
     output = (quantized / (levels - 1) * 255).astype(np.uint8)
 
@@ -66,26 +52,17 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
     return new_img
 
 
-@click.command("dither")
-@click.argument("input_path", type=click.Path(exists=True))
-@click.option(
-    "--output", "-o", type=click.Path(), default=None, help="Output file path"
-)
-@click.option(
-    "--size", "-s", type=str, default="300x400", help="Target size as WxH, e.g. 300x400"
-)
-@click.option("--pad", is_flag=True, default=False, help="Pad image to 3:4 ratio")
-def main(input_path: str, output: str | None, size: str, pad: bool):
-    w, h = map(int, size.split("x")) if size else (None, None)
-    size_tuple: tuple[int, int] | None = (w, h) if w and h else None
+def main():
+    input_path = "resources/鸟巢.jpg"
+    output_path = "resources/鸟巢_dithered.png"
+    pad = False
 
-    output_path = output or input_path.rsplit(".", 1)[0] + "_dithered.png"
-
-    img = Image.open(input_path).convert("L")  # 转为灰度
+    img = Image.open(input_path).convert("L")
+    w_orig, h_orig = img.size
+    size_tuple = (int(w_orig * 300 / h_orig), 300)
     if pad:
         img = pad_to_3x4(img)
-    if size_tuple is not None:
-        img = img.resize(size_tuple, Image.Resampling.LANCZOS)
+    img = img.resize(size_tuple, Image.Resampling.LANCZOS)
     arr = np.array(img)
 
     result = bayer_dither_2bit(arr)
@@ -93,7 +70,6 @@ def main(input_path: str, output: str | None, size: str, pad: bool):
     Image.fromarray(result).save(output_path)
     print(f"saved → {output_path}")
 
-    # 验证：输出中只应有 4 种灰度值
     unique_values = np.unique(result)
     print(f"gray levels in output: {unique_values}")
 
