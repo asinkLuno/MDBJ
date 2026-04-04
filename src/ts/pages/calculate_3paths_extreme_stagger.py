@@ -62,12 +62,14 @@ all_labels = [
 # Worst-case rotated bounding-box half-widths/heights near the convergence (~130-160°):
 #   half-width  ≈ 123px   →  x_max = 1360 - 130 = 1230  (use 1220 for safety)
 #   half-height ≈ 107px   →  y_max = 1036 - 110 = 926   (use 920 for safety)
+# Left-edge safety: at rot~170°, rotated half-width ≈ 112px → x_min_clamp = 200
+# P0/P1 shifted right so paths don't start at the canvas edge.
 # Path B is the main diagonal — drawn as the visible trajectory line.
 paths = [
-    [(0, 500), (350, 450), (900, 350), (1220, 100)],  # Path A: left-upper
-    [(0, 700), (400, 750), (950, 450), (1220, 100)],  # Path B: left-middle (main)
-    [(100, 950), (450, 950), (950, 550), (1220, 100)],  # Path C: bottom-left
-    [(600, 920), (800, 880), (1100, 580), (1220, 100)],  # Path D: bottom-mid
+    [(120, 500), (370, 450), (900, 350), (1220, 100)],  # Path A: left-upper
+    [(120, 700), (420, 750), (950, 450), (1220, 100)],  # Path B: left-middle (main)
+    [(130, 950), (460, 950), (950, 550), (1220, 100)],  # Path C: bottom-left
+    [(620, 920), (810, 880), (1100, 580), (1220, 100)],  # Path D: bottom-mid
 ]
 
 # More on A/B (spread wide), fewer on C/D (bottom paths converge faster)
@@ -119,7 +121,7 @@ for p_idx, p in enumerate(paths):
         bx += random.uniform(-15, 15) + nx * stagger
         by += random.uniform(-15, 15) + ny * stagger
 
-        bx = max(50, min(1220, bx))
+        bx = max(80, min(1220, bx))
         by = max(50, min(920, by))
 
         angle = math.atan2(ty_v, tx_v) * 180 / math.pi
@@ -128,7 +130,7 @@ for p_idx, p in enumerate(paths):
         raw.append([bx, by, rot, label])
 
 # --- Repulsion pass: push overlapping planes apart ---
-MIN_DIST = 160  # px — planes are 185px wide, need decent clearance
+MIN_DIST = 175  # px — planes are 200px wide; 175 gives ~12% clearance
 
 for _ in range(200):
     for i in range(len(raw)):
@@ -146,7 +148,7 @@ for _ in range(200):
 
 # Clamp after repulsion
 for r in raw:
-    r[0] = max(50, min(1220, r[0]))
+    r[0] = max(80, min(1220, r[0]))
     r[1] = max(50, min(920, r[1]))
 
 # --- Build plane lines ---
