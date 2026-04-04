@@ -12,3 +12,6 @@ wheels/
 .DS_Store
 
 node_modules/
+
+# Page output images (generated, not source)
+resources/field_notes/output/page-*.png
