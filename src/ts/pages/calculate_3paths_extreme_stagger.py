@@ -151,36 +151,12 @@ plane_lines = [
     for r in raw
 ]
 
-# --- Trajectory: smooth samples along Path B ---
-main_path = paths[1]
-traj_pts = []
-N = 60
-for i in range(N):
-    t = i / (N - 1)
-    x = bezier(t, main_path[0][0], main_path[1][0], main_path[2][0], main_path[3][0])
-    y = bezier(t, main_path[0][1], main_path[1][1], main_path[2][1], main_path[3][1])
-    traj_pts.append(f"    {{ x: {int(x)}, y: {int(y)} }}")
-
 # --- Build replacement blocks ---
 planes_block = (
     "const planes: SpreadPhotoLayout[] = [\n" + "\n".join(plane_lines) + "\n" + "];"
 )
 
-traj_lines = [
-    "const trajectories: PageConfig['trajectories'] = [",
-    "  {",
-    "    points: [",
-]
-traj_lines += [",".join(traj_pts)]
-traj_lines += [
-    "    ],",
-    "    color: 'rgba(13, 43, 74, 0.4)',",
-    "    lineWidth: 1.5,",
-    "    dash: [5, 5],",
-    "  },",
-    "];",
-]
-traj_block = "\n".join(traj_lines)
+traj_block = "const trajectories: PageConfig['trajectories'] = [];"
 
 # --- Write into page-03.ts ---
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -203,4 +179,4 @@ content = re.sub(
 with open(ts_path, "w", encoding="utf-8") as f:
     f.write(content)
 
-print(f"Written {len(plane_lines)} planes + {N}-point trajectory to {ts_path}")
+print(f"Written {len(plane_lines)} planes to {ts_path}")

@@ -1,6 +1,6 @@
 import sharp from 'sharp';
-import { loadImage, GlobalFonts } from '@napi-rs/canvas';
-import type { Image } from '@napi-rs/canvas';
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
+import type { Image, Canvas } from '@napi-rs/canvas';
 import { readdirSync } from 'fs';
 import * as path from 'path';
 
@@ -25,6 +25,43 @@ async function prepareTexture(): Promise<Buffer> {
     .linear(0.6, 80)
     .png()
     .toBuffer();
+}
+
+/**
+ * Apply paper texture onto an image canvas.
+ * The texture is clipped to existing pixels (source-atop), so transparent
+ * backgrounds are unaffected. Returns the composited canvas.
+ *
+ * @param source  Canvas or Image to apply texture to
+ * @param texture Paper texture Image from SharedAssets
+ * @param alpha   Texture opacity, default 0.18
+ */
+export function applyPaperTexture(
+  source: Canvas | Image,
+  texture: Image,
+  alpha = 0.18,
+  targetW?: number,
+  targetH?: number,
+): Canvas {
+  const w = targetW ?? (source as any).width as number;
+  const h = targetH ?? (source as any).height as number;
+  const off = createCanvas(w, h);
+  const ctx = off.getContext('2d') as any;
+  ctx.drawImage(source, 0, 0, w, h);
+  // Cover: scale texture so it fills the whole canvas (no uncovered edges)
+  const natAspect = texture.width / texture.height;
+  let texW: number, texH: number;
+  if (w / h > natAspect) {
+    texW = w; texH = w / natAspect;
+  } else {
+    texH = h; texW = h * natAspect;
+  }
+  ctx.globalCompositeOperation = 'source-atop';
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(texture, (w - texW) / 2, (h - texH) / 2, texW, texH);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+  return off;
 }
 
 export async function loadSharedAssets(): Promise<SharedAssets> {

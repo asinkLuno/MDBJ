@@ -1,6 +1,6 @@
 import { createCanvas, loadImage } from '@napi-rs/canvas';
 import { writeFileSync, mkdirSync } from 'fs';
-import { loadSharedAssets } from './lib/assets';
+import { loadSharedAssets, applyPaperTexture } from './lib/assets';
 import { renderLeft } from './lib/render-left';
 import { renderRight } from './lib/render-right';
 import { pages } from './pages';
@@ -39,15 +39,16 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         ctx.scale(1, sp.scaleY);
       }
 
-      if (sp.shadowBlur) {
-        (ctx as any).shadowBlur = sp.shadowBlur;
-        (ctx as any).shadowOffsetX = sp.shadowOffsetX ?? 0;
-        (ctx as any).shadowOffsetY = sp.shadowOffsetY ?? 0;
-        (ctx as any).shadowColor = sp.shadowColor ?? 'rgba(0,0,0,0.35)';
-      }
+      // Composite plane + texture on an offscreen canvas first,
+      // so the texture is clipped to the plane shape and doesn't bleed onto the page.
+      const off = applyPaperTexture(photo, assets.texture, 0.18, sp.w, h);
 
-      ctx.drawImage(photo, -sp.w / 2, -h / 2, sp.w, h);
-
+      // Draw composited plane to main canvas with shadow
+      (ctx as any).shadowBlur = sp.shadowBlur ?? 8;
+      (ctx as any).shadowOffsetX = sp.shadowOffsetX ?? 2;
+      (ctx as any).shadowOffsetY = sp.shadowOffsetY ?? 4;
+      (ctx as any).shadowColor = sp.shadowColor ?? 'rgba(0,0,0,0.22)';
+      ctx.drawImage(off, -sp.w / 2, -h / 2);
       (ctx as any).shadowBlur = 0;
       (ctx as any).shadowOffsetX = 0;
       (ctx as any).shadowOffsetY = 0;
