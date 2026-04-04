@@ -53,7 +53,7 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
 
 
 def main():
-    input_path = "resources/虾片/ashin_3d.jpg"
+    input_path = "resources/虾片/hand.png"
     output_path = "resources/虾片/tmp.png"
     pad = False
 

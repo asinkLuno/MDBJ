@@ -85,6 +85,10 @@ export interface SpreadPhotoLayout {
   blur?: number; // motion/depth-of-field blur in pixels
   showFrame?: boolean; // draw HUD targeting frame around the photo
   frameColor?: string; // frame accent color, defaults to COLOR_DEFAULT
+  framePadX?: number; // horizontal inset in unscaled px (default -12; use 0 for tight fit)
+  framePadY?: number; // vertical inset in unscaled px (default -28; use 0 for tight fit)
+  frameCornersOnly?: boolean; // skip full rect + mid ticks, draw only corner brackets
+  frameSameDir?: boolean; // rotate frame with the photo (default: frame is flipped 180°)
 }
 
 export interface PageConfig {

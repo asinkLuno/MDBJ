@@ -65,6 +65,7 @@ export function drawTargetingFrame(
   h: number,
   color: string,
   ss = 1.0,
+  cornersOnly = false,
 ): void {
   const cLen = Math.round(Math.min(w, h) * 0.22);
   const tick = Math.round(Math.min(w, h) * 0.08);
@@ -75,11 +76,13 @@ export function drawTargetingFrame(
   ctx.strokeStyle = color;
   ctx.setLineDash([]);
 
-  // Full rectangle (semi-transparent)
-  ctx.lineWidth = 1.4 * ss;
-  ctx.globalAlpha = 0.65;
-  ctx.strokeRect(x, y, w, h);
-  ctx.globalAlpha = 1;
+  if (!cornersOnly) {
+    // Full rectangle (semi-transparent)
+    ctx.lineWidth = 1.4 * ss;
+    ctx.globalAlpha = 0.65;
+    ctx.strokeRect(x, y, w, h);
+    ctx.globalAlpha = 1;
+  }
 
   // Corner brackets (bold)
   ctx.lineWidth = 2.4 * ss;
@@ -111,6 +114,11 @@ export function drawTargetingFrame(
     ctx.lineTo(end[0], end[1]);
     ctx.stroke();
   });
+
+  if (cornersOnly) {
+    ctx.restore();
+    return;
+  }
 
   // Mid-side tick marks
   ctx.lineWidth = 1.0 * ss;
