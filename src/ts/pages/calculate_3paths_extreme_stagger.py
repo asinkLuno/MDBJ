@@ -57,13 +57,17 @@ all_labels = [
     "臺北",
 ]
 
-# Four paths converging at top-right (1330, 100).
+# Four paths converging at top-right (1220, 100).
+# Plane image is 1811×1405 → aspect ~0.776; at w=200 the rendered height ≈ 155px.
+# Worst-case rotated bounding-box half-widths/heights near the convergence (~130-160°):
+#   half-width  ≈ 123px   →  x_max = 1360 - 130 = 1230  (use 1220 for safety)
+#   half-height ≈ 107px   →  y_max = 1036 - 110 = 926   (use 920 for safety)
 # Path B is the main diagonal — drawn as the visible trajectory line.
 paths = [
-    [(0, 500), (350, 450), (900, 350), (1330, 100)],  # Path A: left-upper
-    [(0, 700), (400, 750), (950, 450), (1330, 100)],  # Path B: left-middle (main)
-    [(100, 950), (450, 950), (950, 550), (1330, 100)],  # Path C: bottom-left
-    [(600, 950), (800, 900), (1100, 600), (1330, 100)],  # Path D: bottom-mid
+    [(0, 500), (350, 450), (900, 350), (1220, 100)],  # Path A: left-upper
+    [(0, 700), (400, 750), (950, 450), (1220, 100)],  # Path B: left-middle (main)
+    [(100, 950), (450, 950), (950, 550), (1220, 100)],  # Path C: bottom-left
+    [(600, 920), (800, 880), (1100, 580), (1220, 100)],  # Path D: bottom-mid
 ]
 
 # More on A/B (spread wide), fewer on C/D (bottom paths converge faster)
@@ -115,8 +119,8 @@ for p_idx, p in enumerate(paths):
         bx += random.uniform(-15, 15) + nx * stagger
         by += random.uniform(-15, 15) + ny * stagger
 
-        bx = max(50, min(1330, bx))
-        by = max(50, min(940, by))
+        bx = max(50, min(1220, bx))
+        by = max(50, min(920, by))
 
         angle = math.atan2(ty_v, tx_v) * 180 / math.pi
         rot = int(angle + 180)
@@ -142,8 +146,8 @@ for _ in range(200):
 
 # Clamp after repulsion
 for r in raw:
-    r[0] = max(50, min(1330, r[0]))
-    r[1] = max(50, min(940, r[1]))
+    r[0] = max(50, min(1220, r[0]))
+    r[1] = max(50, min(920, r[1]))
 
 # --- Build plane lines ---
 plane_lines = [
