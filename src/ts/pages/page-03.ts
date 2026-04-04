@@ -44,7 +44,7 @@ const planes: SpreadPhotoLayout[] = [
 planes.forEach((p) => {
   p.labelColor = COLOR_BLACK;
   p.showFrame = true;
-  p.labelOffsetX = -14;
+  p.labelOffsetX = -10;
   p.labelLetterSpacing = -2;
 });
 

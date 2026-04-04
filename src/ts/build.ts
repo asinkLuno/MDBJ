@@ -98,16 +98,6 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         (ctx as any).letterSpacing = "0px";
       }
 
-      if (sp.showFrame) {
-        const frameColor = sp.frameColor ?? COLOR_DEFAULT;
-        const curSx = sp.x <= REF_W ? sx_left : sx_right;
-        const padX = -12 * curSx,
-          padY = -28 * sy;
-        const fw = scaledW + padX * 2,
-          fh = h + padY * 2;
-        drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor, ss);
-      }
-
       if (sp.tapes) {
         for (const tc of sp.tapes) {
           const t = assets.tapes[tc.idx % assets.tapes.length];
@@ -123,6 +113,26 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         }
       }
 
+      ctx.restore();
+    }
+
+    // Second pass: draw frames on top of all planes
+    for (const sp of config.spreadPhotos) {
+      if (!sp.showFrame) continue;
+      const photo = await loadImage(sp.file);
+      const scaledW = sp.w * ss;
+      const h = Math.round((scaledW * photo.height) / photo.width);
+      const angle = (sp.rot * Math.PI) / 180;
+      const frameColor = sp.frameColor ?? COLOR_DEFAULT;
+      const curSx = sp.x <= REF_W ? sx_left : sx_right;
+      const padX = -12 * curSx,
+        padY = -28 * sy;
+      const fw = scaledW + padX * 2,
+        fh = h + padY * 2;
+      ctx.save();
+      ctx.translate(scaleX(sp.x), sp.y * sy);
+      ctx.rotate(angle);
+      drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor, ss);
       ctx.restore();
     }
   }
