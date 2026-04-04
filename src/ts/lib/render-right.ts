@@ -22,57 +22,69 @@ export async function renderRight(
   const ctx = canvas.getContext("2d");
   ctx.drawImage(bgRight, 0, 0);
 
+  // Reference dimensions from original field notes
+  const REF_W = 680;
+  const REF_H = 1036;
+  const sx = bgRight.width / REF_W;
+  const sy = bgRight.height / REF_H;
+  const ss = Math.min(sx, sy); // scale for font/width
+
   // Draw photos if any
   if (photos) {
     for (const photoConfig of photos) {
       const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
       const photo = await loadImage(file);
-      const h = Math.round((w * photo.height) / photo.width);
-      const cx = x + w / 2;
-      const cy = y + h / 2;
+      const scaledW = w * ss;
+      const h = Math.round((scaledW * photo.height) / photo.width);
+
+      const scaledX = x * sx;
+      const scaledY = y * sy;
+
       const angle = (rot * Math.PI) / 180;
 
       ctx.save();
-      ctx.translate(cx, cy);
+      ctx.translate(scaledX + scaledW / 2, scaledY + h / 2);
       ctx.rotate(angle);
 
       ctx.drawImage(
-        applyPaperTexture(photo, texture, 0.18, w, h),
-        -w / 2,
+        applyPaperTexture(photo, texture, 0.18, scaledW, h),
+        -scaledW / 2,
         -h / 2,
       );
 
-      drawTapes(ctx, tapes, photoTapes, w, h, fontName);
+      drawTapes(ctx, tapes, photoTapes, scaledW, h, fontName);
 
       ctx.restore();
     }
   }
 
-  let nextY = 100;
+  let nextY = 100 * sy;
 
   for (const section of sections) {
     const opts = section.options || {};
-    const fontSize = opts.fontSize || FONT_SECTION_DEFAULT;
+    const fontSize = (opts.fontSize || FONT_SECTION_DEFAULT) * ss;
     const color = opts.color || COLOR_DEFAULT;
-    const lineHeight = opts.lineHeight || fontSize * 1.4;
+    const lineHeight =
+      (opts.lineHeight || (opts.fontSize || FONT_SECTION_DEFAULT) * 1.4) * ss;
     const bold = opts.bold ?? false;
 
     ctx.font = `${fontSize}px ${fontName}`;
-    ctx.letterSpacing = `${opts.letterSpacing ?? 0}px`;
+    ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
     ctx.fillStyle = color;
 
     const lines = section.text.split("\n");
-    let currentY = opts.y ?? nextY + (opts.gap ?? 0);
+    let currentY = opts.y ? opts.y * sy : nextY + (opts.gap || 0) * ss;
+    const xPos = (opts.x || 50) * sx;
 
     for (const line of lines) {
       const text = toTraditional ? await toTrad(line) : line;
       if (bold) {
         ctx.globalAlpha = 0.4;
-        ctx.fillText(text, (opts.x || 50) - 0.5, currentY);
-        ctx.fillText(text, (opts.x || 50) + 0.5, currentY);
+        ctx.fillText(text, xPos - 0.5, currentY);
+        ctx.fillText(text, xPos + 0.5, currentY);
         ctx.globalAlpha = 1;
       }
-      ctx.fillText(text, opts.x || 50, currentY);
+      ctx.fillText(text, xPos, currentY);
       currentY += lineHeight;
     }
     nextY = currentY;

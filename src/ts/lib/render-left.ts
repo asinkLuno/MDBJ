@@ -14,35 +14,49 @@ export async function renderLeft(
   const ctx = canvas.getContext("2d");
   ctx.drawImage(bgLeft, 0, 0);
 
+  // Reference dimensions from original field notes
+  const REF_W = 680;
+  const REF_H = 1036;
+  const sx = bgLeft.width / REF_W;
+  const sy = bgLeft.height / REF_H;
+  const ss = Math.min(sx, sy); // scale for font/width
+
   // Render left texts
   if (leftTexts) {
     for (const lt of leftTexts) {
-      ctx.font = `${lt.fontSize || FONT_LEFT_TEXT_DEFAULT}px ${fontName}`;
-      ctx.letterSpacing = `${lt.letterSpacing || 0}px`;
+      const fontSize = (lt.fontSize || FONT_LEFT_TEXT_DEFAULT) * ss;
+      ctx.font = `${fontSize}px ${fontName}`;
+      ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
       ctx.fillStyle = lt.color || COLOR_DEFAULT;
-      ctx.fillText(lt.text, lt.x, lt.y);
+      ctx.fillText(lt.text, lt.x * sx, lt.y * sy);
     }
   }
 
   for (const photoConfig of photos) {
     const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
     const photo = await loadImage(file);
-    const h = Math.round((w * photo.height) / photo.width);
-    const cx = x + w / 2;
-    const cy = y + h / 2;
+    const scaledW = w * ss;
+    const h = Math.round((scaledW * photo.height) / photo.width);
+    const cx = (x + w / 2) * sx;
+    const cy = (y + h / (2 * ss)) * sy; // adjust center y for scaling
+    // Actually, it's easier to scale x and y directly as the top-left corner
+    // and then use the scaled width.
+    const scaledX = x * sx;
+    const scaledY = y * sy;
+
     const angle = (rot * Math.PI) / 180;
 
     ctx.save();
-    ctx.translate(cx, cy);
+    ctx.translate(scaledX + scaledW / 2, scaledY + h / 2);
     ctx.rotate(angle);
 
     ctx.drawImage(
-      applyPaperTexture(photo, texture, 0.18, w, h),
-      -w / 2,
+      applyPaperTexture(photo, texture, 0.18, scaledW, h),
+      -scaledW / 2,
       -h / 2,
     );
 
-    drawTapes(ctx, tapes, photoTapes, w, h, fontName);
+    drawTapes(ctx, tapes, photoTapes, scaledW, h, fontName);
 
     ctx.restore();
   }

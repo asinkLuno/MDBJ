@@ -55,6 +55,7 @@ export function applyPaperTexture(
  * @param w      Frame width
  * @param h      Frame height
  * @param color  Stroke color
+ * @param ss     Scale factor (default 1.0)
  */
 export function drawTargetingFrame(
   ctx: CanvasRenderingContext2D,
@@ -63,6 +64,7 @@ export function drawTargetingFrame(
   w: number,
   h: number,
   color: string,
+  ss = 1.0,
 ): void {
   const cLen = Math.round(Math.min(w, h) * 0.22);
   const tick = Math.round(Math.min(w, h) * 0.08);
@@ -74,13 +76,13 @@ export function drawTargetingFrame(
   ctx.setLineDash([]);
 
   // Full rectangle (semi-transparent)
-  ctx.lineWidth = 1.4;
+  ctx.lineWidth = 1.4 * ss;
   ctx.globalAlpha = 0.65;
   ctx.strokeRect(x, y, w, h);
   ctx.globalAlpha = 1;
 
   // Corner brackets (bold)
-  ctx.lineWidth = 2.4;
+  ctx.lineWidth = 2.4 * ss;
   [
     [
       [x, y + cLen],
@@ -111,7 +113,7 @@ export function drawTargetingFrame(
   });
 
   // Mid-side tick marks
-  ctx.lineWidth = 1.0;
+  ctx.lineWidth = 1.0 * ss;
   [
     [
       [x - tick, cy],
