@@ -166,6 +166,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.save();
       ctx.strokeStyle = color;
       ctx.lineWidth = (traj.lineWidth ?? 1.2) * ss;
+      ctx.lineCap = traj.lineCap ?? "butt";
       ctx.setLineDash((traj.dash ?? [5, 4]).map((d) => d * ss));
       ctx.beginPath();
       ctx.moveTo(scaleX(traj.points[0].x), traj.points[0].y * sy);

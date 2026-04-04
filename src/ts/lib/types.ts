@@ -60,6 +60,7 @@ export interface TrajectoryPath {
   color?: string;
   dash?: number[]; // e.g. [5, 4]
   lineWidth?: number;
+  lineCap?: CanvasLineCap;
   arrowEnd?: boolean;
 }
 
