@@ -44,6 +44,8 @@ const planes: SpreadPhotoLayout[] = [
 planes.forEach((p) => {
   p.labelColor = COLOR_BLACK;
   p.showFrame = true;
+  p.labelOffsetX = -14;
+  p.labelLetterSpacing = -2;
 });
 
 const trajectories: PageConfig["trajectories"] = [];

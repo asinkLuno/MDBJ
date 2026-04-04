@@ -89,7 +89,13 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = sp.labelColor ?? COLOR_DEFAULT;
-        ctx.fillText(sp.label, 0, 0);
+        (ctx as any).letterSpacing = `${(sp.labelLetterSpacing ?? 0) * ss}px`;
+        ctx.fillText(
+          sp.label,
+          (sp.labelOffsetX ?? 0) * ss,
+          (sp.labelOffsetY ?? 0) * ss,
+        );
+        (ctx as any).letterSpacing = "0px";
       }
 
       if (sp.showFrame) {

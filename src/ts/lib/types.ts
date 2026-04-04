@@ -76,6 +76,9 @@ export interface SpreadPhotoLayout {
   tapes?: TapeConfig[];
   label?: string; // text drawn centered on the plane
   labelColor?: string;
+  labelOffsetX?: number; // local-coordinate X offset for label (positive = toward nose/screen-left at rot~170°)
+  labelOffsetY?: number; // local-coordinate Y offset for label
+  labelLetterSpacing?: number; // letter spacing in px (unscaled), e.g. -2 to tighten
   scaleY?: number; // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
   blur?: number; // motion/depth-of-field blur in pixels
   showFrame?: boolean; // draw HUD targeting frame around the photo
