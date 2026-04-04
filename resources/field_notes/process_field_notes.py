@@ -46,7 +46,7 @@ def extract_content(path):
 
     # 6. 提取内容并与白色混合 (调浅)
     content_pixels = crop_data[filled].astype(float)
-    lightened = (content_pixels * 0.6 + 255 * 0.4).astype(np.uint8)
+    lightened = (content_pixels * 0.4 + 255 * 0.6).astype(np.uint8)
     result[filled] = lightened
 
     return Image.fromarray(result)
