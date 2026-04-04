@@ -51,6 +51,22 @@ repos:
 
   - repo: local
     hooks:
+      - id: ts-format
+        name: prettier
+        entry: /opt/homebrew/bin/prettier --write
+        language: system
+        files: \.ts$
+        pass_filenames: true
+
+      - id: ts-typecheck
+        name: tsc
+        entry: npx tsc --noEmit
+        language: node
+        files: \.ts$
+        pass_filenames: false
+
+  - repo: local
+    hooks:
       - id: mdformat
         name: mdformat
         entry: mdformat
