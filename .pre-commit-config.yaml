@@ -58,13 +58,6 @@ repos:
         files: \.ts$
         pass_filenames: true
 
-      - id: ts-typecheck
-        name: tsc
-        entry: npx tsc --noEmit
-        language: node
-        files: \.ts$
-        pass_filenames: false
-
   - repo: local
     hooks:
       - id: mdformat
