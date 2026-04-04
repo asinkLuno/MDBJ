@@ -137,7 +137,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
 
       if (sp.sublabel) {
         const subFontSize = Math.max(9, Math.round(scaledW * 0.075));
-        ctx.font = `${subFontSize}px "${assets.labelFontName}"`;
+        ctx.font = `bold ${subFontSize}px "${assets.labelFontName}"`;
         (ctx as any).letterSpacing = `${-0.5 * ss}px`;
         ctx.fillStyle = frameColor;
         ctx.globalAlpha = 0.85;
