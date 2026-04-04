@@ -75,7 +75,7 @@ all_labels = [
         "北京",
         "260430  260501\n260502  260503\n260508  260509\n260510  260511\n260515  260516\n260517  260518",
     ),
-    ("臺北", "coming soon..."),
+    ("臺北", "I wonder if this is the end,\nor the start of something new."),
 ]
 
 # === 几何定义 (大幅向下平移 + 压缩高度) ===
