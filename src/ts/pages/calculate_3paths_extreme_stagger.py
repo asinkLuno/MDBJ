@@ -1,5 +1,7 @@
 import math
+import os
 import random
+import re
 
 random.seed(42)
 
@@ -55,56 +57,150 @@ all_labels = [
     "臺北",
 ]
 
+# Four paths converging at top-right (1300, 100).
+# Path B is the main diagonal — drawn as the visible trajectory line.
 paths = [
-    [(0, 550), (400, 600), (900, 300), (1300, 100)],  # Path A: 10 planes
-    [(50, 920), (500, 950), (1000, 450), (1300, 100)],  # Path B: 13 planes
-    [(750, 940), (850, 900), (1150, 600), (1300, 100)],  # Path C: 8 planes
+    [(0, 400), (350, 350), (850, 200), (1300, 100)],  # Path A: left-upper
+    [(0, 700), (400, 750), (950, 400), (1300, 100)],  # Path B: left-middle (main)
+    [(100, 950), (450, 950), (950, 550), (1300, 100)],  # Path C: bottom-left
+    [(600, 950), (800, 900), (1100, 600), (1300, 100)],  # Path D: bottom-mid
 ]
 
-counts = [10, 14, 7]
-t_maxs = [0.75, 0.98, 0.65]
+# More on A/B (spread wide), fewer on C/D (bottom paths converge faster)
+counts = [9, 9, 7, 6]  # total = 31
+t_maxs = [0.78, 0.82, 0.85, 0.72]
 
-results = []
+# Smaller stagger for C/D: their curves start nearly horizontal,
+# so large perpendicular offset pushes planes off-screen vertically.
+stagger_ranges = [
+    (40, 100),  # Path A
+    (40, 100),  # Path B
+    (30, 70),  # Path C
+    (30, 70),  # Path D
+]
+
+# --- Generate raw plane positions ---
+raw = []  # [x, y, rot, label]
 current_idx = 0
+
 for p_idx, p in enumerate(paths):
     count = counts[p_idx]
+    t_min = 0.05
     t_max = t_maxs[p_idx]
+    lo, hi = stagger_ranges[p_idx]
 
-    for i in range(count):
+    interval = (t_max - t_min) / max(1, count - 1)
+    jitter = interval * 0.35
+    base_ts = [t_min + i * interval for i in range(count)]
+    ts = sorted(
+        max(t_min, min(t_max, bt + random.uniform(-jitter, jitter))) for bt in base_ts
+    )
+
+    for t in ts:
         label = all_labels[current_idx]
         current_idx += 1
-
-        t = 0.05 + (i / max(1, count - 1)) * (t_max - 0.05)
 
         bx = bezier(t, p[0][0], p[1][0], p[2][0], p[3][0])
         by = bezier(t, p[0][1], p[1][1], p[2][1], p[3][1])
 
-        tx = tangent(t, p[0][0], p[1][0], p[2][0], p[3][0])
-        ty = tangent(t, p[0][1], p[1][1], p[2][1], p[3][1])
-        mag = math.sqrt(tx**2 + ty**2)
-        nx, ny = -ty / mag, tx / mag
+        tx_v = tangent(t, p[0][0], p[1][0], p[2][0], p[3][0])
+        ty_v = tangent(t, p[0][1], p[1][1], p[2][1], p[3][1])
+        mag = math.sqrt(tx_v**2 + ty_v**2)
+        nx, ny = -ty_v / mag, tx_v / mag
 
-        # INCREASED STAGGER: 90px
-        stagger = 85 if i % 2 == 0 else -85
+        stagger_mag = random.uniform(lo, hi)
+        stagger = stagger_mag if random.random() > 0.5 else -stagger_mag
+        stagger *= 1 - t * 0.7
 
-        # Converge stagger as t approaches 1
-        current_stagger = stagger * (1 - (t * 0.5))
+        bx += random.uniform(-15, 15) + nx * stagger
+        by += random.uniform(-15, 15) + ny * stagger
 
-        bx += random.uniform(-5, 5) + nx * current_stagger
-        by += random.uniform(-5, 5) + ny * current_stagger
+        bx = max(50, min(1290, bx))
+        by = max(50, min(940, by))
 
-        # Clamp to screen
-        bx = max(50, min(1300, bx))
-        by = max(50, min(950, by))
-
-        angle = math.atan2(ty, tx) * 180 / math.pi
+        angle = math.atan2(ty_v, tx_v) * 180 / math.pi
         rot = int(angle + 180)
 
-        results.append(
-            f"  {{ file: PLANE, label: '{label}', x: {int(bx):4}, y: {int(by):4}, w: 185, rot: {rot:3} }},"
-        )
+        raw.append([bx, by, rot, label])
 
-print("const planes: SpreadPhotoLayout[] = [")
-for line in results:
-    print(line)
-print("];")
+# --- Repulsion pass: push overlapping planes apart ---
+MIN_DIST = 160  # px — planes are 185px wide, need decent clearance
+
+for _ in range(200):
+    for i in range(len(raw)):
+        for j in range(i + 1, len(raw)):
+            dx = raw[j][0] - raw[i][0]
+            dy = raw[j][1] - raw[i][1]
+            dist = math.sqrt(dx * dx + dy * dy)
+            if 0 < dist < MIN_DIST:
+                push = (MIN_DIST - dist) / 2
+                px, py = dx / dist * push, dy / dist * push
+                raw[i][0] -= px
+                raw[i][1] -= py
+                raw[j][0] += px
+                raw[j][1] += py
+
+# Clamp after repulsion
+for r in raw:
+    r[0] = max(50, min(1290, r[0]))
+    r[1] = max(50, min(940, r[1]))
+
+# --- Build plane lines ---
+plane_lines = [
+    f"  {{ file: PLANE, label: '{r[3]}', x: {int(r[0]):4}, y: {int(r[1]):4}, w: 185, rot: {r[2]:3} }},"
+    for r in raw
+]
+
+# --- Trajectory: smooth samples along Path B ---
+main_path = paths[1]
+traj_pts = []
+N = 60
+for i in range(N):
+    t = i / (N - 1)
+    x = bezier(t, main_path[0][0], main_path[1][0], main_path[2][0], main_path[3][0])
+    y = bezier(t, main_path[0][1], main_path[1][1], main_path[2][1], main_path[3][1])
+    traj_pts.append(f"    {{ x: {int(x)}, y: {int(y)} }}")
+
+# --- Build replacement blocks ---
+planes_block = (
+    "const planes: SpreadPhotoLayout[] = [\n" + "\n".join(plane_lines) + "\n" + "];"
+)
+
+traj_lines = [
+    "const trajectories: PageConfig['trajectories'] = [",
+    "  {",
+    "    points: [",
+]
+traj_lines += [",".join(traj_pts)]
+traj_lines += [
+    "    ],",
+    "    color: 'rgba(13, 43, 74, 0.4)',",
+    "    lineWidth: 1.5,",
+    "    dash: [5, 5],",
+    "  },",
+    "];",
+]
+traj_block = "\n".join(traj_lines)
+
+# --- Write into page-03.ts ---
+script_dir = os.path.dirname(os.path.abspath(__file__))
+ts_path = os.path.join(script_dir, "page-03.ts")
+
+with open(ts_path, "r", encoding="utf-8") as f:
+    content = f.read()
+
+content = re.sub(
+    r"const planes: SpreadPhotoLayout\[\] = \[[\s\S]*?\];",
+    planes_block,
+    content,
+)
+content = re.sub(
+    r"const trajectories: PageConfig\['trajectories'\] = \[[\s\S]*?\];",
+    traj_block,
+    content,
+)
+
+with open(ts_path, "w", encoding="utf-8") as f:
+    f.write(content)
+
+print(f"Written {len(plane_lines)} planes + {N}-point trajectory to {ts_path}")
