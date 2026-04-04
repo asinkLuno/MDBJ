@@ -129,9 +129,10 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         padY = -28 * sy;
       const fw = scaledW + padX * 2,
         fh = h + padY * 2;
+      // Rotate frame 180° relative to the plane so sublabel falls below the plane on screen.
       ctx.save();
       ctx.translate(scaleX(sp.x), sp.y * sy);
-      ctx.rotate(angle);
+      ctx.rotate(angle + Math.PI);
       drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor, ss);
 
       if (sp.sublabel) {
