@@ -8,9 +8,33 @@ const PLANE = "resources/虾片/plane.png";
 // All planes are w: 165. Calculated via Python.
 
 const planes: SpreadPhotoLayout[] = [
-  { file: PLANE, label: "台中", x: 80, y: 412, w: 200, rot: 168 },
-  { file: PLANE, label: "高雄", x: 189, y: 394, w: 200, rot: 168 },
-  { file: PLANE, label: "香港", x: 336, y: 488, w: 200, rot: 167 },
+  {
+    file: PLANE,
+    label: "台中",
+    sublabel: "231231\n240101\n240102\n240105\n240106\n240107",
+    x: 80,
+    y: 412,
+    w: 200,
+    rot: 168,
+  },
+  {
+    file: PLANE,
+    label: "高雄",
+    sublabel: "20240323\n20240331",
+    x: 189,
+    y: 394,
+    w: 200,
+    rot: 168,
+  },
+  {
+    file: PLANE,
+    label: "香港",
+    sublabel: "240430\n240503\n240504",
+    x: 336,
+    y: 488,
+    w: 200,
+    rot: 167,
+  },
   { file: PLANE, label: "北京", x: 479, y: 387, w: 200, rot: 165 },
   { file: PLANE, label: "深圳", x: 553, y: 228, w: 200, rot: 163 },
   { file: PLANE, label: "太原", x: 721, y: 277, w: 200, rot: 160 },

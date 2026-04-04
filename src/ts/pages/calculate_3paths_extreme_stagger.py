@@ -23,38 +23,39 @@ def tangent(t, p0, p1, p2, p3):
     )
 
 
+# List of (city, sublabel) tuples — duplicates allowed, order preserved.
 all_labels = [
-    "台中",
-    "高雄",
-    "香港",
-    "北京",
-    "深圳",
-    "太原",
-    "武漢",
-    "成都",
-    "上海",
-    "桃園",
-    "新加坡",
-    "雪梨",
-    "拉斯維加斯",
-    "天津",
-    "香港",
-    "杭州",
-    "哈爾濱",
-    "臺北",
-    "北京",
-    "上海",
-    "貴陽",
-    "長沙",
-    "鄭州",
-    "廈門",
-    "上海",
-    "廣州",
-    "台中",
-    "馬來西亞",
-    "香港",
-    "北京",
-    "臺北",
+    ("台中", "231231\n240101\n240102\n240105\n240106\n240107"),
+    ("高雄", "20240323\n20240331"),
+    ("香港", "240430\n240503\n240504"),
+    ("北京", ""),
+    ("深圳", ""),
+    ("太原", ""),
+    ("武漢", ""),
+    ("成都", ""),
+    ("上海", ""),
+    ("桃園", ""),
+    ("新加坡", ""),
+    ("雪梨", ""),
+    ("拉斯維加斯", ""),
+    ("天津", ""),
+    ("香港", ""),
+    ("杭州", ""),
+    ("哈爾濱", ""),
+    ("臺北", ""),
+    ("北京", ""),
+    ("上海", ""),
+    ("貴陽", ""),
+    ("長沙", ""),
+    ("鄭州", ""),
+    ("廈門", ""),
+    ("上海", ""),
+    ("廣州", ""),
+    ("台中", ""),
+    ("馬來西亞", ""),
+    ("香港", ""),
+    ("北京", ""),
+    ("臺北", ""),
 ]
 
 # Four paths converging at top-right (1220, 100).
@@ -103,7 +104,7 @@ for p_idx, p in enumerate(paths):
     )
 
     for t in ts:
-        label = all_labels[current_idx]
+        city, dates = all_labels[current_idx]
         current_idx += 1
 
         bx = bezier(t, p[0][0], p[1][0], p[2][0], p[3][0])
@@ -127,7 +128,7 @@ for p_idx, p in enumerate(paths):
         angle = math.atan2(ty_v, tx_v) * 180 / math.pi
         rot = int(angle + 180)
 
-        raw.append([bx, by, rot, label])
+        raw.append([bx, by, rot, city, dates])
 
 # --- Repulsion pass: push overlapping planes apart ---
 MIN_DIST = 175  # px — planes are 200px wide; 175 gives ~12% clearance
@@ -151,11 +152,15 @@ for r in raw:
     r[0] = max(80, min(1220, r[0]))
     r[1] = max(50, min(920, r[1]))
 
+
 # --- Build plane lines ---
-plane_lines = [
-    f"  {{ file: PLANE, label: '{r[3]}', x: {int(r[0]):4}, y: {int(r[1]):4}, w: 200, rot: {r[2]:3} }},"
-    for r in raw
-]
+def plane_entry(r):
+    escaped = r[4].replace("\n", "\\n")  # real newline → literal \n for TS string
+    sublabel_part = f", sublabel: '{escaped}'" if escaped else ""
+    return f"  {{ file: PLANE, label: '{r[3]}'{sublabel_part}, x: {int(r[0]):4}, y: {int(r[1]):4}, w: 200, rot: {r[2]:3} }},"
+
+
+plane_lines = [plane_entry(r) for r in raw]
 
 # --- Build replacement blocks ---
 planes_block = (
@@ -173,12 +178,12 @@ with open(ts_path, "r", encoding="utf-8") as f:
 
 content = re.sub(
     r"const planes: SpreadPhotoLayout\[\] = \[[\s\S]*?\];",
-    planes_block,
+    lambda _: planes_block,
     content,
 )
 content = re.sub(
     r"const trajectories: PageConfig\['trajectories'\] = \[[\s\S]*?\];",
-    traj_block,
+    lambda _: traj_block,
     content,
 )
 

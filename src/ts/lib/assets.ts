@@ -10,9 +10,11 @@ export interface SharedAssets {
   tapes: Image[];
   texture: Image;
   fontName: string;
+  labelFontName: string;
 }
 
 const FONT_PATH = "resources/ChenYuluoyan-2.0-Thin.ttf";
+const LABEL_FONT_PATH = "resources/3270NerdFont-Regular.ttf";
 const BG_LEFT = "resources/field_notes/a_final.png";
 const BG_RIGHT = "resources/field_notes/b_final.png";
 const TAPE_DIR = "resources/tapes/individual";
@@ -34,6 +36,9 @@ export async function loadSharedAssets(): Promise<SharedAssets> {
     .replace("-2.0-Thin", "");
   GlobalFonts.registerFromPath(FONT_PATH, fontName);
 
+  const labelFontName = path.basename(LABEL_FONT_PATH).replace(".ttf", "");
+  GlobalFonts.registerFromPath(LABEL_FONT_PATH, labelFontName);
+
   const [bgLeft, bgRight, textureBuf] = await Promise.all([
     loadImage(BG_LEFT),
     loadImage(BG_RIGHT),
@@ -48,5 +53,5 @@ export async function loadSharedAssets(): Promise<SharedAssets> {
       .map((f) => loadImage(path.join(TAPE_DIR, f))),
   );
 
-  return { bgLeft, bgRight, tapes, texture, fontName };
+  return { bgLeft, bgRight, tapes, texture, fontName, labelFontName };
 }

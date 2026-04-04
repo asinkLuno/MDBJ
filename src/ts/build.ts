@@ -133,6 +133,26 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.translate(scaleX(sp.x), sp.y * sy);
       ctx.rotate(angle);
       drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor, ss);
+
+      if (sp.sublabel) {
+        const subFontSize = Math.max(9, Math.round(scaledW * 0.075));
+        ctx.font = `${subFontSize}px "${assets.labelFontName}"`;
+        (ctx as any).letterSpacing = `${-0.5 * ss}px`;
+        ctx.fillStyle = frameColor;
+        ctx.globalAlpha = 0.85;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        const lines = sp.sublabel.split("\n");
+        const lineH = subFontSize * 1.3;
+        const startY = fh / 2 + 4 * ss;
+        const startX = -fw / 2;
+        for (let i = 0; i < lines.length; i++) {
+          ctx.fillText(lines[i], startX, startY + i * lineH);
+        }
+        ctx.globalAlpha = 1;
+        (ctx as any).letterSpacing = "0px";
+      }
+
       ctx.restore();
     }
   }
@@ -211,10 +231,12 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.save();
       ctx.fillStyle = color;
       ctx.globalAlpha = 0.9;
-      ctx.font = `${FONT_ANNOTATION * ss}px "${assets.fontName}"`;
+      ctx.font = `${FONT_ANNOTATION * 0.75 * ss}px "${assets.labelFontName}"`;
+      (ctx as any).letterSpacing = `${-1 * ss}px`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
       ctx.fillText(ann.label, cx, ay + scaledH + 5 * sy);
+      (ctx as any).letterSpacing = "0px";
       ctx.restore();
     }
   }
