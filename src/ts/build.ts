@@ -1,9 +1,8 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync, mkdirSync } from "fs";
-import rough from "roughjs";
 import { loadSharedAssets } from "./lib/assets";
 import { FONT_ANNOTATION, COLOR_DEFAULT } from "./lib/typography";
-import { applyPaperTexture } from "./lib/render-utils";
+import { applyPaperTexture, drawTargetingFrame } from "./lib/render-utils";
 import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
 import { pages } from "./pages";
@@ -74,6 +73,15 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         ctx.fillText(sp.label, 0, 0);
       }
 
+      if (sp.showFrame) {
+        const frameColor = sp.frameColor ?? COLOR_DEFAULT;
+        const padX = -12,
+          padY = -28;
+        const fw = sp.w + padX * 2,
+          fh = h + padY * 2;
+        drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor);
+      }
+
       if (sp.tapes) {
         for (const tc of sp.tapes) {
           const t = assets.tapes[tc.idx % assets.tapes.length];
@@ -134,134 +142,42 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   }
 
-  // Draw tracking labels (bounding boxes + data readouts)
-  if (config.trackingLabels) {
-    for (const tl of config.trackingLabels) {
-      const accent = tl.color ?? "#88ccff";
-      const allLines = [tl.label, ...(tl.data ?? [])];
-      const fontSize = 11;
-      const lineH = 14;
-      const padX = 6;
-      const padY = 4;
-      const boxH = padY * 2 + allLines.length * lineH;
-      const maxW =
-        Math.max(...allLines.map((l) => l.length)) * fontSize * 0.55 + padX * 2;
-
-      ctx.save();
-
-      // Connector line to target
-      if (tl.lineToX !== undefined && tl.lineToY !== undefined) {
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 0.8;
-        ctx.setLineDash([3, 3]);
-        ctx.globalAlpha = 0.6;
-        ctx.beginPath();
-        ctx.moveTo(tl.x + maxW / 2, tl.y + boxH / 2);
-        ctx.lineTo(tl.lineToX, tl.lineToY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.globalAlpha = 1;
-      }
-
-      // Box background
-      ctx.globalAlpha = 0.82;
-      ctx.fillStyle = "rgba(5,12,22,0.88)";
-      ctx.fillRect(tl.x, tl.y, maxW, boxH);
-      ctx.globalAlpha = 1;
-
-      // Box border (accent color, thin)
-      ctx.strokeStyle = accent;
-      ctx.lineWidth = 0.8;
-      ctx.strokeRect(tl.x, tl.y, maxW, boxH);
-
-      // Corner ticks
-      const tick = 5;
-      ctx.strokeStyle = accent;
-      ctx.lineWidth = 1.2;
-      [
-        [tl.x, tl.y],
-        [tl.x + maxW, tl.y],
-        [tl.x, tl.y + boxH],
-        [tl.x + maxW, tl.y + boxH],
-      ].forEach(([cx, cy], i) => {
-        const sx = i % 2 === 0 ? 1 : -1;
-        const sy = i < 2 ? 1 : -1;
-        ctx.beginPath();
-        ctx.moveTo(cx - sx * tick, cy);
-        ctx.lineTo(cx, cy);
-        ctx.lineTo(cx, cy - sy * tick);
-        ctx.stroke();
-      });
-
-      // Text
-      ctx.font = `bold ${fontSize}px "Courier New", monospace`;
-      ctx.fillStyle = accent;
-      ctx.fillText(tl.label, tl.x + padX, tl.y + padY + fontSize);
-
-      if (tl.sublabel) {
-        ctx.font = `${fontSize}px "Courier New", monospace`;
-        ctx.fillStyle = "rgba(180,210,240,0.9)";
-        ctx.fillText(tl.sublabel, tl.x + padX, tl.y + padY + fontSize + lineH);
-      }
-
-      ctx.font = `${fontSize - 1}px "Courier New", monospace`;
-      ctx.fillStyle = "rgba(160,200,230,0.85)";
-      const dataStart = tl.sublabel ? 2 : 1;
-      (tl.data ?? []).forEach((line, i) => {
-        ctx.fillText(
-          line,
-          tl.x + padX,
-          tl.y + padY + fontSize + (dataStart + i) * lineH,
-        );
-      });
-
-      ctx.restore();
-    }
-  }
-
-  // Draw Annotations — Rough.js hand-drawn box + highlighter strip + handwritten label
+  // Draw Annotations
   if (config.annotations) {
-    const rc = rough.canvas(final as any);
     for (const ann of config.annotations) {
       const pageOffset = (ann as any).page === "left" ? 0 : leftCanvas.width;
       const ax = pageOffset + ann.x;
       const ay = ann.y;
-      const color = "#4455ee";
+      const color = ann.color ?? COLOR_DEFAULT;
+      const cx = ax + ann.w / 2,
+        cy = ay + ann.h / 2;
 
-      // HUD-style targeting frame: corner brackets + center crosshair
-      const cLen = Math.round(Math.min(ann.w, ann.h) * 0.22); // bracket arm length
-      const lineOpts = { stroke: color, strokeWidth: 1.6, roughness: 0.8 };
-
-      // Top-left
-      rc.line(ax, ay + cLen, ax, ay, lineOpts);
-      rc.line(ax, ay, ax + cLen, ay, lineOpts);
-      // Top-right
-      rc.line(ax + ann.w - cLen, ay, ax + ann.w, ay, lineOpts);
-      rc.line(ax + ann.w, ay, ax + ann.w, ay + cLen, lineOpts);
-      // Bottom-left
-      rc.line(ax, ay + ann.h - cLen, ax, ay + ann.h, lineOpts);
-      rc.line(ax, ay + ann.h, ax + cLen, ay + ann.h, lineOpts);
-      // Bottom-right
-      rc.line(ax + ann.w - cLen, ay + ann.h, ax + ann.w, ay + ann.h, lineOpts);
-      rc.line(ax + ann.w, ay + ann.h - cLen, ax + ann.w, ay + ann.h, lineOpts);
+      drawTargetingFrame(ctx, ax, ay, ann.w, ann.h, color);
 
       // Center crosshair (opt-in)
       if (ann.crosshair) {
-        const cx = ax + ann.w / 2,
-          cy = ay + ann.h / 2,
-          cSize = 6;
-        rc.line(cx - cSize, cy, cx + cSize, cy, lineOpts);
-        rc.line(cx, cy - cSize, cx, cy + cSize, lineOpts);
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.0;
+        ctx.setLineDash([]);
+        const cSize = 6;
+        ctx.beginPath();
+        ctx.moveTo(cx - cSize, cy);
+        ctx.lineTo(cx + cSize, cy);
+        ctx.moveTo(cx, cy - cSize);
+        ctx.lineTo(cx, cy + cSize);
+        ctx.stroke();
+        ctx.restore();
       }
 
-      // Handwritten label below box
+      // Label below box
       ctx.save();
       ctx.fillStyle = color;
       ctx.globalAlpha = 0.9;
       ctx.font = `${FONT_ANNOTATION}px "${assets.fontName}"`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillText(ann.label, ax + ann.w / 2, ay + ann.h + 5);
+      ctx.fillText(ann.label, cx, ay + ann.h + 5);
       ctx.restore();
     }
   }

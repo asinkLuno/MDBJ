@@ -45,6 +45,101 @@ export function applyPaperTexture(
 }
 
 /**
+ * Draw a HUD-style targeting frame: full rectangle + bold corner brackets + mid-side ticks.
+ * Coordinates are in the current canvas transform space (works in both rotated local space
+ * and absolute canvas space).
+ *
+ * @param ctx    Canvas 2D context
+ * @param x      Left edge of frame
+ * @param y      Top edge of frame
+ * @param w      Frame width
+ * @param h      Frame height
+ * @param color  Stroke color
+ */
+export function drawTargetingFrame(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  color: string,
+): void {
+  const cLen = Math.round(Math.min(w, h) * 0.22);
+  const tick = Math.round(Math.min(w, h) * 0.08);
+  const cx = x + w / 2,
+    cy = y + h / 2;
+
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.setLineDash([]);
+
+  // Full rectangle (semi-transparent)
+  ctx.lineWidth = 1.4;
+  ctx.globalAlpha = 0.65;
+  ctx.strokeRect(x, y, w, h);
+  ctx.globalAlpha = 1;
+
+  // Corner brackets (bold)
+  ctx.lineWidth = 2.4;
+  [
+    [
+      [x, y + cLen],
+      [x, y],
+      [x + cLen, y],
+    ],
+    [
+      [x + w - cLen, y],
+      [x + w, y],
+      [x + w, y + cLen],
+    ],
+    [
+      [x, y + h - cLen],
+      [x, y + h],
+      [x + cLen, y + h],
+    ],
+    [
+      [x + w - cLen, y + h],
+      [x + w, y + h],
+      [x + w, y + h - cLen],
+    ],
+  ].forEach(([start, corner, end]) => {
+    ctx.beginPath();
+    ctx.moveTo(start[0], start[1]);
+    ctx.lineTo(corner[0], corner[1]);
+    ctx.lineTo(end[0], end[1]);
+    ctx.stroke();
+  });
+
+  // Mid-side tick marks
+  ctx.lineWidth = 1.0;
+  [
+    [
+      [x - tick, cy],
+      [x + tick, cy],
+    ],
+    [
+      [x + w - tick, cy],
+      [x + w + tick, cy],
+    ],
+    [
+      [cx, y - tick],
+      [cx, y + tick],
+    ],
+    [
+      [cx, y + h - tick],
+      [cx, y + h + tick],
+    ],
+  ].forEach(([a, b]) => {
+    ctx.beginPath();
+    ctx.moveTo(a[0], a[1]);
+    ctx.lineTo(b[0], b[1]);
+    ctx.stroke();
+  });
+
+  ctx.restore();
+}
+
+/**
  * Draw tape stickers onto a photo.
  * Must be called inside a translated+rotated ctx (origin = photo center).
  *

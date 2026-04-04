@@ -43,6 +43,7 @@ const planes: SpreadPhotoLayout[] = [
 
 planes.forEach((p) => {
   p.labelColor = COLOR_BLACK;
+  p.showFrame = true;
 });
 
 const trajectories: PageConfig["trajectories"] = [];

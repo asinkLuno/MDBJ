@@ -28,7 +28,6 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "opencc": "^1.2.0",
-    "roughjs": "^4.6.6"
+    "opencc": "^1.2.0"
   }
 }

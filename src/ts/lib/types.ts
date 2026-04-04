@@ -63,17 +63,6 @@ export interface TrajectoryPath {
   arrowEnd?: boolean;
 }
 
-export interface TrackingLabel {
-  x: number; // top-left of box on spread canvas
-  y: number;
-  label: string;
-  sublabel?: string;
-  data?: string[]; // additional data lines
-  color?: string; // accent color, default '#88ccff'
-  lineToX?: number; // draw a connecting line to this point
-  lineToY?: number;
-}
-
 export interface SpreadPhotoLayout {
   file: string;
   x: number; // center X on combined spread canvas
@@ -89,6 +78,8 @@ export interface SpreadPhotoLayout {
   labelColor?: string;
   scaleY?: number; // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
   blur?: number; // motion/depth-of-field blur in pixels
+  showFrame?: boolean; // draw HUD targeting frame around the photo
+  frameColor?: string; // frame accent color, defaults to COLOR_DEFAULT
 }
 
 export interface PageConfig {
@@ -100,6 +91,5 @@ export interface PageConfig {
   annotations?: Annotation[];
   spreadPhotos?: SpreadPhotoLayout[];
   trajectories?: TrajectoryPath[];
-  trackingLabels?: TrackingLabel[];
   toTraditional?: boolean;
 }
