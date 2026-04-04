@@ -60,15 +60,15 @@ all_labels = [
 # Four paths converging at top-right (1300, 100).
 # Path B is the main diagonal — drawn as the visible trajectory line.
 paths = [
-    [(0, 400), (350, 350), (850, 200), (1300, 100)],  # Path A: left-upper
-    [(0, 700), (400, 750), (950, 400), (1300, 100)],  # Path B: left-middle (main)
+    [(0, 500), (350, 450), (900, 350), (1300, 100)],  # Path A: left-upper
+    [(0, 700), (400, 750), (950, 450), (1300, 100)],  # Path B: left-middle (main)
     [(100, 950), (450, 950), (950, 550), (1300, 100)],  # Path C: bottom-left
     [(600, 950), (800, 900), (1100, 600), (1300, 100)],  # Path D: bottom-mid
 ]
 
 # More on A/B (spread wide), fewer on C/D (bottom paths converge faster)
-counts = [9, 9, 7, 6]  # total = 31
-t_maxs = [0.78, 0.82, 0.85, 0.72]
+counts = [8, 10, 7, 6]  # total = 31
+t_maxs = [0.78, 0.82, 0.95, 0.72]
 
 # Smaller stagger for C/D: their curves start nearly horizontal,
 # so large perpendicular offset pushes planes off-screen vertically.
@@ -147,7 +147,7 @@ for r in raw:
 
 # --- Build plane lines ---
 plane_lines = [
-    f"  {{ file: PLANE, label: '{r[3]}', x: {int(r[0]):4}, y: {int(r[1]):4}, w: 185, rot: {r[2]:3} }},"
+    f"  {{ file: PLANE, label: '{r[3]}', x: {int(r[0]):4}, y: {int(r[1]):4}, w: 200, rot: {r[2]:3} }},"
     for r in raw
 ]
 
