@@ -9,7 +9,7 @@ const PLANE = "resources/虾片/plane.png";
 
 const planes: SpreadPhotoLayout[] = [
   { file: PLANE, label: '台中', sublabel: '231231  240101\n240102  240105\n240106  240107', x:   80, y:  412, w: 200, rot: 168 },
-  { file: PLANE, label: '高雄', sublabel: '240323  240324\n240329  240330\n240331', x:  189, y:  394, w: 200, rot: 168 },
+  { file: PLANE, label: '高雄', sublabel: '240323  240324\n240329  240330\n240331', x:  319, y:  364, w: 200, rot: 158 },
   { file: PLANE, label: '香港', sublabel: '240430  240503\n240504  240505\n240507  240508\n240509', x:  336, y:  488, w: 200, rot: 167 },
   { file: PLANE, label: '北京', sublabel: '240518  240519\n240521  240522\n240524  240525\n240526  240530\n240531  240601', x:  479, y:  387, w: 200, rot: 165 },
   { file: PLANE, label: '深圳', sublabel: '240701  240702\n240703  240705\n240706  240707', x:  553, y:  228, w: 200, rot: 163 },
@@ -26,7 +26,7 @@ const planes: SpreadPhotoLayout[] = [
   { file: PLANE, label: '杭州', sublabel: '250523  250524\n250525  250527\n250528', x:  816, y:  423, w: 200, rot: 145 },
   { file: PLANE, label: '哈爾濱', sublabel: '250613  250614\n250615', x:  989, y:  451, w: 200, rot: 140 },
   { file: PLANE, label: '臺北', sublabel: '250627  250628\n250629  250704\n250705  250706\n250711  250712', x: 1220, y:  303, w: 200, rot: 137 },
-  { file: PLANE, label: '北京', sublabel: '250725  250726\n250727  250801\n250802  250803\n250806  250808\n250809  250810\n250815  250816\n250817', x:  181, y:  920, w: 200, rot: 173 },
+  { file: PLANE, label: '北京', sublabel: '250725  250726  250727\n250801  250802  250803\n250806  250808  250809\n250810  250815  250816\n250817', x:  111, y:  880, w: 200, rot: 173 },
   { file: PLANE, label: '上海', sublabel: '250902  250903\n250904  250910', x:  370, y:  920, w: 200, rot: 157 },
   { file: PLANE, label: '貴陽', sublabel: '250912  250913\n250914', x:  582, y:  789, w: 200, rot: 147 },
   { file: PLANE, label: '長沙', sublabel: '250919  250920\n250921', x:  755, y:  748, w: 200, rot: 142 },
