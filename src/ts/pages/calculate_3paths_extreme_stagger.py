@@ -78,13 +78,17 @@ all_labels = [
     ("臺北", "coming soon..."),
 ]
 
-# === 几何定义 ===
+# === 几何定义 (大幅向下平移 + 压缩高度) ===
+# 脊梁起点整体下移，弧度变平缓
 spine = [(60, 800), (650, 850), (1050, 550), (1280, 150)]
-left_wall = [(-20, 500), (500, 550), (900, 300), (1280, 50)]
-right_wall = [(60, 1050), (800, 1050), (1200, 700), (1280, 250)]
 
+# 上墙整体下移 (Y从 200 压扁到 350)，给底部散布腾出高度空间
+left_wall = [(-30, 350), (450, 450), (900, 250), (1280, 50)]
+
+# 下墙整体大幅下移 (Y从 1000 大幅压扁到 1200)，把飞机“兜”在屏幕底部边缘
+right_wall = [(100, 1150), (350, 1100), (1150, 800), (1280, 250)]
 # 设定我们要强制锁定的终点坐标 (最尖端)
-TARGET_TIP_POS = (1250, 160)
+TARGET_TIP_POS = (1250, 100)
 
 # === 物理引擎初始化 ===
 space = pymunk.Space()
@@ -120,11 +124,11 @@ space.add(cap_top)
 planes_data = []
 total_planes = len(all_labels)
 
-# 用来记录那一架需要被锁死的“臺北”飞机
 anchor_body = None
 
 for i, (city, dates) in enumerate(all_labels):
-    t_spawn = 0.1 + (i / (total_planes - 1)) * 0.8
+    # 【细节调整】把时间点跨度放得更宽 (0.05~0.95)，让它们刚出生就不挤在一起
+    t_spawn = 0.05 + (i / (total_planes - 1)) * 0.90
 
     lx = bezier(
         t_spawn, left_wall[0][0], left_wall[1][0], left_wall[2][0], left_wall[3][0]
@@ -145,14 +149,15 @@ for i, (city, dates) in enumerate(all_labels):
 
     body = pymunk.Body(1, math.inf)
 
-    # 【核心逻辑】：识别特定的飞机
     if city == "臺北" and "coming soon" in dates:
         body.position = TARGET_TIP_POS
-        anchor_body = body  # 存入变量，等下每一帧都要锁死它
+        anchor_body = body
     else:
         body.position = (spawn_x, spawn_y)
 
-    shape = pymunk.Circle(body, 75)
+    # 【核心调整】将碰撞半径从 75 增加到了 82。
+    # 强制在飞机之间留出物理间隙，从根本上解决视觉过密的问题。
+    shape = pymunk.Circle(body, 70)
     shape.elasticity = 0.1
     shape.friction = 0.7
 
@@ -162,9 +167,8 @@ for i, (city, dates) in enumerate(all_labels):
 # === 两阶段物理模拟 ===
 
 # 阶段一：吸引聚集
-space.gravity = (550, -320)
+space.gravity = (550, -320)  # Y方向向上的吸力稍微减弱一点，顺应平缓的漏斗
 for _ in range(450):
-    # 强制让锚点飞机纹丝不动
     if anchor_body:
         anchor_body.position = TARGET_TIP_POS
         anchor_body.velocity = (0, 0)
@@ -172,9 +176,10 @@ for _ in range(450):
 
 # 阶段二：释放重叠 (舒展期)
 space.gravity = (0, 0)
-space.damping = 0.05
-for _ in range(300):
-    # 舒展期依然强制锁死，它会作为一堵“墙”把别的飞机往后推，确保自己绝对在最前面
+# 【细节调整】稍微降低一点点阻尼 (0.05 -> 0.15)，像加了润滑油
+# 这样在解除重力后，82半径的巨大排斥力能把飞机推得更开
+space.damping = 0.1
+for _ in range(350):
     if anchor_body:
         anchor_body.position = TARGET_TIP_POS
         anchor_body.velocity = (0, 0)
@@ -195,8 +200,9 @@ for p in planes_data:
     angle = math.atan2(ty_v, tx_v) * 180 / math.pi
     rot = int(angle + 180 + random.uniform(-8, 8))
 
+    # 画布锁定放宽，允许散得开的飞机在底部边缘有充足的空间
     px = max(20, min(1320, px))
-    py = max(20, min(1050, py))
+    py = max(20, min(1150, py))
 
     raw.append([px, py, rot, city, dates])
 
