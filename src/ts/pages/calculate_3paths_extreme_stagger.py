@@ -57,13 +57,13 @@ all_labels = [
     "臺北",
 ]
 
-# Four paths converging at top-right (1300, 100).
+# Four paths converging at top-right (1330, 100).
 # Path B is the main diagonal — drawn as the visible trajectory line.
 paths = [
-    [(0, 500), (350, 450), (900, 350), (1300, 100)],  # Path A: left-upper
-    [(0, 700), (400, 750), (950, 450), (1300, 100)],  # Path B: left-middle (main)
-    [(100, 950), (450, 950), (950, 550), (1300, 100)],  # Path C: bottom-left
-    [(600, 950), (800, 900), (1100, 600), (1300, 100)],  # Path D: bottom-mid
+    [(0, 500), (350, 450), (900, 350), (1330, 100)],  # Path A: left-upper
+    [(0, 700), (400, 750), (950, 450), (1330, 100)],  # Path B: left-middle (main)
+    [(100, 950), (450, 950), (950, 550), (1330, 100)],  # Path C: bottom-left
+    [(600, 950), (800, 900), (1100, 600), (1330, 100)],  # Path D: bottom-mid
 ]
 
 # More on A/B (spread wide), fewer on C/D (bottom paths converge faster)
@@ -115,7 +115,7 @@ for p_idx, p in enumerate(paths):
         bx += random.uniform(-15, 15) + nx * stagger
         by += random.uniform(-15, 15) + ny * stagger
 
-        bx = max(50, min(1290, bx))
+        bx = max(50, min(1330, bx))
         by = max(50, min(940, by))
 
         angle = math.atan2(ty_v, tx_v) * 180 / math.pi
@@ -142,7 +142,7 @@ for _ in range(200):
 
 # Clamp after repulsion
 for r in raw:
-    r[0] = max(50, min(1290, r[0]))
+    r[0] = max(50, min(1330, r[0]))
     r[1] = max(50, min(940, r[1]))
 
 # --- Build plane lines ---

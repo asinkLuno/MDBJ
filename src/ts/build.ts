@@ -32,9 +32,19 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   // Reference dimensions from original field notes (per page)
   const REF_W = 680;
   const REF_H = 1036;
-  const sx = leftCanvas.width / REF_W;
+  const sx_left = leftCanvas.width / REF_W;
+  const sx_right = rightCanvas.width / REF_W;
   const sy = leftCanvas.height / REF_H;
-  const ss = Math.min(sx, sy);
+  const ss = Math.min(sx_left, sy);
+
+  // Helper for split-scaling across different page widths
+  const scaleX = (x: number) => {
+    if (x <= REF_W) {
+      return x * sx_left;
+    } else {
+      return leftCanvas.width + (x - REF_W) * sx_right;
+    }
+  };
 
   // Draw spread photos (span both pages)
   if (config.spreadPhotos) {
@@ -48,7 +58,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       if (sp.blur) {
         (ctx as any).filter = `blur(${sp.blur * ss}px)`;
       }
-      ctx.translate(sp.x * sx, sp.y * sy);
+      ctx.translate(scaleX(sp.x), sp.y * sy);
       ctx.rotate(angle);
       if (sp.scaleY !== undefined) {
         ctx.scale(1, sp.scaleY);
@@ -60,7 +70,8 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
 
       // Draw composited plane to main canvas with shadow
       (ctx as any).shadowBlur = (sp.shadowBlur ?? 8) * ss;
-      (ctx as any).shadowOffsetX = (sp.shadowOffsetX ?? 2) * sx;
+      (ctx as any).shadowOffsetX =
+        (sp.shadowOffsetX ?? 2) * (sp.x <= REF_W ? sx_left : sx_right);
       (ctx as any).shadowOffsetY = (sp.shadowOffsetY ?? 4) * sy;
       (ctx as any).shadowColor = sp.shadowColor ?? "rgba(0,0,0,0.22)";
       ctx.drawImage(off, -scaledW / 2, -h / 2);
@@ -83,7 +94,8 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
 
       if (sp.showFrame) {
         const frameColor = sp.frameColor ?? COLOR_DEFAULT;
-        const padX = -12 * sx,
+        const curSx = sp.x <= REF_W ? sx_left : sx_right;
+        const padX = -12 * curSx,
           padY = -28 * sy;
         const fw = scaledW + padX * 2,
           fh = h + padY * 2;
@@ -119,29 +131,29 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.lineWidth = (traj.lineWidth ?? 1.2) * ss;
       ctx.setLineDash((traj.dash ?? [5, 4]).map((d) => d * ss));
       ctx.beginPath();
-      ctx.moveTo(traj.points[0].x * sx, traj.points[0].y * sy);
+      ctx.moveTo(scaleX(traj.points[0].x), traj.points[0].y * sy);
       for (let i = 1; i < traj.points.length; i++) {
-        ctx.lineTo(traj.points[i].x * sx, traj.points[i].y * sy);
+        ctx.lineTo(scaleX(traj.points[i].x), traj.points[i].y * sy);
       }
       ctx.stroke();
 
       if (traj.arrowEnd) {
         const last = traj.points[traj.points.length - 1];
         const prev = traj.points[traj.points.length - 2];
-        const dx = (last.x - prev.x) * sx;
+        const dx = scaleX(last.x) - scaleX(prev.x);
         const dy = (last.y - prev.y) * sy;
         const ang = Math.atan2(dy, dx);
         const alen = 10 * ss;
         ctx.setLineDash([]);
         ctx.beginPath();
-        ctx.moveTo(last.x * sx, last.y * sy);
+        ctx.moveTo(scaleX(last.x), last.y * sy);
         ctx.lineTo(
-          last.x * sx - alen * Math.cos(ang - 0.4),
+          scaleX(last.x) - alen * Math.cos(ang - 0.4),
           last.y * sy - alen * Math.sin(ang - 0.4),
         );
-        ctx.moveTo(last.x * sx, last.y * sy);
+        ctx.moveTo(scaleX(last.x), last.y * sy);
         ctx.lineTo(
-          last.x * sx - alen * Math.cos(ang + 0.4),
+          scaleX(last.x) - alen * Math.cos(ang + 0.4),
           last.y * sy - alen * Math.sin(ang + 0.4),
         );
         ctx.stroke();
@@ -153,8 +165,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   // Draw Annotations
   if (config.annotations) {
     for (const ann of config.annotations) {
-      const pageOffset = (ann as any).page === "left" ? 0 : leftCanvas.width;
-      const ax = pageOffset + ann.x * sx;
+      const ax = scaleX(ann.x);
       const ay = ann.y * sy;
       const color = ann.color ?? COLOR_DEFAULT;
       const scaledW = ann.w * ss;
