@@ -16,10 +16,10 @@ export interface Section {
 }
 
 export interface TapeConfig {
-  idx: number;       // tape index
-  offsetX?: number;  // horizontal offset as fraction of photo width (default 0)
-  label?: string;    // text to draw on the tape
-  side?: 'top' | 'bottom'; // which edge to attach tape (default 'top')
+  idx: number; // tape index
+  offsetX?: number; // horizontal offset as fraction of photo width (default 0)
+  label?: string; // text to draw on the tape
+  side?: "top" | "bottom"; // which edge to attach tape (default 'top')
   tapeWidth?: number; // tape width as fraction of photo width (default 0.6)
 }
 
@@ -40,7 +40,10 @@ export interface Annotation {
   label: string;
   color?: string;
   connectToLeftIdx?: number; // index of photo in leftPhotos
-  page?: 'left' | 'right';
+  page?: "left" | "right";
+  lineToX?: number; // spread canvas X to draw a connecting line to
+  lineToY?: number;
+  crosshair?: boolean; // draw center crosshair, default false
 }
 
 export interface LeftText {
@@ -53,39 +56,39 @@ export interface LeftText {
 }
 
 export interface TrajectoryPath {
-  points: Array<{ x: number; y: number }>;  // polyline control points on spread canvas
+  points: Array<{ x: number; y: number }>; // polyline control points on spread canvas
   color?: string;
-  dash?: number[];        // e.g. [5, 4]
+  dash?: number[]; // e.g. [5, 4]
   lineWidth?: number;
   arrowEnd?: boolean;
 }
 
 export interface TrackingLabel {
-  x: number;             // top-left of box on spread canvas
+  x: number; // top-left of box on spread canvas
   y: number;
   label: string;
   sublabel?: string;
-  data?: string[];       // additional data lines
-  color?: string;        // accent color, default '#88ccff'
-  lineToX?: number;      // draw a connecting line to this point
+  data?: string[]; // additional data lines
+  color?: string; // accent color, default '#88ccff'
+  lineToX?: number; // draw a connecting line to this point
   lineToY?: number;
 }
 
 export interface SpreadPhotoLayout {
   file: string;
-  x: number;          // center X on combined spread canvas
-  y: number;          // center Y on combined spread canvas
-  w: number;          // display width
-  rot: number;        // rotation in degrees
+  x: number; // center X on combined spread canvas
+  y: number; // center Y on combined spread canvas
+  w: number; // display width
+  rot: number; // rotation in degrees
   shadowBlur?: number;
   shadowOffsetX?: number;
   shadowOffsetY?: number;
   shadowColor?: string;
   tapes?: TapeConfig[];
-  label?: string;     // text drawn centered on the plane
+  label?: string; // text drawn centered on the plane
   labelColor?: string;
-  scaleY?: number;    // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
-  blur?: number;      // motion/depth-of-field blur in pixels
+  scaleY?: number; // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
+  blur?: number; // motion/depth-of-field blur in pixels
 }
 
 export interface PageConfig {

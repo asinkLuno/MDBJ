@@ -53,13 +53,13 @@ def pad_to_3x4(img: Image.Image) -> Image.Image:
 
 
 def main():
-    input_path = "resources/虾片/mayday_3d.jpg"
-    output_path = "resources/mayday_3d_dithered.png"
+    input_path = "resources/虾片/ashin_3d.jpg"
+    output_path = "resources/虾片/tmp.png"
     pad = False
 
     img = Image.open(input_path).convert("L")
     w_orig, h_orig = img.size
-    size_tuple = (int(w_orig * 350 / h_orig), 350)
+    size_tuple = (int(w_orig * 300 / h_orig), 300)
     if pad:
         img = pad_to_3x4(img)
     img = img.resize(size_tuple, Image.Resampling.LANCZOS)

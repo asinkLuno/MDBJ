@@ -2,10 +2,10 @@
   "name": "mdbj",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "process-stickers": "npx tsx src/ts/process-stickers.ts",
-    "build": "npx tsx src/ts/build.ts"
+    "build": "npx tsx src/ts/build.ts",
+    "lint": "npx knip"
   },
   "repository": {
     "type": "git",
@@ -22,11 +22,13 @@
   "devDependencies": {
     "@napi-rs/canvas": "^0.1.97",
     "@types/node": "^25.5.0",
-    "satori": "^0.26.0",
+    "knip": "^6.3.0",
     "sharp": "^0.34.5",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "opencc": "^1.2.0"
+    "opencc": "^1.2.0",
+    "roughjs": "^4.6.6"
   }
 }

@@ -60,6 +60,15 @@ repos:
 
   - repo: local
     hooks:
+      - id: knip
+        name: knip
+        entry: npx knip
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  - repo: local
+    hooks:
       - id: mdformat
         name: mdformat
         entry: mdformat

@@ -1,9 +1,9 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import OpenCC from "opencc";
 import type { Section, PhotoLayout } from "./types";
-import { applyPaperTexture } from "./assets";
 import type { SharedAssets } from "./assets";
-import { drawTapes } from "./render-utils";
+import { applyPaperTexture, drawTapes } from "./render-utils";
+import { FONT_SECTION_DEFAULT, COLOR_DEFAULT } from "./typography";
 
 const converter = new OpenCC("s2t.json");
 
@@ -52,8 +52,8 @@ export async function renderRight(
 
   for (const section of sections) {
     const opts = section.options || {};
-    const fontSize = opts.fontSize || 26;
-    const color = opts.color || "#1a1a1a";
+    const fontSize = opts.fontSize || FONT_SECTION_DEFAULT;
+    const color = opts.color || COLOR_DEFAULT;
     const lineHeight = opts.lineHeight || fontSize * 1.4;
     const bold = opts.bold ?? false;
 

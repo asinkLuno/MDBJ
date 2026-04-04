@@ -1,8 +1,8 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import type { PhotoLayout, LeftText } from "./types";
-import { applyPaperTexture } from "./assets";
 import type { SharedAssets } from "./assets";
-import { drawTapes } from "./render-utils";
+import { applyPaperTexture, drawTapes } from "./render-utils";
+import { FONT_LEFT_TEXT_DEFAULT, COLOR_DEFAULT } from "./typography";
 
 export async function renderLeft(
   photos: PhotoLayout[],
@@ -17,9 +17,9 @@ export async function renderLeft(
   // Render left texts
   if (leftTexts) {
     for (const lt of leftTexts) {
-      ctx.font = `${lt.fontSize || 22}px ${fontName}`;
+      ctx.font = `${lt.fontSize || FONT_LEFT_TEXT_DEFAULT}px ${fontName}`;
       ctx.letterSpacing = `${lt.letterSpacing || 0}px`;
-      ctx.fillStyle = lt.color || "#1a1a1a";
+      ctx.fillStyle = lt.color || COLOR_DEFAULT;
       ctx.fillText(lt.text, lt.x, lt.y);
     }
   }

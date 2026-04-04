@@ -4,8 +4,8 @@ from pathlib import Path
 
 import zhconv
 
-INPUT_DIR = Path("五月天正规专辑歌词")
-OUTPUT_DIR = Path("output_lyrics")
+INPUT_DIR = Path("resources/raw_lyrics")
+OUTPUT_DIR = Path("resources/output_lyrics")
 
 
 def extract_lyrics(content: str) -> list[str]:
