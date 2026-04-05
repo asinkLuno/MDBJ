@@ -1,7 +1,7 @@
 import type { PageConfig, TrajectoryPath, Annotation } from "../lib/types";
 import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
 
-const COLOR_RED_VINTAGE = "#8B2020"; // deep warm crimson — antique/archival feel
+const COLOR_RED_ACCENT = "#ee4455";
 
 const SONGS_5525 = [
   "OAOA",
@@ -119,45 +119,80 @@ function getYearValue(song: string): number {
   return date.getFullYear() + date.getMonth() / 12 + date.getDate() / 365;
 }
 
-// 逆时针旋转90度后的坐标系 (CCW 90 deg from previous layout)
-// Time (Y) moves LEFT along the short edge
-// 5525 (X) moves UP along the long edge
-// 5526 (Z) moves DOWN-RIGHT for depth
-//
-// Left page bounds: x ∈ [0, 680], y ∈ [0, 1036] (ref px), margin ~30px
-// Chart footprint:
-//   width  = TIME_SCALE*24 + Z_SCALE*sin36°*30 = 15*24 + 14*0.588*30 ≈ 607
-//   height = X_SCALE*32   + Z_SCALE*cos36°*30 = 18*32 + 14*0.809*30 ≈ 916
-// Origin: left ≥ 60, right ≤ 667, top ≥ 64, bottom ≤ 980
 const ORIGIN_X = 420;
 const ORIGIN_Y = 560;
-const TIME_SCALE = 15; // px per year (Time goes left)
-const X_SCALE = 16; // px per song (5525 goes up)
-const Z_SCALE = 16; // px per song (5526 goes down-right)
-const ANGLE = Math.PI / 6; // 30° — steeper depth, more vertical spread per step
-
-// Non-linear time mapping: 2016+ is compressed to 1/4 scale
-// (only 任性 in 2022 and a few 2016 songs live there)
-const YEAR_BREAK = 2016;
-const YEAR_COMPRESS = 0.25;
+const TIME_SCALE = 15;
+const X_SCALE = 16;
+const Z_SCALE = 16;
+const ANGLE = Math.PI / 6;
 
 function yearToVisual(year: number): number {
-  if (year <= YEAR_BREAK) return year - 1999;
-  return YEAR_BREAK - 1999 + (year - YEAR_BREAK) * YEAR_COMPRESS;
+  return year - 1999;
 }
 
 function project(x: number, y: number, z: number) {
   const yearOffset = yearToVisual(y);
   return {
-    // Time goes left (-), Z goes right (+)
     x: ORIGIN_X - yearOffset * TIME_SCALE + z * Z_SCALE * Math.sin(ANGLE),
-    // 5525 goes up (-), Z goes down (+)
     y: ORIGIN_Y - x * X_SCALE + z * Z_SCALE * Math.cos(ANGLE),
+  };
+}
+
+function createArrow(
+  pStart: { x: number; y: number },
+  pEnd: { x: number; y: number },
+  color: string,
+): TrajectoryPath {
+  const dx = pEnd.x - pStart.x;
+  const dy = pEnd.y - pStart.y;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  const arrowLen = 8;
+  const arrowW = 4;
+  return {
+    points: [
+      {
+        x: pEnd.x - arrowLen * ux + arrowW * uy,
+        y: pEnd.y - arrowLen * uy - arrowW * ux,
+      },
+      pEnd,
+      {
+        x: pEnd.x - arrowLen * ux - arrowW * uy,
+        y: pEnd.y - arrowLen * uy + arrowW * ux,
+      },
+    ],
+    color,
+    lineWidth: 1.5,
   };
 }
 
 const trajectories: TrajectoryPath[] = [];
 const annotations: Annotation[] = [];
+
+// ================= 背景色块区域 (最先绘制，确保垫在网格和图表最底部) =================
+// 5525 第 8-23 个点对应索引 7-22，即 x 轴的 8 到 23。
+// 向外延伸 0.5 的余量包裹，即 7.5 到 23.5。通过横向线段堆叠出完整的矩形高亮区域。
+for (let x = 7.5; x <= 23.5; x += 0.5) {
+  trajectories.push({
+    points: [project(x, 1999, 0), project(x, 2024.5, 0)],
+    color: "rgba(68, 85, 238, 0.12)", // 蓝色半透明
+    lineWidth: 9.5, // 0.5 步长对应的宽度覆盖
+    dash: [],
+  });
+}
+
+// 5526 第 8-22 个点对应索引 7-21，即 z 轴的 8 到 22。包裹区间 7.5 到 22.5。
+// 这里同样通过堆叠横线，完美贴合透视角度，生成倾斜的平行四边形背景。
+for (let z = 7.5; z <= 22.5; z += 0.5) {
+  trajectories.push({
+    points: [project(0, 1999, z), project(0, 2024.5, z)],
+    color: "rgba(238, 68, 85, 0.12)", // 红色半透明
+    lineWidth: 8.5,
+    dash: [],
+  });
+}
+// =======================================================================
 
 // Grid lines
 for (let y = 2000; y <= 2023; y += 1) {
@@ -176,60 +211,58 @@ for (let y = 2000; y <= 2023; y += 1) {
   });
 }
 
+const pOrigin = project(0, 1999, 0);
+const pTimeEnd = project(0, 2024.5, 0);
+const pXEnd = project(34, 1999, 0);
+const pZEnd = project(0, 1999, 32);
+
 // Axes
 trajectories.push({
-  points: [project(0, 1999, 0), project(0, 2023, 0)],
+  points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
 });
+trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
 trajectories.push({
-  points: [project(0, 1999, 0), project(32, 1999, 0)],
+  points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
 });
+trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
 trajectories.push({
-  points: [project(0, 1999, 0), project(0, 1999, 30)],
+  points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
 });
+trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
-// 5525 line
+// Data lines
 const points5525 = SONGS_5525.map((song, i) =>
   project(i + 1, getYearValue(song), 0),
 );
-
-// 5526 line
 const points5526 = SONGS_5526.map((song, i) =>
   project(0, getYearValue(song), i + 1),
 );
 
-trajectories.push({
-  points: points5525,
-  color: COLOR_DEFAULT,
-  lineWidth: 2.5,
-});
-
+trajectories.push({ points: points5525, color: COLOR_DEFAULT, lineWidth: 2.5 });
 trajectories.push({
   points: points5526,
-  color: COLOR_RED_VINTAGE,
+  color: COLOR_RED_ACCENT,
   lineWidth: 2.5,
 });
 
-// Song labels for 5525 — directly right of each point, no stagger
-const LABEL_W = 65; // "YYYY-MM-DD" at 10px ≈ 60px
+// ================= 标签 & 图例 =================
+const LABEL_W = 65;
+
 const songAnnotations5525 = SONGS_5525.map((song, idx) => {
-  const date = SONG_RELEASE_DATES[song] ?? "";
   const p = project(idx + 1, getYearValue(song), 0);
   return {
     x: p.x + 4,
     y: p.y - LABEL_W / 2,
     w: LABEL_W,
     h: 10,
-    label: date,
-    color: COLOR_BLACK,
+    label: SONG_RELEASE_DATES[song] ?? "",
+    color: COLOR_DEFAULT,
     noFrame: true,
     angle: -90,
     fontSize: 10,
@@ -237,17 +270,15 @@ const songAnnotations5525 = SONGS_5525.map((song, idx) => {
   };
 });
 
-// Song labels for 5526 — directly left of each point, no stagger
 const songAnnotations5526 = SONGS_5526.map((song, idx) => {
-  const date = SONG_RELEASE_DATES[song] ?? "";
   const p = project(0, getYearValue(song), idx + 1);
   return {
     x: p.x - 14,
     y: p.y - LABEL_W / 2,
     w: LABEL_W,
     h: 10,
-    label: date,
-    color: COLOR_RED_VINTAGE,
+    label: SONG_RELEASE_DATES[song] ?? "",
+    color: COLOR_RED_ACCENT,
     noFrame: true,
     angle: -90,
     fontSize: 10,
@@ -255,14 +286,23 @@ const songAnnotations5526 = SONGS_5526.map((song, idx) => {
   };
 });
 
-// Legend — placed bottom-left of chart area
-const legendX = project(0, 2023, 0).x - 5; // near time-axis left end
-const legendY = ORIGIN_Y + 30;
-const legendAnnotations = [
+const axisAnnotations: Annotation[] = [
   {
-    x: legendX - 40,
-    y: legendY,
-    w: 65,
+    x: pTimeEnd.x - 15,
+    y: pTimeEnd.y - 12,
+    w: 40,
+    h: 10,
+    label: "TIME",
+    color: COLOR_BLACK,
+    noFrame: true,
+    angle: -90,
+    fontSize: 10,
+    fontFamily: "3270NerdFont-Regular",
+  },
+  {
+    x: pXEnd.x + 8,
+    y: pXEnd.y - 35,
+    w: 80,
     h: 10,
     label: "5525 (55場25日)",
     color: COLOR_DEFAULT,
@@ -272,12 +312,12 @@ const legendAnnotations = [
     fontFamily: "3270NerdFont-Regular",
   },
   {
-    x: legendX - 40,
-    y: legendY + 20,
-    w: 65,
+    x: pZEnd.x - 12,
+    y: pZEnd.y + 45,
+    w: 80,
     h: 10,
     label: "5526 (55場26日)",
-    color: COLOR_RED_VINTAGE,
+    color: COLOR_RED_ACCENT,
     noFrame: true,
     angle: -90,
     fontSize: 10,
@@ -285,25 +325,60 @@ const legendAnnotations = [
   },
 ];
 
-// Legend line swatches
-trajectories.push({
-  points: [
-    { x: legendX - 2, y: legendY + 22 },
-    { x: legendX - 2, y: legendY + 48 },
-  ],
-  color: COLOR_DEFAULT,
-  lineWidth: 2.5,
-  dash: [],
-});
-trajectories.push({
-  points: [
-    { x: legendX - 2, y: legendY + 62 },
-    { x: legendX - 2, y: legendY + 88 },
-  ],
-  color: COLOR_RED_VINTAGE,
-  lineWidth: 2.5,
-  dash: [],
-});
+const inChartTitleAndLegend: Annotation[] = [
+  {
+    x: 60,
+    y: 950,
+    w: 400,
+    h: 30,
+    label: "5525 vs 5526: Release Chronology",
+    color: "#333333",
+    fontSize: 24,
+    bold: true,
+    fontFamily: "3270NerdFont-Regular",
+    angle: -90,
+    noFrame: true,
+  },
+  {
+    x: 100,
+    y: 950,
+    w: 300,
+    h: 20,
+    label: "Y: Time (Linear 1999-2023)",
+    color: "#666666",
+    fontSize: 16,
+    bold: true,
+    fontFamily: "3270NerdFont-Regular",
+    angle: -90,
+    noFrame: true,
+  },
+  {
+    x: 125,
+    y: 950,
+    w: 300,
+    h: 20,
+    label: "X: 5525 Songs (8th-23rd Highlight)",
+    color: COLOR_DEFAULT,
+    fontSize: 16,
+    bold: true,
+    fontFamily: "3270NerdFont-Regular",
+    angle: -90,
+    noFrame: true,
+  },
+  {
+    x: 150,
+    y: 950,
+    w: 300,
+    h: 20,
+    label: "Z: 5526 Songs (8th-22nd Highlight)",
+    color: COLOR_RED_ACCENT,
+    fontSize: 16,
+    bold: true,
+    fontFamily: "3270NerdFont-Regular",
+    angle: -90,
+    noFrame: true,
+  },
+];
 
 const page: PageConfig = {
   id: "page-05",
@@ -320,57 +395,19 @@ const page: PageConfig = {
       ...points5526.map((p) => ({
         x: p.x,
         y: p.y,
-        color: COLOR_RED_VINTAGE,
+        color: COLOR_RED_ACCENT,
         size: 3,
       })),
     ],
   },
-  rightSections: [
-    {
-      text: "5525 vs 5526: Release Chronology",
-      options: {
-        fontSize: 24,
-        color: "#333333",
-        x: 50,
-        y: 840, // Moved to bottom-left empty space
-        bold: true,
-        fontFamily: "3270NerdFont-Regular",
-        angle: -90,
-      },
-    },
-    {
-      text: "Y: Time (1999 - 2023)\nX: 5525 Songs (Red)\nZ: 5526 Songs (Blue)",
-      options: {
-        fontSize: 14,
-        color: "#666666",
-        x: 90, // Shifted to make room
-        y: 880,
-        lineHeight: 20,
-        fontFamily: "3270NerdFont-Regular",
-        angle: -90,
-      },
-    },
-  ],
+  rightSections: [],
   trajectories,
   annotations: [
-    // Axis + year labels: rotated -90°
-    ...[
-      ...annotations,
-      {
-        x: project(0, 2023, 0).x + 5,
-        y: project(0, 2023, 0).y - 11,
-        w: 40,
-        h: 10,
-        label: "TIME",
-        color: COLOR_BLACK,
-        fontSize: 10,
-        fontFamily: "3270NerdFont-Regular",
-      },
-    ].map((a) => ({ ...a, noFrame: true, angle: -90 })),
-    // Song labels: small font, staggered, angle=-90
+    ...annotations.map((a) => ({ ...a, noFrame: true, angle: -90 })),
     ...songAnnotations5525,
     ...songAnnotations5526,
-    ...legendAnnotations,
+    ...axisAnnotations,
+    ...inChartTitleAndLegend,
   ],
 };
 
