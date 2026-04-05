@@ -119,9 +119,9 @@ function getYearValue(song: string): number {
   return date.getFullYear() + date.getMonth() / 12 + date.getDate() / 365;
 }
 
-const ORIGIN_X = 420;
-const ORIGIN_Y = 560;
-const TIME_SCALE = 15;
+const ORIGIN_X = 442;
+const ORIGIN_Y = 575;
+const TIME_SCALE = 16;
 const X_SCALE = 16;
 const Z_SCALE = 16;
 const ANGLE = Math.PI / 6;
@@ -164,6 +164,7 @@ function createArrow(
     ],
     color,
     lineWidth: 1.5,
+    dash: [], // 箭头保持实线
   };
 }
 
@@ -216,27 +217,30 @@ const pTimeEnd = project(0, 2024.5, 0);
 const pXEnd = project(34, 1999, 0);
 const pZEnd = project(0, 1999, 32);
 
-// Axes
+// Axes - 明确使用实线
 trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
 trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
 trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
-// Data lines
+// Data lines - 调细并使用点状虚线
 const points5525 = SONGS_5525.map((song, i) =>
   project(i + 1, getYearValue(song), 0),
 );
@@ -244,11 +248,17 @@ const points5526 = SONGS_5526.map((song, i) =>
   project(0, getYearValue(song), i + 1),
 );
 
-trajectories.push({ points: points5525, color: COLOR_DEFAULT, lineWidth: 2.5 });
+trajectories.push({
+  points: points5525,
+  color: COLOR_DEFAULT,
+  lineWidth: 1.0,
+  dash: [4, 4], // 设置为虚线
+});
 trajectories.push({
   points: points5526,
   color: COLOR_RED_ACCENT,
-  lineWidth: 2.5,
+  lineWidth: 1.0,
+  dash: [4, 4], // 设置为虚线
 });
 
 // ================= 标签 & 图例 =================
