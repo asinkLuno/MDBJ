@@ -298,7 +298,7 @@ SONGS_5526.forEach((song, idx) => {
       label: currentDate,
       color: COLOR_RED_ACCENT,
       noFrame: true,
-      angle: -90,
+      angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
       fontSize: 9, // 缩小字号
       fontFamily: "3270NerdFont-Regular",
     });
@@ -342,7 +342,7 @@ const axisAnnotations: Annotation[] = [
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
-    angle: -90,
+    angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
     fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
@@ -395,7 +395,7 @@ const trendTextAnnotations: Annotation[] = [
     color: "rgba(238, 68, 85, 0.75)",
     noFrame: true,
     bold: true,
-    angle: -90,
+    angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
     fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
