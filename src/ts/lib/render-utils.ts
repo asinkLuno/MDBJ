@@ -259,7 +259,7 @@ function drawArcArrow(
 
   ctx.save();
   ctx.strokeStyle = color;
-  ctx.lineWidth = 0.9 * ss;
+  ctx.lineWidth = 1.8 * ss;
   ctx.setLineDash([2.5 * ss, 2 * ss]);
   ctx.beginPath();
   ctx.moveTo(x1, y);
@@ -268,11 +268,11 @@ function drawArcArrow(
 
   // Arrowhead: tangent at t=1 of quadratic bezier = 2*(end - cp)
   ctx.setLineDash([]);
-  ctx.lineWidth = 1 * ss;
+  ctx.lineWidth = 1.6 * ss;
   const tdx = x2 - mx;
   const tdy = y - cpY;
   const angle = Math.atan2(tdy, tdx);
-  const ah = 4 * ss;
+  const ah = 4.5 * ss;
   ctx.beginPath();
   ctx.moveTo(x2, y);
   ctx.lineTo(x2 - ah * Math.cos(angle - 0.45), y - ah * Math.sin(angle - 0.45));
@@ -314,10 +314,19 @@ export function drawHighlightedLine(
         const idx = text.indexOf(hl.char, startPos);
         if (idx === -1) break;
         const before = text.substring(0, idx);
-        const charX =
-          x +
-          ctx.measureText(before).width +
-          ctx.measureText(hl.char).width / 2;
+        let charX = x + ctx.measureText(before).width;
+
+        if (
+          hl.char.length > 1 &&
+          (hl.char.startsWith("我") || hl.char.startsWith("你"))
+        ) {
+          // Center on first character
+          charX += ctx.measureText(hl.char[0]).width / 2;
+        } else {
+          // Center on whole highlight
+          charX += ctx.measureText(hl.char).width / 2;
+        }
+
         ctx.save();
         ctx.fillStyle = hl.color;
         ctx.beginPath();
@@ -336,32 +345,40 @@ export function drawHighlightedLine(
       const obj = pos[rel.objectIdx];
       if (!subj || !obj || subj.w === 0 || obj.w === 0) continue;
 
+      const subjToken = rel.tokens[rel.subjectIdx];
+      const objToken = rel.tokens[rel.objectIdx];
+
       const dotColor = "#4455ee";
       const dotRadius = fontSize * 0.55;
       const dotY = baselineY - fontSize * 0.35;
 
-      [subj, obj].forEach((p) => {
+      const getCenterX = (p: { x: number; w: number }, token: string) => {
+        if (
+          token.length > 1 &&
+          (token.startsWith("我") || token.startsWith("你"))
+        ) {
+          return p.x + ctx.measureText(token[0]).width / 2;
+        }
+        return p.x + p.w / 2;
+      };
+
+      const subjX = getCenterX(subj, subjToken);
+      const objX = getCenterX(obj, objToken);
+
+      [subjX, objX].forEach((cx) => {
         ctx.save();
         ctx.fillStyle = dotColor;
         ctx.globalAlpha = 0.9;
         ctx.beginPath();
-        ctx.arc(p.x + p.w / 2, dotY, dotRadius, 0, Math.PI * 2);
+        ctx.arc(cx, dotY, dotRadius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       });
 
       const arrowY = frameTop - 3 * ss;
-      const span = Math.abs(obj.x + obj.w / 2 - (subj.x + subj.w / 2));
+      const span = Math.abs(objX - subjX);
       const cpDrop = Math.max(8 * ss, span * 0.28);
-      drawArcArrow(
-        ctx,
-        subj.x + subj.w / 2,
-        obj.x + obj.w / 2,
-        arrowY,
-        cpDrop,
-        dotColor,
-        ss,
-      );
+      drawArcArrow(ctx, subjX, objX, arrowY, cpDrop, dotColor, ss);
     }
     return;
   }

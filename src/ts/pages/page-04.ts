@@ -43,10 +43,6 @@ const REL_GAP = 0;
 const HIGHLIGHTS: CharHighlight[] = [
   { char: "你", color: "#4455ee" },
   { char: "我", color: "#4455ee" },
-  { char: "我們", color: "#4455ee" },
-  { char: "我们", color: "#4455ee" },
-  { char: "你們", color: "#4455ee" },
-  { char: "你们", color: "#4455ee" },
 ];
 
 // ── 3-column layout ──────────────
@@ -64,24 +60,10 @@ const colLayout: ColumnLayout = {
 const allSections: Section[] = [];
 
 for (const song of data.songs) {
-  let combinedText = "";
-  let combinedArrows: RelationArrow[] = [];
-  let currentTokenOffset = 0;
-
   for (const lineData of song.lines) {
+    if (lineData.relations.length === 0) continue;
+
     const tokenWords = lineData.tokens.map((t) => t.word);
-
-    // Add 4 spaces if not first line
-    if (combinedText.length > 0) {
-      combinedText += "    ";
-      // We don't have a way to offset arrows in the renderer easily if we merge,
-      // but the renderer uses token lists which are local to the 'RelationArrow'.
-      // If the renderer expects ONE RelationArrow per Section, we should keep them as separate sections
-      // but remove the visual gaps to make them look merged.
-    }
-
-    // Actually, if we want them to look like one block, we can keep them as separate Section objects
-    // but set their gap to 0 and ensure they don't have trailing newlines.
 
     const arrows: RelationArrow[] = [];
     for (const rel of lineData.relations) {
@@ -102,7 +84,7 @@ for (const song of data.songs) {
         lineHeight: LYRIC_LH,
         letterSpacing: -1.0,
         gap: 0,
-        fontFamily: "zpix",
+        fontFamily: "SarasaFixedTC-Light",
         relationArrows: arrows,
         dotHighlights:
           lineData.line.includes("我") || lineData.line.includes("你")
@@ -111,17 +93,6 @@ for (const song of data.songs) {
       },
     });
   }
-
-  // Add an empty line between songs
-  allSections.push({
-    text: " ",
-    options: {
-      fontSize: LYRIC_FONT,
-      lineHeight: LYRIC_LH * 0.8,
-      gap: 0,
-      fontFamily: "zpix",
-    },
-  });
 }
 
 // ── simulate column fill to find the right/left split point ──────────────

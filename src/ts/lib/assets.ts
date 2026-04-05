@@ -12,11 +12,13 @@ export interface SharedAssets {
   fontName: string;
   labelFontName: string;
   chineseLabelFontName: string;
+  sarasaFontName: string;
 }
 
 const FONT_PATH = "resources/ChenYuluoyan-2.0-Thin.ttf";
 const LABEL_FONT_PATH = "resources/3270NerdFont-Regular.ttf";
 const CHINESE_LABEL_FONT_PATH = "resources/zpix.ttf";
+const SARASA_FONT_PATH = "resources/SarasaFixedTC-Light.ttf";
 const BG_LEFT = "resources/field_notes/a_final.png";
 const BG_RIGHT = "resources/field_notes/b_final.png";
 const TAPE_DIR = "resources/tapes/individual";
@@ -46,6 +48,9 @@ export async function loadSharedAssets(): Promise<SharedAssets> {
     .replace(".ttf", "");
   GlobalFonts.registerFromPath(CHINESE_LABEL_FONT_PATH, chineseLabelFontName);
 
+  const sarasaFontName = path.basename(SARASA_FONT_PATH).replace(".ttf", "");
+  GlobalFonts.registerFromPath(SARASA_FONT_PATH, sarasaFontName);
+
   const [bgLeft, bgRight, textureBuf] = await Promise.all([
     loadImage(BG_LEFT),
     loadImage(BG_RIGHT),
@@ -68,5 +73,6 @@ export async function loadSharedAssets(): Promise<SharedAssets> {
     fontName,
     labelFontName,
     chineseLabelFontName,
+    sarasaFontName,
   };
 }
