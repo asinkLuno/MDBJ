@@ -3,8 +3,19 @@ import json
 import os
 import random
 import re
+
 from playwright.async_api import async_playwright
-from song_lyrics import SONGS_5525, SONGS_5526
+
+try:
+    from song_lyrics import (  # type: ignore[reportImplicitRelativeImport]
+        SONGS_5525,
+        SONGS_5526,
+    )
+except ImportError:
+    from .song_lyrics import (  # type: ignore[reportImplicitRelativeImport]
+        SONGS_5525,
+        SONGS_5526,
+    )
 
 ALL_SONGS = sorted(list(SONGS_5525.union(SONGS_5526)))
 OUTPUT_DIR = "resources/lyrics/musixmatch"
@@ -18,16 +29,23 @@ async def fetch_lyrics(page, song_name):
     print(f"Fetching: {lyrics_url}")
 
     try:
-
         await page.goto(lyrics_url, wait_until="networkidle", timeout=30000)
         await asyncio.sleep(3)
 
         body = await page.evaluate("() => document.body.innerText")
         lines = body.split("\n")
 
-        start = next((i for i, l in enumerate(lines) if l.strip().startswith("Lyrics of")), None)
+        start = next(
+            (i for i, line in enumerate(lines) if line.strip().startswith("Lyrics of")),
+            None,
+        )
         end = next(
-            (i for i, l in enumerate(lines) if i > (start or 0) and re.search(r"Writer|About|Translation|Embed|Report", l)),
+            (
+                i
+                for i, line in enumerate(lines)
+                if i > (start or 0)
+                and re.search(r"Writer|About|Translation|Embed|Report", line)
+            ),
             None,
         )
 
@@ -35,7 +53,7 @@ async def fetch_lyrics(page, song_name):
             print(f"  Could not find lyrics section for {song_name}")
             return None
 
-        lyrics_lines = [l.strip() for l in lines[start + 1 : end] if l.strip()]
+        lyrics_lines = [ln.strip() for ln in lines[start + 1 : end] if ln.strip()]
         if not lyrics_lines:
             print(f"  Empty lyrics for {song_name}")
             return None

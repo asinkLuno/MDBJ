@@ -23,12 +23,15 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.leftTexts,
       assets,
       config.toTraditional ?? true,
+      config.leftSections,
+      config.leftColumns,
     ),
     renderRight(
       config.rightSections,
       assets,
       config.toTraditional ?? true,
       config.rightPhotos,
+      config.rightColumns,
     ),
   ]);
 
@@ -53,29 +56,41 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   };
 
-  // Draw dot matrix wave
+  // Draw dot matrix wave or explicit points
   if (config.dotMatrix) {
     const dm = config.dotMatrix;
     const color = dm.color ?? COLOR_DEFAULT;
-    const spacing = dm.spacing * ss;
     const dotSize = (dm.dotSize ?? 2) * ss;
-    const amp = (dm.waveAmplitude ?? 20) * sy;
-    const freq = dm.waveFrequency ?? 0.05;
 
     ctx.save();
-    ctx.fillStyle = color;
     ctx.globalAlpha = 0.6;
-    for (let lx = 0; lx < dm.w; lx += dm.spacing) {
-      for (let ly = 0; ly < dm.h; ly += dm.spacing) {
-        const x = dm.x + lx;
-        const y = dm.y + ly;
-
-        // Wave offset
-        const dy = Math.sin(lx * freq + ly * freq * 0.5) * amp;
-
+    if (dm.points) {
+      for (const p of dm.points) {
+        ctx.fillStyle = p.color || color;
+        const ps = (p.size || dm.dotSize || 2) * ss;
         ctx.beginPath();
-        ctx.arc(scaleX(x), (y + dy) * sy, dotSize, 0, Math.PI * 2);
+        ctx.arc(scaleX(p.x), p.y * sy, ps, 0, Math.PI * 2);
         ctx.fill();
+      }
+    } else if (
+      dm.x !== undefined &&
+      dm.y !== undefined &&
+      dm.w !== undefined &&
+      dm.h !== undefined &&
+      dm.spacing !== undefined
+    ) {
+      const amp = (dm.waveAmplitude ?? 20) * sy;
+      const freq = dm.waveFrequency ?? 0.05;
+      ctx.fillStyle = color;
+      for (let lx = 0; lx < dm.w; lx += dm.spacing) {
+        for (let ly = 0; ly < dm.h; ly += dm.spacing) {
+          const x = dm.x + lx;
+          const y = dm.y + ly;
+          const dy = Math.sin(lx * freq + ly * freq * 0.5) * amp;
+          ctx.beginPath();
+          ctx.arc(scaleX(x), (y + dy) * sy, dotSize, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
     }
     ctx.restore();

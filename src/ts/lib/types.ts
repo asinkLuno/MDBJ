@@ -3,6 +3,18 @@ export interface CharHighlight {
   color: string;
 }
 
+/**
+ * Specifies a subject→predicate→object relation to render as framed tokens
+ * with a curved arrow connecting subject to object.
+ */
+export interface RelationArrow {
+  tokens: string[]; // ordered HanLP token words (no spaces)
+  subjectIdx: number; // 0-based index into tokens
+  predicateIdx: number;
+  objectIdx: number;
+  direction: "我→谓→你" | "你→谓→我";
+}
+
 export interface TextOptions {
   fontSize?: number;
   color?: string;
@@ -14,6 +26,7 @@ export interface TextOptions {
   bold?: boolean;
   wrapWidth?: number; // auto-wrap text within this pixel width
   highlights?: CharHighlight[]; // draw targeting frames around these characters
+  relationArrows?: RelationArrow[]; // draw subject→predicate→object frames + arc arrow
 }
 
 export interface Section {
@@ -100,21 +113,31 @@ export interface SpreadPhotoLayout {
   frameSameDir?: boolean; // rotate frame with the photo (default: frame is flipped 180°)
 }
 
+export interface ColumnLayout {
+  count: number;
+  xStarts: number[]; // reference-px x start for each column
+  colWidth: number[]; // reference-px wrap width for each column
+}
+
 export interface PageConfig {
   id: string;
   leftPhotos: PhotoLayout[];
   leftTexts?: LeftText[];
+  leftSections?: Section[]; // column-rendered sections on the left page
+  leftColumns?: ColumnLayout;
   rightSections: Section[];
+  rightColumns?: ColumnLayout;
   rightPhotos?: PhotoLayout[];
   annotations?: Annotation[];
   spreadPhotos?: SpreadPhotoLayout[];
   trajectories?: TrajectoryPath[];
   dotMatrix?: {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    spacing: number;
+    points?: { x: number; y: number; color?: string; size?: number }[];
+    x?: number;
+    y?: number;
+    w?: number;
+    h?: number;
+    spacing?: number;
     color?: string;
     waveAmplitude?: number;
     waveFrequency?: number;
