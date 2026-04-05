@@ -1,3 +1,8 @@
+export interface CharHighlight {
+  char: string;
+  color: string;
+}
+
 export interface TextOptions {
   fontSize?: number;
   color?: string;
@@ -8,6 +13,7 @@ export interface TextOptions {
   gap?: number;
   bold?: boolean;
   wrapWidth?: number; // auto-wrap text within this pixel width
+  highlights?: CharHighlight[]; // draw targeting frames around these characters
 }
 
 export interface Section {
@@ -53,6 +59,9 @@ export interface LeftText {
   fontSize?: number;
   color?: string;
   letterSpacing?: number;
+  lineHeight?: number;
+  wrapWidth?: number;
+  highlights?: CharHighlight[];
 }
 
 export interface TrajectoryPath {

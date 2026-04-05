@@ -2,7 +2,12 @@ import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync, mkdirSync } from "fs";
 import { loadSharedAssets } from "./lib/assets";
 import { FONT_ANNOTATION, COLOR_DEFAULT } from "./lib/typography";
-import { applyPaperTexture, drawTargetingFrame } from "./lib/render-utils";
+import {
+  applyPaperTexture,
+  drawTargetingFrame,
+  REF_W,
+  REF_H,
+} from "./lib/render-utils";
 import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
 import { pages } from "./pages";
@@ -13,7 +18,12 @@ const OUTPUT_DIR = "resources/field_notes/output";
 
 async function buildPage(config: PageConfig, assets: SharedAssets) {
   const [leftCanvas, rightCanvas] = await Promise.all([
-    renderLeft(config.leftPhotos, config.leftTexts, assets),
+    renderLeft(
+      config.leftPhotos,
+      config.leftTexts,
+      assets,
+      config.toTraditional ?? true,
+    ),
     renderRight(
       config.rightSections,
       assets,
@@ -29,9 +39,6 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   ctx.drawImage(leftCanvas, 0, 0);
   ctx.drawImage(rightCanvas, leftCanvas.width, 0);
 
-  // Reference dimensions from original field notes (per page)
-  const REF_W = 680;
-  const REF_H = 1036;
   const sx_left = leftCanvas.width / REF_W;
   const sx_right = rightCanvas.width / REF_W;
   const sy = leftCanvas.height / REF_H;
@@ -260,12 +267,12 @@ async function main() {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
   const filter = process.argv[2];
-  const targets = filter
-    ? pages.filter((p) => p.id === filter)
-    : pages;
+  const targets = filter ? pages.filter((p) => p.id === filter) : pages;
 
   if (filter && targets.length === 0) {
-    console.error(`No page found with id "${filter}". Available: ${pages.map((p) => p.id).join(", ")}`);
+    console.error(
+      `No page found with id "${filter}". Available: ${pages.map((p) => p.id).join(", ")}`,
+    );
     process.exit(1);
   }
 

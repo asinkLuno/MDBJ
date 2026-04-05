@@ -1,81 +1,27 @@
-import { createCanvas, loadImage } from "@napi-rs/canvas";
-import OpenCC from "opencc";
+import { createCanvas } from "@napi-rs/canvas";
 import type { Section, PhotoLayout } from "./types";
 import type { SharedAssets } from "./assets";
-import { applyPaperTexture, drawTapes } from "./render-utils";
+import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
+import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_SECTION_DEFAULT, COLOR_DEFAULT } from "./typography";
-
-const converter = new OpenCC("s2t.json");
-
-function wrapTextLine(
-  ctx: { measureText: (text: string) => { width: number } },
-  text: string,
-  maxWidth: number,
-): string[] {
-  if (!text || ctx.measureText(text).width <= maxWidth) return [text];
-  const result: string[] = [];
-  let current = "";
-  for (const char of text) {
-    const test = current + char;
-    if (ctx.measureText(test).width > maxWidth && current.length > 0) {
-      result.push(current);
-      current = char;
-    } else {
-      current = test;
-    }
-  }
-  if (current) result.push(current);
-  return result;
-}
-
-async function toTrad(s: string): Promise<string> {
-  return converter.convertPromise(s);
-}
 
 export async function renderRight(
   sections: Section[],
   assets: SharedAssets,
-  toTraditional = true,
+  toTrad = true,
   photos?: PhotoLayout[],
 ) {
-  const { bgRight, fontName, texture, tapes } = assets;
+  const { bgRight, fontName } = assets;
   const canvas = createCanvas(bgRight.width, bgRight.height);
   const ctx = canvas.getContext("2d");
   ctx.drawImage(bgRight, 0, 0);
 
-  // Reference dimensions from original field notes
-  const REF_W = 680;
-  const REF_H = 1036;
-  const sx = bgRight.width / REF_W;
-  const sy = bgRight.height / REF_H;
-  const ss = Math.min(sx, sy); // scale for font/width
+  const { sx, sy, ss } = getScaling(bgRight.width, bgRight.height);
 
   // Draw photos if any
   if (photos) {
     for (const photoConfig of photos) {
-      const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
-      const photo = await loadImage(file);
-      const scaledW = w * ss;
-      const h = Math.round((scaledW * photo.height) / photo.width);
-
-      const scaledX = x * sx;
-      const scaledY = y * sy;
-
-      const angle = (rot * Math.PI) / 180;
-
-      ctx.save();
-      ctx.translate(scaledX + scaledW / 2, scaledY + h / 2);
-      ctx.rotate(angle);
-
-      ctx.drawImage(
-        applyPaperTexture(photo, texture, 0.18, scaledW, h),
-        -scaledW / 2,
-        -h / 2,
-      );
-
-      drawTapes(ctx, tapes, photoTapes, scaledW, h, fontName);
-
-      ctx.restore();
+      await drawPhoto(ctx as any, photoConfig, assets, ss, sx, sy);
     }
   }
 
@@ -99,8 +45,10 @@ export async function renderRight(
     const xPos = (opts.x || 50) * sx;
 
     for (const rawLine of rawLines) {
-      const converted = toTraditional ? await toTrad(rawLine) : rawLine;
-      const drawLines = wrapWidth ? wrapTextLine(ctx, converted, wrapWidth) : [converted];
+      const converted = toTrad ? await toTraditional(rawLine) : rawLine;
+      const drawLines = wrapWidth
+        ? wrapTextLine(ctx, converted, wrapWidth)
+        : [converted];
       for (const line of drawLines) {
         if (bold) {
           ctx.globalAlpha = 0.4;
@@ -108,7 +56,19 @@ export async function renderRight(
           ctx.fillText(line, xPos + 0.5, currentY);
           ctx.globalAlpha = 1;
         }
-        ctx.fillText(line, xPos, currentY);
+        if (opts.highlights?.length) {
+          drawHighlightedLine(
+            ctx as any,
+            line,
+            xPos,
+            currentY,
+            fontSize,
+            opts.highlights,
+            ss,
+          );
+        } else {
+          ctx.fillText(line, xPos, currentY);
+        }
         currentY += lineHeight;
       }
     }

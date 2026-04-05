@@ -1,45 +1,73 @@
 import { readFileSync, readdirSync } from "fs";
 import * as path from "path";
-import type { PageConfig, Section } from "../lib/types";
+import type { PageConfig, Section, CharHighlight } from "../lib/types";
 import { COLOR_BLACK } from "../lib/typography";
 
 const LYRICS_DIR = "resources/lyrics";
 
-function readAlbumText(albumDir: string): string {
-  const files = readdirSync(albumDir)
-    .filter((f) => f.endsWith(".txt"))
-    .sort();
-  return files
-    .map((f) => readFileSync(path.join(albumDir, f), "utf-8").trim())
-    .join(" ")
-    .replace(/\n/g, " ")
-    .replace(/  +/g, " ");
-}
+const HIGHLIGHTS: CharHighlight[] = [
+  { char: "你", color: "#4455ee" },
+  { char: "我", color: "#cc2200" },
+];
+
+const TEXT_OPTIONS = {
+  fontSize: 12,
+  color: COLOR_BLACK,
+  lineHeight: 11,
+  letterSpacing: -1,
+  wrapWidth: 620,
+  highlights: HIGHLIGHTS,
+};
 
 const albums = readdirSync(LYRICS_DIR)
   .filter((d) => /^\d+$/.test(d))
   .sort();
 
-const rightSections: Section[] = [];
-for (let i = 0; i < albums.length; i++) {
-  rightSections.push({
-    text: readAlbumText(path.join(LYRICS_DIR, albums[i])),
-    options: {
-      fontSize: 12,
-      color: COLOR_BLACK,
-      lineHeight: 11,
-      letterSpacing: -1,
-      wrapWidth: 680,
-      x: 0,
-      ...(i === 0 ? { y: 12 } : { gap: 15 }),
-    },
-  });
-}
+// Collect all matching lines across all albums, deduplicated (first occurrence wins)
+const seen = new Set<string>();
+const albumLines: string[][] = albums.map((album) =>
+  readdirSync(path.join(LYRICS_DIR, album))
+    .filter((f) => f.endsWith(".txt"))
+    .sort()
+    .flatMap((f) =>
+      readFileSync(path.join(LYRICS_DIR, album, f), "utf-8")
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => {
+          if ((!l.includes("你") && !l.includes("我")) || seen.has(l))
+            return false;
+          seen.add(l);
+          return true;
+        }),
+    ),
+);
+
+const leftText = albumLines
+  .slice(0, 5)
+  .map((lines) => lines.join(" "))
+  .filter(Boolean)
+  .join("  ");
+
+const rightSections: Section[] = albumLines
+  .slice(5)
+  .map((lines, i) => ({
+    text: lines.join(" "),
+    options: { ...TEXT_OPTIONS, x: 30, gap: i === 0 ? 0 : 15 },
+  }))
+  .filter((s) => s.text.length > 0);
 
 const page: PageConfig = {
   id: "page-04",
-  toTraditional: false,
+  toTraditional: true,
   leftPhotos: [],
+  leftTexts: [
+    {
+      text: leftText,
+      x: 30,
+      y: 30,
+      ...TEXT_OPTIONS,
+    },
+  ],
   rightSections,
 };
 

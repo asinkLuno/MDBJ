@@ -1,7 +1,55 @@
-import { createCanvas } from "@napi-rs/canvas";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
 import type { CanvasRenderingContext2D, Image, Canvas } from "@napi-rs/canvas";
-import type { TapeConfig } from "./types";
-import { FONT_TAPE_LABEL, COLOR_DEFAULT } from "./typography";
+import type { TapeConfig, CharHighlight, PhotoLayout } from "./types";
+import type { SharedAssets } from "./assets";
+import { FONT_TAPE_LABEL } from "./typography";
+
+/**
+ * Reference dimensions from original field notes (per page)
+ */
+export const REF_W = 680;
+export const REF_H = 1036;
+
+/**
+ * Calculate scaling factors based on canvas dimensions
+ */
+export function getScaling(canvasW: number, canvasH: number) {
+  const sx = canvasW / REF_W;
+  const sy = canvasH / REF_H;
+  return { sx, sy, ss: Math.min(sx, sy) };
+}
+
+/**
+ * Draw a photo with paper texture and optional tapes
+ */
+export async function drawPhoto(
+  ctx: CanvasRenderingContext2D,
+  photoConfig: PhotoLayout,
+  assets: SharedAssets,
+  ss: number,
+  sx: number,
+  sy: number,
+) {
+  const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
+  const photo = await loadImage(file);
+  const scaledW = w * ss;
+  const h = Math.round((scaledW * photo.height) / photo.width);
+  const angle = (rot * Math.PI) / 180;
+
+  ctx.save();
+  ctx.translate(x * sx + scaledW / 2, y * sy + h / 2);
+  ctx.rotate(angle);
+
+  ctx.drawImage(
+    applyPaperTexture(photo, assets.texture, 0.18, scaledW, h),
+    -scaledW / 2,
+    -h / 2,
+  );
+
+  drawTapes(ctx, assets.tapes, photoTapes, scaledW, h, assets.fontName);
+
+  ctx.restore();
+}
 
 /**
  * Apply paper texture onto an image or canvas.
@@ -150,6 +198,44 @@ export function drawTargetingFrame(
 }
 
 /**
+ * Draw text and overlay targeting-frame highlights on specified characters.
+ * Renders the full string first, then measures per-character widths to place frames.
+ */
+export function drawHighlightedLine(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  baselineY: number,
+  fontSize: number,
+  highlights: CharHighlight[],
+  ss: number,
+): void {
+  ctx.fillText(text, x, baselineY);
+
+  const hlMap = new Map(highlights.map((h) => [h.char, h.color]));
+  const frameH = fontSize * 1.0;
+  const frameTop = baselineY - fontSize * 0.85;
+
+  let curX = x;
+  for (const char of text) {
+    const cw = ctx.measureText(char).width;
+    if (hlMap.has(char)) {
+      drawTargetingFrame(
+        ctx,
+        curX,
+        frameTop,
+        cw,
+        frameH,
+        hlMap.get(char)!,
+        ss,
+        true,
+      );
+    }
+    curX += cw;
+  }
+}
+
+/**
  * Draw tape stickers onto a photo.
  * Must be called inside a translated+rotated ctx (origin = photo center).
  *
@@ -160,7 +246,7 @@ export function drawTargetingFrame(
  * @param h          Photo display height
  * @param fontName   Font for tape labels
  */
-export function drawTapes(
+function drawTapes(
   ctx: CanvasRenderingContext2D,
   tapes: Image[],
   configs: TapeConfig[],
