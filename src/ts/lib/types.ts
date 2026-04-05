@@ -109,5 +109,16 @@ export interface PageConfig {
   annotations?: Annotation[];
   spreadPhotos?: SpreadPhotoLayout[];
   trajectories?: TrajectoryPath[];
+  dotMatrix?: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    spacing: number;
+    color?: string;
+    waveAmplitude?: number;
+    waveFrequency?: number;
+    dotSize?: number;
+  };
   toTraditional?: boolean;
 }

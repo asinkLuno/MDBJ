@@ -53,6 +53,34 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   };
 
+  // Draw dot matrix wave
+  if (config.dotMatrix) {
+    const dm = config.dotMatrix;
+    const color = dm.color ?? COLOR_DEFAULT;
+    const spacing = dm.spacing * ss;
+    const dotSize = (dm.dotSize ?? 2) * ss;
+    const amp = (dm.waveAmplitude ?? 20) * sy;
+    const freq = dm.waveFrequency ?? 0.05;
+
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.6;
+    for (let lx = 0; lx < dm.w; lx += dm.spacing) {
+      for (let ly = 0; ly < dm.h; ly += dm.spacing) {
+        const x = dm.x + lx;
+        const y = dm.y + ly;
+
+        // Wave offset
+        const dy = Math.sin(lx * freq + ly * freq * 0.5) * amp;
+
+        ctx.beginPath();
+        ctx.arc(scaleX(x), (y + dy) * sy, dotSize, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
   // Draw spread photos (span both pages)
   if (config.spreadPhotos) {
     for (const sp of config.spreadPhotos) {
