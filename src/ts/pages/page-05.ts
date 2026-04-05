@@ -1,4 +1,7 @@
 import type { PageConfig, TrajectoryPath, Annotation } from "../lib/types";
+import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
+
+const COLOR_RED_VINTAGE = "#8B2020"; // deep warm crimson — antique/archival feel
 
 const SONGS_5525 = [
   "OAOA",
@@ -120,15 +123,31 @@ function getYearValue(song: string): number {
 // Time (Y) moves LEFT along the short edge
 // 5525 (X) moves UP along the long edge
 // 5526 (Z) moves DOWN-RIGHT for depth
-const ORIGIN_X = 1120;
-const ORIGIN_Y = 740;
-const TIME_SCALE = 18; // px per year (Time goes left)
-const X_SCALE = 22; // px per song (5525 goes up)
-const Z_SCALE = 12; // px per song (5526 goes down-right)
-const ANGLE = Math.PI / 5; // 36 degrees for depth
+//
+// Left page bounds: x ∈ [0, 680], y ∈ [0, 1036] (ref px), margin ~30px
+// Chart footprint:
+//   width  = TIME_SCALE*24 + Z_SCALE*sin36°*30 = 15*24 + 14*0.588*30 ≈ 607
+//   height = X_SCALE*32   + Z_SCALE*cos36°*30 = 18*32 + 14*0.809*30 ≈ 916
+// Origin: left ≥ 60, right ≤ 667, top ≥ 64, bottom ≤ 980
+const ORIGIN_X = 420;
+const ORIGIN_Y = 560;
+const TIME_SCALE = 15; // px per year (Time goes left)
+const X_SCALE = 16; // px per song (5525 goes up)
+const Z_SCALE = 16; // px per song (5526 goes down-right)
+const ANGLE = Math.PI / 6; // 30° — steeper depth, more vertical spread per step
+
+// Non-linear time mapping: 2016+ is compressed to 1/4 scale
+// (only 任性 in 2022 and a few 2016 songs live there)
+const YEAR_BREAK = 2016;
+const YEAR_COMPRESS = 0.25;
+
+function yearToVisual(year: number): number {
+  if (year <= YEAR_BREAK) return year - 1999;
+  return YEAR_BREAK - 1999 + (year - YEAR_BREAK) * YEAR_COMPRESS;
+}
 
 function project(x: number, y: number, z: number) {
-  const yearOffset = y - 1999;
+  const yearOffset = yearToVisual(y);
   return {
     // Time goes left (-), Z goes right (+)
     x: ORIGIN_X - yearOffset * TIME_SCALE + z * Z_SCALE * Math.sin(ANGLE),
@@ -140,117 +159,150 @@ function project(x: number, y: number, z: number) {
 const trajectories: TrajectoryPath[] = [];
 const annotations: Annotation[] = [];
 
-// Grid lines & Year labels
+// Grid lines
 for (let y = 2000; y <= 2023; y += 1) {
   const isMajor = y % 5 === 0;
-
-  // Vertical grid line (parallel to 5525 plane)
   trajectories.push({
     points: [project(0, y, 0), project(32, y, 0)],
     color: "rgba(200, 200, 200, 0.2)",
     lineWidth: isMajor ? 1.0 : 0.5,
     dash: isMajor ? [] : [2, 2],
   });
-  // Depth grid line (parallel to 5526 plane)
   trajectories.push({
     points: [project(0, y, 0), project(0, y, 30)],
     color: "rgba(200, 200, 200, 0.2)",
     lineWidth: isMajor ? 1.0 : 0.5,
     dash: isMajor ? [] : [2, 2],
   });
-
-  // Year label along the Time axis for major years
-  if (isMajor) {
-    const p = project(0, y, 0);
-    annotations.push({
-      x: p.x - 15,
-      y: p.y + 10,
-      w: 35,
-      h: 15,
-      label: y.toString(),
-      color: "rgba(100, 100, 100, 0.8)",
-    });
-  }
 }
 
 // Axes
 trajectories.push({
-  // Time Axis (Horizontal, Left)
   points: [project(0, 1999, 0), project(0, 2023, 0)],
-  color: "#888888",
+  color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 trajectories.push({
-  // 5525 Axis (Vertical, Up)
   points: [project(0, 1999, 0), project(32, 1999, 0)],
-  color: "#888888",
+  color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 trajectories.push({
-  // 5526 Axis (Depth, Down-Right)
   points: [project(0, 1999, 0), project(0, 1999, 30)],
-  color: "#888888",
+  color: COLOR_BLACK,
   lineWidth: 1.5,
+  dash: [],
 });
 
 // 5525 line
 const points5525 = SONGS_5525.map((song, i) =>
   project(i + 1, getYearValue(song), 0),
 );
-trajectories.push({
-  points: points5525,
-  color: "#cc2200",
-  lineWidth: 2.5,
-});
 
 // 5526 line
 const points5526 = SONGS_5526.map((song, i) =>
   project(0, getYearValue(song), i + 1),
 );
+
 trajectories.push({
-  points: points5526,
-  color: "#4455ee",
+  points: points5525,
+  color: COLOR_DEFAULT,
   lineWidth: 2.5,
 });
 
-// Song labels for 5525 (X-axis line, pointing up)
-const s5525_labels = [
-  { idx: 4, label: "瘋狂世界" },
-  { idx: 0, label: "OAOA" },
-  { idx: 19, label: "我心中尚未崩壞的地方" },
-  { idx: 27, label: "任性" },
-];
-s5525_labels.forEach(({ idx, label }) => {
-  const song = SONGS_5525[idx];
-  const p = project(idx + 1, getYearValue(song), 0);
-  annotations.push({
-    x: p.x + 10,
-    y: p.y - 8,
-    w: 120, // wider for full song name
-    h: 16,
-    label: label,
-    color: "#cc2200",
-  });
+trajectories.push({
+  points: points5526,
+  color: COLOR_RED_VINTAGE,
+  lineWidth: 2.5,
 });
 
-// Song labels for 5526 (Z-axis line, pointing down-right)
-const s5526_labels = [
-  { idx: 20, label: "瘋狂世界" },
-  { idx: 0, label: "OAOA" },
-  { idx: 3, label: "乾杯" },
-  { idx: 28, label: "任意門" },
-];
-s5526_labels.forEach(({ idx, label }) => {
-  const song = SONGS_5526[idx];
+// Song labels for 5525 — directly right of each point, no stagger
+const LABEL_W = 65; // "YYYY-MM-DD" at 10px ≈ 60px
+const songAnnotations5525 = SONGS_5525.map((song, idx) => {
+  const date = SONG_RELEASE_DATES[song] ?? "";
+  const p = project(idx + 1, getYearValue(song), 0);
+  return {
+    x: p.x + 4,
+    y: p.y - LABEL_W / 2,
+    w: LABEL_W,
+    h: 10,
+    label: date,
+    color: COLOR_BLACK,
+    noFrame: true,
+    angle: -90,
+    fontSize: 10,
+    fontFamily: "3270NerdFont-Regular",
+  };
+});
+
+// Song labels for 5526 — directly left of each point, no stagger
+const songAnnotations5526 = SONGS_5526.map((song, idx) => {
+  const date = SONG_RELEASE_DATES[song] ?? "";
   const p = project(0, getYearValue(song), idx + 1);
-  annotations.push({
-    x: p.x + 8,
-    y: p.y + 5,
-    w: 60,
-    h: 16,
-    label: label,
-    color: "#4455ee",
-  });
+  return {
+    x: p.x - 14,
+    y: p.y - LABEL_W / 2,
+    w: LABEL_W,
+    h: 10,
+    label: date,
+    color: COLOR_RED_VINTAGE,
+    noFrame: true,
+    angle: -90,
+    fontSize: 10,
+    fontFamily: "3270NerdFont-Regular",
+  };
+});
+
+// Legend — placed bottom-left of chart area
+const legendX = project(0, 2023, 0).x - 5; // near time-axis left end
+const legendY = ORIGIN_Y + 30;
+const legendAnnotations = [
+  {
+    x: legendX - 40,
+    y: legendY,
+    w: 65,
+    h: 10,
+    label: "5525 (55場25日)",
+    color: COLOR_DEFAULT,
+    noFrame: true,
+    angle: -90,
+    fontSize: 10,
+    fontFamily: "3270NerdFont-Regular",
+  },
+  {
+    x: legendX - 40,
+    y: legendY + 20,
+    w: 65,
+    h: 10,
+    label: "5526 (55場26日)",
+    color: COLOR_RED_VINTAGE,
+    noFrame: true,
+    angle: -90,
+    fontSize: 10,
+    fontFamily: "3270NerdFont-Regular",
+  },
+];
+
+// Legend line swatches
+trajectories.push({
+  points: [
+    { x: legendX - 2, y: legendY + 22 },
+    { x: legendX - 2, y: legendY + 48 },
+  ],
+  color: COLOR_DEFAULT,
+  lineWidth: 2.5,
+  dash: [],
+});
+trajectories.push({
+  points: [
+    { x: legendX - 2, y: legendY + 62 },
+    { x: legendX - 2, y: legendY + 88 },
+  ],
+  color: COLOR_RED_VINTAGE,
+  lineWidth: 2.5,
+  dash: [],
 });
 
 const page: PageConfig = {
@@ -259,8 +311,18 @@ const page: PageConfig = {
   leftPhotos: [],
   dotMatrix: {
     points: [
-      ...points5525.map((p) => ({ x: p.x, y: p.y, color: "#cc2200", size: 3 })),
-      ...points5526.map((p) => ({ x: p.x, y: p.y, color: "#4455ee", size: 3 })),
+      ...points5525.map((p) => ({
+        x: p.x,
+        y: p.y,
+        color: COLOR_DEFAULT,
+        size: 3,
+      })),
+      ...points5526.map((p) => ({
+        x: p.x,
+        y: p.y,
+        color: COLOR_RED_VINTAGE,
+        size: 3,
+      })),
     ],
   },
   rightSections: [
@@ -291,35 +353,25 @@ const page: PageConfig = {
   ],
   trajectories,
   annotations: [
-    ...annotations,
-    {
-      // 5525 Axis Label
-      x: project(32, 1999, 0).x - 22,
-      y: project(32, 1999, 0).y - 25,
-      w: 45,
-      h: 22,
-      label: "5525-X",
-      color: "#cc2200",
-    },
-    {
-      // 5526 Axis Label
-      x: project(0, 1999, 30).x + 10,
-      y: project(0, 1999, 30).y,
-      w: 45,
-      h: 22,
-      label: "5526-Z",
-      color: "#4455ee",
-    },
-    {
-      // Time Axis Label
-      x: project(0, 2023, 0).x - 55,
-      y: project(0, 2023, 0).y - 11,
-      w: 45,
-      h: 22,
-      label: "TIME-Y",
-      color: "#888888",
-    },
-  ].map((a) => ({ ...a, noFrame: true, angle: -90 })),
+    // Axis + year labels: rotated -90°
+    ...[
+      ...annotations,
+      {
+        x: project(0, 2023, 0).x + 5,
+        y: project(0, 2023, 0).y - 11,
+        w: 40,
+        h: 10,
+        label: "TIME",
+        color: COLOR_BLACK,
+        fontSize: 10,
+        fontFamily: "3270NerdFont-Regular",
+      },
+    ].map((a) => ({ ...a, noFrame: true, angle: -90 })),
+    // Song labels: small font, staggered, angle=-90
+    ...songAnnotations5525,
+    ...songAnnotations5526,
+    ...legendAnnotations,
+  ],
 };
 
 export default page;

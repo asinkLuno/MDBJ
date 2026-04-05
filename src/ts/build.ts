@@ -294,10 +294,11 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.fillStyle = color;
       ctx.globalAlpha = 0.9;
       const isChinese = /[\u4e00-\u9fa5]/.test(ann.label);
-      const fontName = isChinese
-        ? assets.chineseLabelFontName
-        : assets.labelFontName;
-      ctx.font = `${FONT_ANNOTATION * 0.75 * ss}px "${fontName}"`;
+      const fontName =
+        ann.fontFamily ??
+        (isChinese ? assets.chineseLabelFontName : assets.labelFontName);
+      const annFontSize = ann.fontSize ?? FONT_ANNOTATION * 0.75;
+      ctx.font = `${annFontSize * ss}px "${fontName}"`;
       (ctx as any).letterSpacing = `${-1 * ss}px`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";

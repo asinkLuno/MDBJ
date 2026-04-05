@@ -67,6 +67,8 @@ export interface Annotation {
   crosshair?: boolean; // draw center crosshair, default false
   noFrame?: boolean; // do not draw the targeting frame around the annotation
   angle?: number; // rotation angle in degrees
+  fontSize?: number; // override annotation font size in px (default: FONT_ANNOTATION * 0.75)
+  fontFamily?: string; // override font family (default: auto-select by Chinese detection)
 }
 
 export interface LeftText {
