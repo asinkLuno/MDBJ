@@ -35,13 +35,22 @@ export async function drawPhoto(
   sx: number,
   sy: number,
 ) {
-  const { file, x, y, w, rot, tapes: photoTapes = [] } = photoConfig;
+  const {
+    file,
+    x,
+    y,
+    w,
+    rot,
+    tapes: photoTapes = [],
+    opacity = 1.0,
+  } = photoConfig;
   const photo = await loadImage(file);
   const scaledW = w * ss;
   const h = Math.round((scaledW * photo.height) / photo.width);
   const angle = (rot * Math.PI) / 180;
 
   ctx.save();
+  ctx.globalAlpha = opacity;
   ctx.translate(x * sx + scaledW / 2, y * sy + h / 2);
   ctx.rotate(angle);
 

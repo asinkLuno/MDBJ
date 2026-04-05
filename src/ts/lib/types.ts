@@ -51,6 +51,7 @@ export interface PhotoLayout {
   w: number;
   rot: number;
   tapes: TapeConfig[];
+  opacity?: number;
 }
 
 export interface Annotation {
@@ -112,6 +113,7 @@ export interface SpreadPhotoLayout {
   sublabel?: string; // extra text rendered near the frame (e.g. dates), supports \n
   scaleY?: number; // vertical squish for 3D-tilt illusion (e.g. 0.3 = edge-on)
   blur?: number; // motion/depth-of-field blur in pixels
+  opacity?: number; // photo opacity (0.0 to 1.0)
   showFrame?: boolean; // draw HUD targeting frame around the photo
   frameColor?: string; // frame accent color, defaults to COLOR_DEFAULT
   framePadX?: number; // horizontal inset in unscaled px (default -12; use 0 for tight fit)

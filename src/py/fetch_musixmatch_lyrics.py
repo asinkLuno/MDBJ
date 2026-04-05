@@ -3,6 +3,8 @@ import json
 import os
 import random
 import re
+import unicodedata
+from difflib import SequenceMatcher
 
 from playwright.async_api import async_playwright
 
@@ -211,5 +213,48 @@ async def main():
         print("Done.")
 
 
+def get_display_width(s: str) -> int:
+    """计算字符串在终端显示的实际宽度（处理中文字符）"""
+    width = 0
+    for char in s:
+        if unicodedata.east_asian_width(char) in ("W", "F"):
+            width += 2
+        else:
+            width += 1
+    return width
+
+
+def pad_to_width(s: str, width: int) -> str:
+    """根据显示宽度进行填充"""
+    cur_w = get_display_width(s)
+    return s + " " * (width - cur_w)
+
+
+def compare_setlists(list1: list[str], list2: list[str]) -> None:
+    """并排对比两个歌单，打印差异"""
+    sm = SequenceMatcher(None, list1, list2)
+    all_songs = list1 + list2
+    max_w = max(get_display_width(s) for s in all_songs) + 4
+
+    print(f"{pad_to_width('5525 演唱會', max_w)} | 5526 演唱會")
+    print("-" * (max_w + 20))
+
+    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+        if tag == "equal":
+            for k in range(i1, i2):
+                print(list1[k])
+        elif tag == "replace":
+            for k in range(max(i2 - i1, j2 - j1)):
+                s1 = list1[i1 + k] if k < (i2 - i1) else ""
+                s2 = list2[j1 + k] if k < (j2 - j1) else ""
+                print(f"{pad_to_width(s1, max_w)} | {s2}")
+        elif tag == "delete":
+            for k in range(i1, i2):
+                print(f"{pad_to_width(list1[k], max_w)} |")
+        elif tag == "insert":
+            for k in range(j1, j2):
+                print(f"{pad_to_width('', max_w)} | {list2[k]}")
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    compare_setlists(SONGS_5525, SONGS_5526)

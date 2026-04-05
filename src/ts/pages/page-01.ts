@@ -62,7 +62,7 @@ const SONGS_5526 = [
   "軋車",
   "派對動物",
   "離開地球表面",
-  "戀戀ING",
+  "戀愛ING",
   "任性",
   "突然好想你",
   "轉眼",
@@ -97,7 +97,6 @@ const SONG_RELEASE_DATES: Record<string, string> = {
   派對動物: "2016-07-21",
   離開地球表面: "2007-07-20",
   戀愛ING: "2005-08-26",
-  戀戀ING: "2005-08-26",
   任性: "2022-11-01",
   突然好想你: "2008-10-23",
   轉眼: "2016-07-21",
@@ -405,7 +404,7 @@ const trendTextAnnotations: Annotation[] = [
 // ================= 生成 PageConfig =================
 const page: PageConfig = {
   id: "page-01",
-  toTraditional: false,
+  toTraditional: true,
   leftPhotos: [],
   dotMatrix: {
     points: [
@@ -424,7 +423,20 @@ const page: PageConfig = {
       })),
     ],
   },
-  rightSections: [],
+  rightSections: [
+    {
+      text: "歌曲发行年份的分布图谱显示\n5525 与 5526 在演变趋势上存在显著差异\n5525 在蓝色背景标注的观测区间内呈现增长趋势\n而 5526 呈现明显递减趋势\n这是否说明 5525 是顺时间而行而 5526 是逆时间而行？？？",
+      options: {
+        x: 42,
+        y: 764 - 39,
+        fontSize: 36,
+        fontFamily: "ChenYuluoyan",
+        color: COLOR_DEFAULT,
+        wrapWidth: 600,
+        lineHeight: 39,
+      },
+    },
+  ],
   trajectories,
   annotations: [
     ...annotations.map((a) => ({ ...a, noFrame: true, angle: -90 })),

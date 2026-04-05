@@ -105,6 +105,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       const angle = (sp.rot * Math.PI) / 180;
 
       ctx.save();
+      if (sp.opacity !== undefined) {
+        ctx.globalAlpha = sp.opacity;
+      }
       if (sp.blur) {
         (ctx as any).filter = `blur(${sp.blur * ss}px)`;
       }
