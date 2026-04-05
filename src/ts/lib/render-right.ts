@@ -41,13 +41,13 @@ export async function renderRight(
         (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
       const bold = opts.bold ?? false;
       const wrapWidth = colWidth[col] * ss;
+      const curFont = opts.fontFamily ?? fontName;
 
-      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${fontName}`;
+      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
       ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       ctx.fillStyle = color;
 
       const gap = (opts.gap ?? 0) * ss;
-      const xPos = xStarts[col] * sx;
 
       // Advance column if current one is full
       while (
@@ -55,7 +55,7 @@ export async function renderRight(
         colNextY[col] + gap + lineHeight > maxContentY
       ) {
         col++;
-        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${fontName}`;
+        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
         ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       }
 
@@ -67,7 +67,11 @@ export async function renderRight(
         const converted = toTrad ? await toTraditional(rawLine) : rawLine;
         const drawLines = wrapTextLine(ctx, converted, wrapWidth);
         for (const line of drawLines) {
-          if (opts.highlights?.length || opts.relationArrows?.length) {
+          if (
+            opts.highlights?.length ||
+            opts.relationArrows?.length ||
+            opts.dotHighlights?.length
+          ) {
             drawHighlightedLine(
               ctx as any,
               line,
@@ -77,6 +81,7 @@ export async function renderRight(
               opts.highlights ?? [],
               ss,
               opts.relationArrows,
+              opts.dotHighlights,
             );
           } else {
             ctx.fillText(line, currentXPos, currentY);
@@ -87,7 +92,7 @@ export async function renderRight(
       colNextY[col] = currentY;
     }
   } else {
-    // ── Single-column mode (original behaviour) ───────────────────────────
+    // ── Single-column mode ──────────────────────────────────────────────
     let nextY = 100 * sy;
 
     for (const section of sections) {
@@ -98,8 +103,9 @@ export async function renderRight(
         (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
       const bold = opts.bold ?? false;
       const wrapWidth = opts.wrapWidth ? opts.wrapWidth * ss : null;
+      const curFont = opts.fontFamily ?? fontName;
 
-      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${fontName}`;
+      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
       ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       ctx.fillStyle = color;
 
@@ -114,12 +120,17 @@ export async function renderRight(
           : [converted];
         for (const line of drawLines) {
           if (bold) {
+            ctx.save();
             ctx.globalAlpha = 0.4;
             ctx.fillText(line, xPos - 0.5, currentY);
             ctx.fillText(line, xPos + 0.5, currentY);
-            ctx.globalAlpha = 1;
+            ctx.restore();
           }
-          if (opts.highlights?.length || opts.relationArrows?.length) {
+          if (
+            opts.highlights?.length ||
+            opts.relationArrows?.length ||
+            opts.dotHighlights?.length
+          ) {
             drawHighlightedLine(
               ctx as any,
               line,
@@ -129,6 +140,7 @@ export async function renderRight(
               opts.highlights ?? [],
               ss,
               opts.relationArrows,
+              opts.dotHighlights,
             );
           } else {
             ctx.fillText(line, xPos, currentY);

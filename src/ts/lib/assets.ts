@@ -11,11 +11,12 @@ export interface SharedAssets {
   texture: Image;
   fontName: string;
   labelFontName: string;
+  chineseLabelFontName: string;
 }
 
 const FONT_PATH = "resources/ChenYuluoyan-2.0-Thin.ttf";
 const LABEL_FONT_PATH = "resources/3270NerdFont-Regular.ttf";
-const CHINESE_LABEL_FONT_PATH = "resources/SonyMing.ttf";
+const CHINESE_LABEL_FONT_PATH = "resources/zpix.ttf";
 const BG_LEFT = "resources/field_notes/a_final.png";
 const BG_RIGHT = "resources/field_notes/b_final.png";
 const TAPE_DIR = "resources/tapes/individual";
@@ -59,5 +60,13 @@ export async function loadSharedAssets(): Promise<SharedAssets> {
       .map((f) => loadImage(path.join(TAPE_DIR, f))),
   );
 
-  return { bgLeft, bgRight, tapes, texture, fontName, labelFontName };
+  return {
+    bgLeft,
+    bgRight,
+    tapes,
+    texture,
+    fontName,
+    labelFontName,
+    chineseLabelFontName,
+  };
 }

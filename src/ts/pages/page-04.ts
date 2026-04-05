@@ -33,22 +33,26 @@ interface RelationsData {
 const data: RelationsData = JSON.parse(readFileSync(RELATIONS_FILE, "utf-8"));
 
 // ── typography ────────────────────────────────────────────────────────────
-const LYRIC_FONT = 7;
-const LYRIC_LH = 8;
-const TITLE_FONT = 7;
-const TITLE_LH = 9;
-const TITLE_GAP = 5;
-const REL_GAP = 4; // extra space above relation lines for the arc
+const LYRIC_FONT = 15;
+const LYRIC_LH = 13.5; // negative leading for overlap
+const TITLE_FONT = 16;
+const TITLE_LH = 15;
+const TITLE_GAP = 0;
+const REL_GAP = 0;
 
 const HIGHLIGHTS: CharHighlight[] = [
   { char: "你", color: "#4455ee" },
-  { char: "我", color: "#cc2200" },
+  { char: "我", color: "#4455ee" },
+  { char: "我們", color: "#4455ee" },
+  { char: "我们", color: "#4455ee" },
+  { char: "你們", color: "#4455ee" },
+  { char: "你们", color: "#4455ee" },
 ];
 
-// ── 4-column layout — 2px gap between cols, 8px left margin ──────────────
-const COLS = 4;
-const COL_X: number[] = [8, 175, 342, 509];
-const COL_W: number[] = [165, 165, 165, 165];
+// ── 3-column layout ──────────────
+const COLS = 3;
+const COL_X: number[] = [15, 235, 455];
+const COL_W: number[] = [210, 210, 210];
 
 const colLayout: ColumnLayout = {
   count: COLS,
@@ -60,70 +64,71 @@ const colLayout: ColumnLayout = {
 const allSections: Section[] = [];
 
 for (const song of data.songs) {
-  allSections.push({
-    text: `— ${song.title}`,
-    options: {
-      fontSize: TITLE_FONT,
-      color: "#888888",
-      lineHeight: TITLE_LH,
-      gap: TITLE_GAP,
-    },
-  });
+  let combinedText = "";
+  let combinedArrows: RelationArrow[] = [];
+  let currentTokenOffset = 0;
 
   for (const lineData of song.lines) {
     const tokenWords = lineData.tokens.map((t) => t.word);
-    const hasRelation = lineData.relations.length > 0;
-    const hasPronouns =
-      lineData.line.includes("我") || lineData.line.includes("你");
 
-    if (hasRelation) {
-      const seen = new Set<string>();
-      const arrows: RelationArrow[] = [];
-      for (const rel of lineData.relations) {
-        const key = `${rel.subject.index}-${rel.predicate.index}-${rel.object.index}`;
-        if (!seen.has(key)) {
-          seen.add(key);
-          arrows.push({
-            tokens: tokenWords,
-            subjectIdx: rel.subject.index,
-            predicateIdx: rel.predicate.index,
-            objectIdx: rel.object.index,
-            direction: rel.direction as RelationArrow["direction"],
-          });
-        }
-      }
-      allSections.push({
-        text: lineData.line,
-        options: {
-          fontSize: LYRIC_FONT,
-          color: COLOR_BLACK,
-          lineHeight: LYRIC_LH,
-          letterSpacing: -0.5,
-          gap: REL_GAP,
-          relationArrows: arrows,
-        },
-      });
-    } else {
-      allSections.push({
-        text: lineData.line,
-        options: {
-          fontSize: LYRIC_FONT,
-          color: COLOR_BLACK,
-          lineHeight: LYRIC_LH,
-          letterSpacing: -0.5,
-          gap: 0,
-          ...(hasPronouns ? { highlights: HIGHLIGHTS } : {}),
-        },
+    // Add 4 spaces if not first line
+    if (combinedText.length > 0) {
+      combinedText += "    ";
+      // We don't have a way to offset arrows in the renderer easily if we merge,
+      // but the renderer uses token lists which are local to the 'RelationArrow'.
+      // If the renderer expects ONE RelationArrow per Section, we should keep them as separate sections
+      // but remove the visual gaps to make them look merged.
+    }
+
+    // Actually, if we want them to look like one block, we can keep them as separate Section objects
+    // but set their gap to 0 and ensure they don't have trailing newlines.
+
+    const arrows: RelationArrow[] = [];
+    for (const rel of lineData.relations) {
+      arrows.push({
+        tokens: tokenWords,
+        subjectIdx: rel.subject.index,
+        predicateIdx: rel.predicate.index,
+        objectIdx: rel.object.index,
+        direction: rel.direction as RelationArrow["direction"],
       });
     }
+
+    allSections.push({
+      text: lineData.line + "    ", // 4 spaces as separator
+      options: {
+        fontSize: LYRIC_FONT,
+        color: COLOR_BLACK,
+        lineHeight: LYRIC_LH,
+        letterSpacing: -1.0,
+        gap: 0,
+        fontFamily: "zpix",
+        relationArrows: arrows,
+        dotHighlights:
+          lineData.line.includes("我") || lineData.line.includes("你")
+            ? HIGHLIGHTS
+            : [],
+      },
+    });
   }
+
+  // Add an empty line between songs
+  allSections.push({
+    text: " ",
+    options: {
+      fontSize: LYRIC_FONT,
+      lineHeight: LYRIC_LH * 0.8,
+      gap: 0,
+      fontFamily: "zpix",
+    },
+  });
 }
 
 // ── simulate column fill to find the right/left split point ──────────────
 // Approximate canvas: bgRight ≈ bgLeft ≈ 2672 × 4224 → ss ≈ 3.93
 const SS = Math.min(2672 / REF_W, 4224 / REF_H);
-const maxY = 4224 - 60 * SS;
-const startY = 100 * SS;
+const maxY = 4224 - 30 * SS;
+const startY = 30 * SS;
 
 let col = 0;
 let y = startY;

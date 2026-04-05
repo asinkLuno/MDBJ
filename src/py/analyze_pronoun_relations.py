@@ -1,25 +1,7 @@
 """
 用 HanLP 分析歌词中「我→谓→你」/「你→谓→我」主谓关系，输出全量歌词 JSON。
-
-用法：uv run python src/py/analyze_pronoun_relations.py
-输出：resources/lyrics/pronoun_relations.json
-
-JSON 结构：
-{
-  "songs": [
-    {
-      "title": str,
-      "lines": [
-        {
-          "line": str,       // 原始歌词行
-          "tokens": [...],   // 仅当含 我+你 时有值（用于 arrow 渲染）
-          "relations": [...]  // 我→谓→你 / 你→谓→我；无则为 []
-        }
-      ]
-    }
-  ],
-  "summary": { "wo_to_ni": {...}, "ni_to_wo": {...} }
-}
+支持跨行分析：使用滑动窗口（例如 3 行一组）进行分析。
+优化关系提取：寻找共享同一 Head 或共同祖先的「我」和「你」。
 """
 
 import json
@@ -49,75 +31,78 @@ SECTION_LABELS = {
     "hook",
 }
 
-SUBJECT_DEPRELS = {"nsubj", "nsubj:pass"}
-OBJECT_DEPRELS = {"dobj", "obj", "iobj"}
 
-
-def is_section_label(line: str) -> bool:
-    return line.strip().lower() in SECTION_LABELS
-
-
-def is_english_only(line: str) -> bool:
-    return bool(re.fullmatch(r"[A-Za-z0-9\s\-'!\?,\.~]+", line.strip()))
-
-
-def clean_line(line: str) -> str:
-    line = line.strip()
-    if not line or is_section_label(line) or is_english_only(line):
-        return ""
-    return line
-
-
-def load_all_lines(path: Path) -> list[str]:
-    """返回歌词文件中所有非空、非标签行（保留重复，保留歌曲结构）。"""
-    lines = []
-    for raw in path.read_text(encoding="utf-8").splitlines():
-        cleaned = clean_line(raw)
-        if cleaned:
-            lines.append(cleaned)
-    return lines
-
-
+# 只要有共同 head，不再局限于 nsubj/obj
 def extract_relations(conll_sent: list[dict[str, Any]]) -> list[dict[str, Any]]:
     tokens = [t["form"] for t in conll_sent]
-    heads = [t["head"] for t in conll_sent]
-    deprels = [t["deprel"] for t in conll_sent]
-    n = len(tokens)
+    heads = [t["head"] for t in conll_sent]  # 1-based
     relations = []
 
-    for i, (word, head_idx, deprel) in enumerate(zip(tokens, heads, deprels)):
-        if deprel not in SUBJECT_DEPRELS:
-            continue
-        if word in WO_SET:
-            obj_set, direction = NI_SET, "我→谓→你"
-        elif word in NI_SET:
-            obj_set, direction = WO_SET, "你→谓→我"
-        else:
-            continue
+    # 找出所有“我”和“你”的索引
+    me_indices = [i for i, w in enumerate(tokens) if w in WO_SET]
+    you_indices = [i for i, w in enumerate(tokens) if w in NI_SET]
 
-        pred_i = head_idx - 1
-        if pred_i < 0 or pred_i >= n:
-            continue
+    if not me_indices or not you_indices:
+        return []
 
-        obj = None
-        for j in range(n):
-            if heads[j] - 1 == pred_i and deprels[j] in OBJECT_DEPRELS:
-                if tokens[j] in obj_set:
-                    obj = {"word": tokens[j], "index": j}
-                break
+    # 1. 寻找共享相同 head 或共同祖先的情况 (Ancestor chain search)
+    for m_idx in me_indices:
+        # 获取“我”的祖先链 (包含自己，最多向上看4层)
+        m_anc = [m_idx]
+        curr = heads[m_idx] - 1
+        while curr >= 0 and len(m_anc) < 5:
+            m_anc.append(curr)
+            curr = heads[curr] - 1
 
-        if obj is None:
-            continue
+        for y_idx in you_indices:
+            # 获取“你”的祖先链
+            y_anc = [y_idx]
+            curr = heads[y_idx] - 1
+            while curr >= 0 and len(y_anc) < 5:
+                y_anc.append(curr)
+                curr = heads[curr] - 1
 
-        relations.append(
-            {
-                "subject": {"word": word, "index": i},
-                "predicate": {"word": tokens[pred_i], "index": pred_i},
-                "object": obj,
-                "direction": direction,
-            }
+            # 寻找最近的共同祖先
+            common = None
+            for ma in m_anc:
+                if ma in y_anc:
+                    common = ma
+                    break
+
+            if common is not None:
+                # 如果共同祖先就是其中一个，谓语用其 head 或它本身
+                pred_idx = common
+                pred_word = tokens[pred_idx]
+
+                # 排除“我”或“你”本身作为谓词的情况（除非语义确实如此）
+                if pred_idx == m_idx or pred_idx == y_idx:
+                    # 尝试取共同祖先的 head
+                    actual_pred_idx = heads[pred_idx] - 1
+                    if actual_pred_idx >= 0:
+                        pred_idx = actual_pred_idx
+                        pred_word = tokens[pred_idx]
+
+                relations.append(
+                    {
+                        "subject": {"word": tokens[m_idx], "index": m_idx},
+                        "predicate": {"word": pred_word, "index": pred_idx},
+                        "object": {"word": tokens[y_idx], "index": y_idx},
+                        "direction": "我↔你",
+                    }
+                )
+
+    # 去重
+    seen = set()
+    unique_rels = []
+    for r in relations:
+        key = tuple(sorted((r["subject"]["index"], r["object"]["index"]))) + (
+            r["predicate"]["index"],
         )
-    return relations
+        if key not in seen:
+            seen.add(key)
+            unique_rels.append(r)
+
+    return unique_rels
 
 
 def annotate_tokens(
@@ -128,26 +113,38 @@ def annotate_tokens(
     for rel in relations:
         role_map[rel["subject"]["index"]].add("subject")
         role_map[rel["predicate"]["index"]].add("predicate")
-        if rel["object"]:
-            role_map[rel["object"]["index"]].add("object")
+        role_map[rel["object"]["index"]].add("object")
     return [{"word": w, "roles": sorted(role_map[i])} for i, w in enumerate(tokens)]
 
 
+def load_all_lines(path: Path) -> list[str]:
+    lines = []
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or is_section_label(line) or is_english_only(line):
+            continue
+        lines.append(line)
+    return lines
+
+
+def is_section_label(line: str) -> bool:
+    return line.strip().lower() in SECTION_LABELS
+
+
+def is_english_only(line: str) -> bool:
+    return bool(re.fullmatch(r"[A-Za-z0-9\s\-'!\?,\.~]+", line.strip()))
+
+
 def main():
-    print("加载 HanLP 分词模型…", flush=True)
+    print("加载 HanLP 模型…", flush=True)
     tok = hanlp.load(hanlp.pretrained.tok.COARSE_ELECTRA_SMALL_ZH)
-    print("加载 HanLP 依存分析模型…", flush=True)
     dep = hanlp.load(hanlp.pretrained.dep.CTB9_DEP_ELECTRA_SMALL)
 
     txt_files = sorted(LYRICS_DIR.glob("*.txt"))
     print(f"找到 {len(txt_files)} 首歌词文件\n", flush=True)
 
-    # 跨曲去重：同一行只保留首次出现（保留曲内重复）
     seen_cross: set[str] = set()
-
     songs_output = []
-    wo_to_ni: dict[str, int] = {}
-    ni_to_wo: dict[str, int] = {}
 
     for path in txt_files:
         all_lines = load_all_lines(path)
@@ -155,96 +152,57 @@ def main():
             continue
 
         title = path.stem
-        print(f"  《{title}》({len(all_lines)} 行)…", flush=True)
-
-        # 找出需要 dep 分析的行（含 我+你）
-        needs_dep: list[int] = [
-            i
-            for i, line in enumerate(all_lines)
-            if any(c in line for c in WO_SET) and any(c in line for c in NI_SET)
-        ]
-        dep_lines = [all_lines[i] for i in needs_dep]
-        dep_tokenized: list[list[str]] | None = None
-        dep_parsed: list[list[dict[str, Any]]] | None = None
-
-        if dep_lines:
-            try:
-                dep_tokenized = tok(dep_lines)
-                dep_parsed = dep(dep_tokenized)
-            except Exception as e:
-                print(f"    !! dep 解析失败: {e}", file=sys.stderr)
-
-        # 建立 index → (tokenized, parsed) 映射
-        dep_map: dict[int, tuple[list[str], list[dict[str, Any]]]] = {}
-        if dep_parsed and dep_tokenized:
-            for k, idx in enumerate(needs_dep):
-                dep_map[idx] = (dep_tokenized[k], dep_parsed[k])
+        print(f"  《{title}》分析中…", flush=True)
 
         song_lines = []
-        seen_in_song: set[str] = set()
+        # 窗口调大一点以捕捉更长跨度的关系
+        window_size = 5
+        step = 3
 
-        for i, line_text in enumerate(all_lines):
-            # 曲内重复保留；跨曲重复删除
-            if line_text in seen_cross:
+        windows = []
+        for i in range(0, len(all_lines), step):
+            win_lines = all_lines[i : i + window_size]
+            if not win_lines:
+                break
+            windows.append(" ".join(win_lines))
+
+        try:
+            tokenized_windows = tok(windows)
+            if tokenized_windows and isinstance(tokenized_windows[0], str):
+                tokenized_windows = [tokenized_windows]
+            parsed_windows = dep(tokenized_windows)
+        except Exception as e:
+            print(f"    !! 解析失败: {e}", file=sys.stderr)
+            continue
+
+        for win_text, _, conll in zip(windows, tokenized_windows, parsed_windows):
+            if win_text in seen_cross:
                 continue
 
-            if i in dep_map:
-                _tok_words, conll = dep_map[i]
-                relations = extract_relations(conll)
-                tokens_out = annotate_tokens(conll, relations)
-            else:
-                relations = []
-                tokens_out = []
+            relations = extract_relations(conll)
+            tokens_out = annotate_tokens(conll, relations)
 
             song_lines.append(
                 {
-                    "line": line_text,
+                    "line": win_text,
                     "tokens": tokens_out,
                     "relations": relations,
                 }
             )
-
-            if line_text not in seen_in_song:
-                seen_in_song.add(line_text)
-                # 只有首次在本曲出现时才加入跨曲去重集
-                # （本曲内后续重复仍可出现）
-            # 跨曲去重：第一首出现该行后，其他曲跳过
-            seen_cross.add(line_text)
-
-            for rel in relations:
-                pred = rel["predicate"]["word"]
-                if rel["direction"] == "我→谓→你":
-                    wo_to_ni[pred] = wo_to_ni.get(pred, 0) + 1
-                else:
-                    ni_to_wo[pred] = ni_to_wo.get(pred, 0) + 1
+            seen_cross.add(win_text)
 
         if song_lines:
             songs_output.append({"title": title, "lines": song_lines})
 
-    def top_sorted(d: dict[str, int]) -> dict[str, int]:
-        return dict(sorted(d.items(), key=lambda x: -x[1]))
-
-    output = {
-        "songs": songs_output,
-        "summary": {
-            "wo_to_ni": top_sorted(wo_to_ni),
-            "ni_to_wo": top_sorted(ni_to_wo),
-        },
-    }
-
+    output = {"songs": songs_output}
     OUTPUT.write_text(
         json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8"
     )
 
-    total_lines = sum(len(s["lines"]) for s in songs_output)
-    relation_lines = sum(
+    relation_units = sum(
         1 for s in songs_output for ln in s["lines"] if ln["relations"]
     )
-    print(f"\n✓ 输出 → {OUTPUT.relative_to(ROOT)}")
-    print(
-        f"  歌曲：{len(songs_output)} 首 | 总行数：{total_lines} | 含主谓关系：{relation_lines}"
-    )
-    print(f"  我→谓→你：{sum(wo_to_ni.values())} | 你→谓→我：{sum(ni_to_wo.values())}")
+    print(f"\n✓ 输出 → {OUTPUT.relative_to(ROOT)} | 含关系单元：{relation_units}")
 
 
 if __name__ == "__main__":

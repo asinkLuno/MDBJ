@@ -24,8 +24,10 @@ export interface TextOptions {
   y?: number;
   gap?: number;
   bold?: boolean;
+  fontFamily?: string;
   wrapWidth?: number; // auto-wrap text within this pixel width
   highlights?: CharHighlight[]; // draw targeting frames around these characters
+  dotHighlights?: CharHighlight[]; // draw dots over these characters
   relationArrows?: RelationArrow[]; // draw subject→predicate→object frames + arc arrow
 }
 
@@ -63,6 +65,8 @@ export interface Annotation {
   lineToX?: number; // spread canvas X to draw a connecting line to
   lineToY?: number;
   crosshair?: boolean; // draw center crosshair, default false
+  noFrame?: boolean; // do not draw the targeting frame around the annotation
+  angle?: number; // rotation angle in degrees
 }
 
 export interface LeftText {
@@ -73,6 +77,7 @@ export interface LeftText {
   color?: string;
   letterSpacing?: number;
   lineHeight?: number;
+  fontFamily?: string;
   wrapWidth?: number;
   highlights?: CharHighlight[];
 }

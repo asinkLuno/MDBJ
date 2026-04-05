@@ -288,63 +288,60 @@ export function drawHighlightedLine(
   highlights: CharHighlight[],
   ss: number,
   relationArrows?: RelationArrow[],
+  dotHighlights?: CharHighlight[],
 ): void {
   ctx.fillText(text, x, baselineY);
 
   const frameH = fontSize * 1.0;
   const frameTop = baselineY - fontSize * 0.85;
-
-  // Line width proportional to font size (≈10% of font height, in screen px)
   const frameLW = fontSize * 0.1;
+
+  if (dotHighlights?.length) {
+    const dotRadius = fontSize * 0.55;
+    const dotY = baselineY - fontSize * 0.35;
+    for (const hl of dotHighlights) {
+      let startPos = 0;
+      while (true) {
+        const idx = text.indexOf(hl.char, startPos);
+        if (idx === -1) break;
+        const before = text.substring(0, idx);
+        const charX =
+          x +
+          ctx.measureText(before).width +
+          ctx.measureText(hl.char).width / 2;
+        ctx.save();
+        ctx.fillStyle = hl.color;
+        ctx.beginPath();
+        ctx.arc(charX, dotY, dotRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        startPos = idx + 1;
+      }
+    }
+  }
 
   if (relationArrows?.length) {
     for (const rel of relationArrows) {
       const pos = computeTokenXPositions(ctx, text, rel.tokens, x);
       const subj = pos[rel.subjectIdx];
-      const pred = pos[rel.predicateIdx];
       const obj = pos[rel.objectIdx];
-      if (!subj || !pred || !obj || subj.w === 0 || obj.w === 0) continue;
+      if (!subj || !obj || subj.w === 0 || obj.w === 0) continue;
 
-      const isWoToNi = rel.direction === "我→谓→你";
-      const subjColor = isWoToNi ? "#cc2200" : "#4455ee";
-      const objColor = isWoToNi ? "#4455ee" : "#cc2200";
+      const dotColor = "#4455ee";
+      const dotRadius = fontSize * 0.55;
+      const dotY = baselineY - fontSize * 0.35;
 
-      drawTargetingFrame(
-        ctx,
-        subj.x,
-        frameTop,
-        subj.w,
-        frameH,
-        subjColor,
-        ss,
-        true,
-        frameLW,
-      );
-      drawTargetingFrame(
-        ctx,
-        pred.x,
-        frameTop,
-        pred.w,
-        frameH,
-        "#cc8800",
-        ss,
-        true,
-        frameLW,
-      );
-      drawTargetingFrame(
-        ctx,
-        obj.x,
-        frameTop,
-        obj.w,
-        frameH,
-        objColor,
-        ss,
-        true,
-        frameLW,
-      );
+      [subj, obj].forEach((p) => {
+        ctx.save();
+        ctx.fillStyle = dotColor;
+        ctx.globalAlpha = 0.9;
+        ctx.beginPath();
+        ctx.arc(p.x + p.w / 2, dotY, dotRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
 
       const arrowY = frameTop - 3 * ss;
-      // span is already in screen pixels; cpDrop scales with text size, not span
       const span = Math.abs(obj.x + obj.w / 2 - (subj.x + subj.w / 2));
       const cpDrop = Math.max(8 * ss, span * 0.28);
       drawArcArrow(
@@ -353,7 +350,7 @@ export function drawHighlightedLine(
         obj.x + obj.w / 2,
         arrowY,
         cpDrop,
-        subjColor,
+        dotColor,
         ss,
       );
     }

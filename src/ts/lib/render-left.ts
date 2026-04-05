@@ -31,7 +31,8 @@ export async function renderLeft(
       const lineHeight =
         (lt.lineHeight || (lt.fontSize || FONT_LEFT_TEXT_DEFAULT) * 1.4) * ss;
       const wrapWidth = lt.wrapWidth ? lt.wrapWidth * ss : null;
-      ctx.font = `${fontSize}px ${fontName}`;
+      const curFont = lt.fontFamily ?? fontName;
+      ctx.font = `${fontSize}px ${curFont}`;
       ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
       ctx.fillStyle = lt.color || COLOR_DEFAULT;
 
@@ -77,8 +78,9 @@ export async function renderLeft(
         (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
       const bold = opts.bold ?? false;
       const wrapWidth = colWidth[col] * ss;
+      const curFont = opts.fontFamily ?? fontName;
 
-      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${fontName}`;
+      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
       ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       ctx.fillStyle = color;
 
@@ -89,7 +91,7 @@ export async function renderLeft(
         colNextY[col] + gap + lineHeight > maxContentY
       ) {
         col++;
-        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${fontName}`;
+        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
         ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       }
 

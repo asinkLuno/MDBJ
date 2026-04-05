@@ -269,7 +269,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       const cx = ax + scaledW / 2,
         cy = ay + scaledH / 2;
 
-      drawTargetingFrame(ctx, ax, ay, scaledW, scaledH, color, ss);
+      if (!ann.noFrame) {
+        drawTargetingFrame(ctx, ax, ay, scaledW, scaledH, color, ss);
+      }
 
       // Center crosshair (opt-in)
       if (ann.crosshair) {
@@ -291,11 +293,26 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       ctx.save();
       ctx.fillStyle = color;
       ctx.globalAlpha = 0.9;
-      ctx.font = `${FONT_ANNOTATION * 0.75 * ss}px "${assets.labelFontName}"`;
+      const isChinese = /[\u4e00-\u9fa5]/.test(ann.label);
+      const fontName = isChinese
+        ? assets.chineseLabelFontName
+        : assets.labelFontName;
+      ctx.font = `${FONT_ANNOTATION * 0.75 * ss}px "${fontName}"`;
       (ctx as any).letterSpacing = `${-1 * ss}px`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillText(ann.label, cx, ay + scaledH + 5 * sy);
+
+      const labelX = cx;
+      const labelY = ay + scaledH + 5 * sy;
+
+      if (ann.angle !== undefined) {
+        ctx.translate(labelX, labelY);
+        ctx.rotate((ann.angle * Math.PI) / 180);
+        ctx.fillText(ann.label, 0, 0);
+      } else {
+        ctx.fillText(ann.label, labelX, labelY);
+      }
+
       (ctx as any).letterSpacing = "0px";
       ctx.restore();
     }
