@@ -119,14 +119,12 @@ function getYearValue(song: string): number {
   return date.getFullYear() + date.getMonth() / 12 + date.getDate() / 365;
 }
 
-// ========= 更新后的常量 =========
 const ORIGIN_X = 442;
 const ORIGIN_Y = 575;
 const TIME_SCALE = 16;
 const X_SCALE = 16;
 const Z_SCALE = 16;
 const ANGLE = Math.PI / 6;
-// =================================
 
 function yearToVisual(year: number): number {
   return year - 1999;
@@ -166,7 +164,7 @@ function createArrow(
     ],
     color,
     lineWidth: 1.5,
-    dash: [], // 箭头保持实线
+    dash: [],
   };
 }
 
@@ -215,7 +213,7 @@ const pTimeEnd = project(0, 2024.5, 0);
 const pXEnd = project(34, 1999, 0);
 const pZEnd = project(0, 1999, 32);
 
-// Axes - 实线
+// Axes
 trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
@@ -223,6 +221,7 @@ trajectories.push({
   dash: [],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
+
 trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
@@ -230,6 +229,7 @@ trajectories.push({
   dash: [],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
+
 trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
@@ -238,7 +238,7 @@ trajectories.push({
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
-// Data lines - 细点状虚线
+// ================= 数据线 =================
 const points5525 = SONGS_5525.map((song, i) =>
   project(i + 1, getYearValue(song), 0),
 );
@@ -259,53 +259,66 @@ trajectories.push({
   dash: [3, 3],
 });
 
-// ================= 标签 & 图例 =================
-const LABEL_W = 65;
+// ================= 标签 & 图例 (仅排版优化) =================
 
-const songAnnotations5525 = SONGS_5525.map((song, idx) => {
-  const p = project(idx + 1, getYearValue(song), 0);
-  return {
-    x: p.x + 4,
-    y: p.y - LABEL_W / 2,
-    w: LABEL_W,
-    h: 10,
-    label: SONG_RELEASE_DATES[song] ?? "",
-    color: COLOR_DEFAULT,
-    noFrame: true,
-    angle: -90,
-    fontSize: 12,
-    fontFamily: "3270NerdFont-Regular",
-  };
+// 修改：過濾掉連續相同的日期，只標記第一個
+let lastDate5525: string | null = null;
+const songAnnotations5525: Annotation[] = [];
+SONGS_5525.forEach((song, idx) => {
+  const currentDate = SONG_RELEASE_DATES[song] ?? "";
+  if (currentDate !== lastDate5525) {
+    const p = project(idx + 1, getYearValue(song), 0);
+    songAnnotations5525.push({
+      x: p.x + 8, // 向外推，避免与散点重叠
+      y: p.y - 25, // 微调居中
+      w: 55,
+      h: 10,
+      label: currentDate,
+      color: COLOR_DEFAULT,
+      noFrame: true,
+      angle: -90,
+      fontSize: 9, // 缩小字号，增强精密感
+      fontFamily: "3270NerdFont-Regular",
+    });
+    lastDate5525 = currentDate; // 更新上一個日期
+  }
 });
 
-const songAnnotations5526 = SONGS_5526.map((song, idx) => {
-  const p = project(0, getYearValue(song), idx + 1);
-  return {
-    x: p.x - 14,
-    y: p.y - LABEL_W / 2,
-    w: LABEL_W,
-    h: 10,
-    label: SONG_RELEASE_DATES[song] ?? "",
-    color: COLOR_RED_ACCENT,
-    noFrame: true,
-    angle: -90,
-    fontSize: 12,
-    fontFamily: "3270NerdFont-Regular",
-  };
+// 修改：過濾掉連續相同的日期，只標記第一個
+let lastDate5526: string | null = null;
+const songAnnotations5526: Annotation[] = [];
+SONGS_5526.forEach((song, idx) => {
+  const currentDate = SONG_RELEASE_DATES[song] ?? "";
+  if (currentDate !== lastDate5526) {
+    const p = project(0, getYearValue(song), idx + 1);
+    songAnnotations5526.push({
+      x: p.x - 16, // 向外推
+      y: p.y - 25,
+      w: 55,
+      h: 10,
+      label: currentDate,
+      color: COLOR_RED_ACCENT,
+      noFrame: true,
+      angle: -90,
+      fontSize: 9, // 缩小字号
+      fontFamily: "3270NerdFont-Regular",
+    });
+    lastDate5526 = currentDate; // 更新上一個日期
+  }
 });
 
 const axisAnnotations: Annotation[] = [
   {
     x: pTimeEnd.x - 30,
-    y: pTimeEnd.y - 40,
-    w: 40,
+    y: pTimeEnd.y - 50,
+    w: 60,
     h: 10,
-    label: "TIME",
+    label: "TIME [YR]", // 增加工程感代号
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
     angle: -90,
-    fontSize: 18,
+    fontSize: 14, // 缩小字号
     fontFamily: "3270NerdFont-Regular",
   },
   {
@@ -313,12 +326,12 @@ const axisAnnotations: Annotation[] = [
     y: pXEnd.y - 5,
     w: 80,
     h: 10,
-    label: "5525",
+    label: "AXIS: 5525",
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
     angle: -90,
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
   {
@@ -326,30 +339,27 @@ const axisAnnotations: Annotation[] = [
     y: pZEnd.y - 30,
     w: 80,
     h: 10,
-    label: "5526",
+    label: "AXIS: 5526",
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
     angle: -90,
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
 ];
 
-// 将图例的绝对坐标转换为相对 ORIGIN_X 和 ORIGIN_Y 的偏移计算
-// (以前 ORIGIN_Y 是 560，y 对应 950，所以偏移量为 +390)
-// (以前 ORIGIN_X 是 420，x 分别对应 60, 100, 125, 150)
 const LEGEND_Y = ORIGIN_Y + 390;
 
 const inChartTitleAndLegend: Annotation[] = [
   {
-    x: ORIGIN_X - 590, // 以前是 60
-    y: LEGEND_Y,
+    x: ORIGIN_X - 590,
+    y: LEGEND_Y - 170,
     w: 400,
-    h: 30,
-    label: "5525 vs 5526: Release Chronology",
+    h: 20,
+    label: "FIG.1 - RELEASE CHRONOLOGY (5525 v 5526)", // 全大写前缀编号
     color: "#333333",
-    fontSize: 24,
+    fontSize: 18, // 收敛标题大小，作为图框标注
     bold: true,
     fontFamily: "3270NerdFont-Regular",
     angle: -90,
@@ -357,12 +367,49 @@ const inChartTitleAndLegend: Annotation[] = [
   },
 ];
 
+// ================= 在背景图上增加趋势说明文字 =================
+// 取得蓝色块大致中上方的坐标，悬浮文本
+const pBlueTextCenter = project(18, 2010, 0);
+// 取得红色块大致中上方的坐标，悬浮文本
+const pRedTextCenter = project(0, 2010, 18);
+
+const trendTextAnnotations: Annotation[] = [
+  {
+    x: pBlueTextCenter.x - 275, // 微调偏移量放置在色块旁
+    y: pBlueTextCenter.y,
+    w: 160,
+    h: 12,
+    label: "TREND: ASCENDING [+]",
+    color: "rgba(68, 85, 238, 0.75)",
+    noFrame: true,
+    bold: true,
+    angle: -90,
+    fontSize: 14, // 说明文字字号介于数据点和坐标轴之间
+    fontFamily: "3270NerdFont-Regular",
+  },
+  {
+    x: pRedTextCenter.x - 300,
+    y: pRedTextCenter.y - 20,
+    w: 160,
+    h: 12,
+    label: "TREND: DESCENDING [-]",
+    color: "rgba(238, 68, 85, 0.75)",
+    noFrame: true,
+    bold: true,
+    angle: -90,
+    fontSize: 14,
+    fontFamily: "3270NerdFont-Regular",
+  },
+];
+
+// ================= 生成 PageConfig =================
 const page: PageConfig = {
   id: "page-05",
   toTraditional: false,
   leftPhotos: [],
   dotMatrix: {
     points: [
+      // 保持原始精确点位，不生成随机墨迹
       ...points5525.map((p) => ({
         x: p.x,
         y: p.y,
@@ -385,6 +432,7 @@ const page: PageConfig = {
     ...songAnnotations5526,
     ...axisAnnotations,
     ...inChartTitleAndLegend,
+    ...trendTextAnnotations, // 加入图上的趋势说明文字
   ],
 };
 
