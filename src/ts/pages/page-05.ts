@@ -210,8 +210,8 @@ for (let y = 2000; y <= 2023; y += 1) {
 
 const pOrigin = project(0, 1999, 0);
 const pTimeEnd = project(0, 2024.5, 0);
-const pXEnd = project(34, 1999, 0);
-const pZEnd = project(0, 1999, 32);
+const pXEnd = project(32, 1999, 0);
+const pZEnd = project(0, 1999, 28);
 
 // Axes
 trajectories.push({
