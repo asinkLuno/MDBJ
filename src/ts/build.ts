@@ -259,11 +259,21 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
 async function main() {
   mkdirSync(OUTPUT_DIR, { recursive: true });
 
+  const filter = process.argv[2];
+  const targets = filter
+    ? pages.filter((p) => p.id === filter)
+    : pages;
+
+  if (filter && targets.length === 0) {
+    console.error(`No page found with id "${filter}". Available: ${pages.map((p) => p.id).join(", ")}`);
+    process.exit(1);
+  }
+
   console.log("Loading shared assets...");
   const assets = await loadSharedAssets();
-  console.log(`Building ${pages.length} page(s)...`);
+  console.log(`Building ${targets.length} page(s)...`);
 
-  for (const page of pages) {
+  for (const page of targets) {
     await buildPage(page, assets);
   }
 }

@@ -7,6 +7,27 @@ import { FONT_SECTION_DEFAULT, COLOR_DEFAULT } from "./typography";
 
 const converter = new OpenCC("s2t.json");
 
+function wrapTextLine(
+  ctx: { measureText: (text: string) => { width: number } },
+  text: string,
+  maxWidth: number,
+): string[] {
+  if (!text || ctx.measureText(text).width <= maxWidth) return [text];
+  const result: string[] = [];
+  let current = "";
+  for (const char of text) {
+    const test = current + char;
+    if (ctx.measureText(test).width > maxWidth && current.length > 0) {
+      result.push(current);
+      current = char;
+    } else {
+      current = test;
+    }
+  }
+  if (current) result.push(current);
+  return result;
+}
+
 async function toTrad(s: string): Promise<string> {
   return converter.convertPromise(s);
 }
@@ -67,25 +88,29 @@ export async function renderRight(
     const lineHeight =
       (opts.lineHeight || (opts.fontSize || FONT_SECTION_DEFAULT) * 1.4) * ss;
     const bold = opts.bold ?? false;
+    const wrapWidth = opts.wrapWidth ? opts.wrapWidth * ss : null;
 
     ctx.font = `${fontSize}px ${fontName}`;
     ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
     ctx.fillStyle = color;
 
-    const lines = section.text.split("\n");
+    const rawLines = section.text.split("\n");
     let currentY = opts.y ? opts.y * sy : nextY + (opts.gap || 0) * ss;
     const xPos = (opts.x || 50) * sx;
 
-    for (const line of lines) {
-      const text = toTraditional ? await toTrad(line) : line;
-      if (bold) {
-        ctx.globalAlpha = 0.4;
-        ctx.fillText(text, xPos - 0.5, currentY);
-        ctx.fillText(text, xPos + 0.5, currentY);
-        ctx.globalAlpha = 1;
+    for (const rawLine of rawLines) {
+      const converted = toTraditional ? await toTrad(rawLine) : rawLine;
+      const drawLines = wrapWidth ? wrapTextLine(ctx, converted, wrapWidth) : [converted];
+      for (const line of drawLines) {
+        if (bold) {
+          ctx.globalAlpha = 0.4;
+          ctx.fillText(line, xPos - 0.5, currentY);
+          ctx.fillText(line, xPos + 0.5, currentY);
+          ctx.globalAlpha = 1;
+        }
+        ctx.fillText(line, xPos, currentY);
+        currentY += lineHeight;
       }
-      ctx.fillText(text, xPos, currentY);
-      currentY += lineHeight;
     }
     nextY = currentY;
   }
