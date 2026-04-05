@@ -174,7 +174,7 @@ const trajectories: TrajectoryPath[] = [];
 const annotations: Annotation[] = [];
 
 // ================= 背景色块区域 =================
-for (let x = 7.5; x <= 23.5; x += 0.5) {
+for (let x = 8; x <= 22.5; x += 0.5) {
   trajectories.push({
     points: [project(x, 1999, 0), project(x, 2024.5, 0)],
     color: "rgba(68, 85, 238, 0.12)",
@@ -183,7 +183,7 @@ for (let x = 7.5; x <= 23.5; x += 0.5) {
   });
 }
 
-for (let z = 7.5; z <= 22.5; z += 0.5) {
+for (let z = 8; z <= 22; z += 0.5) {
   trajectories.push({
     points: [project(0, 1999, z), project(0, 2024.5, z)],
     color: "rgba(238, 68, 85, 0.12)",
