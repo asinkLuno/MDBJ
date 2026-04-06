@@ -12,10 +12,79 @@ import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
 import { renderColumnSections } from "./lib/render-sections";
 import { pages } from "./pages";
+import type { Canvas } from "@napi-rs/canvas";
 import type { PageConfig, Annotation, SpreadPhotoLayout } from "./lib/types";
 import type { SharedAssets } from "./lib/assets";
 
 const OUTPUT_DIR = "resources/field_notes/output";
+
+/**
+ * Post-process the final canvas with an ink-bleed effect.
+ * Blurs dark (ink) pixels outward to simulate bleeding into paper.
+ */
+async function applyInkBleedFilter(
+  canvas: Canvas,
+  radius = 3,
+): Promise<Canvas> {
+  const W = canvas.width;
+  const H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  const imageData = ctx.getImageData(0, 0, W, H);
+  const data = imageData.data;
+
+  // Separable box blur pass 1 (Horizontal)
+  const temp = new Uint8ClampedArray(data);
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      let r = 0,
+        g = 0,
+        b = 0,
+        cnt = 0;
+      for (let dx = -radius; dx <= radius; dx++) {
+        const nx = x + dx;
+        if (nx >= 0 && nx < W) {
+          const ni = (y * W + nx) * 4;
+          r += data[ni];
+          g += data[ni + 1];
+          b += data[ni + 2];
+          cnt++;
+        }
+      }
+      const di = (y * W + x) * 4;
+      temp[di] = r / cnt;
+      temp[di + 1] = g / cnt;
+      temp[di + 2] = b / cnt;
+    }
+  }
+
+  // Separable box blur pass 2 (Vertical) + Darken Blend
+  for (let x = 0; x < W; x++) {
+    for (let y = 0; y < H; y++) {
+      let r = 0,
+        g = 0,
+        b = 0,
+        cnt = 0;
+      for (let dy = -radius; dy <= radius; dy++) {
+        const ny = y + dy;
+        if (ny >= 0 && ny < H) {
+          const ni = (ny * W + x) * 4;
+          r += temp[ni];
+          g += temp[ni + 1];
+          b += temp[ni + 2];
+          cnt++;
+        }
+      }
+      const di = (y * W + x) * 4;
+      // Darken blend: spreads dark ink into light paper
+      data[di] = Math.min(data[di], r / cnt);
+      data[di + 1] = Math.min(data[di + 1], g / cnt);
+      data[di + 2] = Math.min(data[di + 2], b / cnt);
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+}
 
 async function buildPage(config: PageConfig, assets: SharedAssets) {
   const [leftCanvas, rightCanvas] = await Promise.all([
@@ -342,8 +411,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   }
 
+  const filtered = await applyInkBleedFilter(final, 3);
   const out = `${OUTPUT_DIR}/${config.id}.png`;
-  writeFileSync(out, final.toBuffer("image/png"));
+  writeFileSync(out, filtered.toBuffer("image/png"));
   console.log(`Saved: ${out}`);
 }
 
