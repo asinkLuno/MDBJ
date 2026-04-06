@@ -198,13 +198,13 @@ for (let y = 2000; y <= 2024; y += 1) {
   trajectories.push({
     points: [project(0, y, 0), project(32, y, 0)],
     color: COLOR_BG_BLUE_TRANS,
-    lineWidth: isMajor ? 1.0 : 0.5,
+    lineWidth: isMajor ? 1.0 : 0.75,
     dash: isMajor ? [] : [1, 3],
   });
   trajectories.push({
-    points: [project(0, y, 0), project(0, y, 32)],
+    points: [project(0, y, 0), project(0, y, 28)],
     color: COLOR_BG_BLUE_TRANS,
-    lineWidth: isMajor ? 1.0 : 0.5,
+    lineWidth: isMajor ? 1.0 : 0.75,
     dash: isMajor ? [] : [1, 3],
   });
 }
@@ -212,7 +212,7 @@ for (let y = 2000; y <= 2024; y += 1) {
 const pOrigin = project(0, 1999, 0);
 const pTimeEnd = project(0, 2025, 0);
 const pXEnd = project(32, 1999, 0);
-const pZEnd = project(0, 1999, 32);
+const pZEnd = project(0, 1999, 28);
 
 // Axes
 trajectories.push({
