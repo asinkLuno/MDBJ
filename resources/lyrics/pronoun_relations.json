@@ -4,6 +4,86 @@
       "title": "一千個世紀",
       "lines": [
         {
+          "line": "長出人類的心，哈 我要和你一起走過一千個世紀",
+          "tokens": [
+            {
+              "word": "長出",
+              "roles": []
+            },
+            {
+              "word": "人類",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "心",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "哈",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一起",
+              "roles": []
+            },
+            {
+              "word": "走過",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "一千個世紀",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 6
+              },
+              "predicate": {
+                "word": "走過",
+                "index": 11
+              },
+              "object": {
+                "word": "你",
+                "index": 9
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
           "line": "哈 我要和你一起走過一千個世紀，每次誕生 我都要與你相遇",
           "tokens": [
             {
@@ -252,6 +332,153 @@
           ]
         },
         {
+          "line": "每次輪迴 都為你，當時你我都野性 我們學會用火跟穴居",
+          "tokens": [
+            {
+              "word": "每次",
+              "roles": []
+            },
+            {
+              "word": "輪迴",
+              "roles": []
+            },
+            {
+              "word": "都",
+              "roles": []
+            },
+            {
+              "word": "為",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "當時",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "都",
+              "roles": []
+            },
+            {
+              "word": "野性",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "學會",
+              "roles": []
+            },
+            {
+              "word": "用",
+              "roles": []
+            },
+            {
+              "word": "火",
+              "roles": []
+            },
+            {
+              "word": "跟",
+              "roles": []
+            },
+            {
+              "word": "穴居",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "為",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "野性",
+                "index": 10
+              },
+              "object": {
+                "word": "你",
+                "index": 7
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我們",
+                "index": 11
+              },
+              "predicate": {
+                "word": "為",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我們",
+                "index": 11
+              },
+              "predicate": {
+                "word": "為",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 7
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
           "line": "當時你我都野性 我們學會用火跟穴居，後來帝國正崛起 我們戰亂之中更相依",
           "tokens": [
             {
@@ -392,6 +619,90 @@
               "object": {
                 "word": "你",
                 "index": 1
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "卻愛的很美麗，哈 我要和你一起走過一千個世紀",
+          "tokens": [
+            {
+              "word": "卻",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "很",
+              "roles": []
+            },
+            {
+              "word": "美麗",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "哈",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一起",
+              "roles": []
+            },
+            {
+              "word": "走過",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "一千個世紀",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 7
+              },
+              "predicate": {
+                "word": "走過",
+                "index": 12
+              },
+              "object": {
+                "word": "你",
+                "index": 10
               },
               "direction": "我→谓→你"
             }
@@ -1207,6 +1518,147 @@
           ]
         },
         {
+          "line": "也要和你舉起回憶釀的甜 和你再乾一杯，如果說要我選出代表青春那個畫面",
+          "tokens": [
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "舉起",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "回憶",
+              "roles": []
+            },
+            {
+              "word": "釀",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "甜",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "乾",
+              "roles": []
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "杯",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "如果說",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "選出",
+              "roles": []
+            },
+            {
+              "word": "代表",
+              "roles": []
+            },
+            {
+              "word": "青春",
+              "roles": []
+            },
+            {
+              "word": "那個",
+              "roles": []
+            },
+            {
+              "word": "畫面",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "舉起",
+                "index": 4
+              },
+              "object": {
+                "word": "我",
+                "index": 18
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "舉起",
+                "index": 4
+              },
+              "object": {
+                "word": "我",
+                "index": 18
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
           "line": "當回憶衝破考卷 衝出歲月在我眼前，我和你流著汗水 喝著汽水在操場邊",
           "tokens": [
             {
@@ -1658,6 +2110,215 @@
                 "index": 4
               },
               "direction": "你→谓→我 (位置推断)"
+            }
+          ]
+        },
+        {
+          "line": "期待會你會不會 他會不會開個同學會，他在等你 你在等我 我在等誰?",
+          "tokens": [
+            {
+              "word": "期待",
+              "roles": []
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "會不會",
+              "roles": []
+            },
+            {
+              "word": "他",
+              "roles": []
+            },
+            {
+              "word": "會不會",
+              "roles": []
+            },
+            {
+              "word": "開",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "個",
+              "roles": []
+            },
+            {
+              "word": "同學",
+              "roles": []
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "他",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": []
+            },
+            {
+              "word": "誰",
+              "roles": []
+            },
+            {
+              "word": "?",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 2
+              },
+              "predicate": {
+                "word": "開",
+                "index": 6
+              },
+              "object": {
+                "word": "我",
+                "index": 18
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 14
+              },
+              "predicate": {
+                "word": "開",
+                "index": 6
+              },
+              "object": {
+                "word": "我",
+                "index": 18
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "等",
+                "index": 17
+              },
+              "object": {
+                "word": "我",
+                "index": 18
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 2
+              },
+              "predicate": {
+                "word": "開",
+                "index": 6
+              },
+              "object": {
+                "word": "我",
+                "index": 19
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 19
+              },
+              "predicate": {
+                "word": "開",
+                "index": 6
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "等",
+                "index": 17
+              },
+              "object": {
+                "word": "我",
+                "index": 19
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -2290,6 +2951,1354 @@
       ]
     },
     {
+      "title": "任性",
+      "lines": [
+        {
+          "line": "捨不得混濁人間 你獨自闖蕩人性，命運讓我們相遇 也許是要你相信",
+          "tokens": [
+            {
+              "word": "捨不得",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "混濁",
+              "roles": []
+            },
+            {
+              "word": "人間",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "獨自",
+              "roles": []
+            },
+            {
+              "word": "闖蕩",
+              "roles": []
+            },
+            {
+              "word": "人性",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "命運",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "相遇",
+              "roles": []
+            },
+            {
+              "word": "也許",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "相信",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "捨不得",
+                "index": 0
+              },
+              "object": {
+                "word": "我們",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "捨不得",
+                "index": 0
+              },
+              "object": {
+                "word": "我們",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "命運讓我們相遇 也許是要你相信，所有你曾經懷疑有我證明",
+          "tokens": [
+            {
+              "word": "命運",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "相遇",
+              "roles": []
+            },
+            {
+              "word": "也許",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "相信",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "所有",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "曾經",
+              "roles": []
+            },
+            {
+              "word": "懷疑",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "有",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "證明",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 7
+              },
+              "predicate": {
+                "word": "要",
+                "index": 6
+              },
+              "object": {
+                "word": "我們",
+                "index": 2
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "要",
+                "index": 6
+              },
+              "object": {
+                "word": "我們",
+                "index": 2
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 15
+              },
+              "predicate": {
+                "word": "要",
+                "index": 6
+              },
+              "object": {
+                "word": "你",
+                "index": 7
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "懷疑",
+                "index": 13
+              },
+              "object": {
+                "word": "我",
+                "index": 15
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "所有你曾經懷疑有我證明，我決定 就為了你 為了你勇敢任性",
+          "tokens": [
+            {
+              "word": "所有",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "曾經",
+              "roles": []
+            },
+            {
+              "word": "懷疑",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "有",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "證明",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "決定",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "勇敢",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 1
+              },
+              "predicate": {
+                "word": "懷疑",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 5
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 5
+              },
+              "predicate": {
+                "word": "懷疑",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 12
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 5
+              },
+              "predicate": {
+                "word": "懷疑",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 1
+              },
+              "predicate": {
+                "word": "懷疑",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 8
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 12
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "我決定 就為了你 為了你勇敢任性，世界再對 我再錯 又有何懼?",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "決定",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "勇敢",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "世界",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "對",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "錯",
+              "roles": []
+            },
+            {
+              "word": "又",
+              "roles": []
+            },
+            {
+              "word": "有",
+              "roles": []
+            },
+            {
+              "word": "何",
+              "roles": []
+            },
+            {
+              "word": "懼",
+              "roles": []
+            },
+            {
+              "word": "?",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 1
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 1
+              },
+              "object": {
+                "word": "你",
+                "index": 6
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 13
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 6
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 13
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "就為了你 為了你勇敢任性，世界再對 我再錯 又有何懼?",
+          "tokens": [
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "勇敢",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "世界",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "對",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "錯",
+              "roles": []
+            },
+            {
+              "word": "又",
+              "roles": []
+            },
+            {
+              "word": "有",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "何",
+              "roles": []
+            },
+            {
+              "word": "懼",
+              "roles": []
+            },
+            {
+              "word": "?",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 2
+              },
+              "predicate": {
+                "word": "有",
+                "index": 15
+              },
+              "object": {
+                "word": "我",
+                "index": 11
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "有",
+                "index": 15
+              },
+              "object": {
+                "word": "我",
+                "index": 11
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "就算最後所有人與我為敵，也不後悔全心全意深愛過你",
+          "tokens": [
+            {
+              "word": "就算",
+              "roles": []
+            },
+            {
+              "word": "最後",
+              "roles": []
+            },
+            {
+              "word": "所有",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "與",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "為敵",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "後悔",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "全心全意",
+              "roles": []
+            },
+            {
+              "word": "深",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": []
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "後悔",
+                "index": 10
+              },
+              "object": {
+                "word": "我",
+                "index": 5
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "哄著你 陪著你，我曾愛過你的任性",
+          "tokens": [
+            {
+              "word": "哄",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "陪",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "曾",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 7
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 2
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 7
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 5
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 7
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 11
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "我曾愛過你的任性，這世界破破爛爛 為了你縫縫釘釘",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "曾",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "世界",
+              "roles": []
+            },
+            {
+              "word": "破破爛爛",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "縫縫釘釘",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 2
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 2
+              },
+              "object": {
+                "word": "你",
+                "index": 12
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "像最桀驁的翅膀拒絕引力，我決定 就為了你 為了你勇敢任性",
+          "tokens": [
+            {
+              "word": "像",
+              "roles": []
+            },
+            {
+              "word": "最",
+              "roles": []
+            },
+            {
+              "word": "桀驁",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "翅膀",
+              "roles": []
+            },
+            {
+              "word": "拒絕",
+              "roles": []
+            },
+            {
+              "word": "引力",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "決定",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "勇敢",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 12
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "也不後悔全心全意深愛過你，我決定 就為了你 為了你勇敢任性",
+          "tokens": [
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "後悔",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "全心全意",
+              "roles": []
+            },
+            {
+              "word": "深",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": []
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "決定",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "為了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "勇敢",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "後悔",
+                "index": 2
+              },
+              "object": {
+                "word": "你",
+                "index": 7
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 10
+              },
+              "object": {
+                "word": "你",
+                "index": 13
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "決定",
+                "index": 10
+              },
+              "object": {
+                "word": "你",
+                "index": 15
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "我曾愛過你的任性",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "曾",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "任性",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 2
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "title": "任意門",
       "lines": [
         {
@@ -2424,7 +4433,7 @@
           ]
         },
         {
-          "line": "你問我全世界是哪裡最美？，答案是你身邊噠 噠噠啦噠啦噠 噠噠啦噠啦噠 啦啦啦",
+          "line": "你問我全世界是哪裡最美？，答案是你身邊",
           "tokens": [
             {
               "word": "你",
@@ -2488,10 +4497,6 @@
             },
             {
               "word": "身邊",
-              "roles": []
-            },
-            {
-              "word": "噠 噠噠啦噠啦噠 噠噠啦噠啦噠 啦啦啦",
               "roles": []
             }
           ],
@@ -2630,7 +4635,7 @@
           ]
         },
         {
-          "line": "千年後 你我都 仍被豢養",
+          "line": "千年後 你我都 仍被豢養，夜未央 天未亮 我在倖存的沙場",
           "tokens": [
             {
               "word": "千年",
@@ -2669,6 +4674,56 @@
               "roles": [
                 "predicate"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "夜",
+              "roles": []
+            },
+            {
+              "word": "未",
+              "roles": []
+            },
+            {
+              "word": "央",
+              "roles": []
+            },
+            {
+              "word": "天",
+              "roles": []
+            },
+            {
+              "word": "未",
+              "roles": []
+            },
+            {
+              "word": "亮",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "倖存",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "沙場",
+              "roles": []
             }
           ],
           "relations": [
@@ -2676,6 +4731,21 @@
               "subject": {
                 "word": "我",
                 "index": 3
+              },
+              "predicate": {
+                "word": "豢養",
+                "index": 7
+              },
+              "object": {
+                "word": "你",
+                "index": 2
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 15
               },
               "predicate": {
                 "word": "豢養",
@@ -3056,7 +5126,7 @@
           ]
         },
         {
-          "line": "我會永遠在這裡 只要你回來吧",
+          "line": "我會永遠在這裡 只要你回來吧，所有的人 都說時間是魔法",
           "tokens": [
             {
               "word": "我",
@@ -3098,6 +5168,42 @@
             },
             {
               "word": "吧",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "所有",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "都",
+              "roles": []
+            },
+            {
+              "word": "說",
+              "roles": []
+            },
+            {
+              "word": "時間",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": []
+            },
+            {
+              "word": "魔法",
               "roles": []
             }
           ],
@@ -3448,6 +5554,110 @@
               "predicate": {
                 "word": "懷念",
                 "index": 15
+              },
+              "object": {
+                "word": "我",
+                "index": 0
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "我會永遠在這裡 只要你回來吧，快回來吧 期待的未來這麼算了嗎",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "永遠",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "這裡",
+              "roles": []
+            },
+            {
+              "word": "只要",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "回來",
+              "roles": []
+            },
+            {
+              "word": "吧",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "快",
+              "roles": []
+            },
+            {
+              "word": "回來",
+              "roles": []
+            },
+            {
+              "word": "吧",
+              "roles": []
+            },
+            {
+              "word": "期待",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "未來",
+              "roles": []
+            },
+            {
+              "word": "這麼",
+              "roles": []
+            },
+            {
+              "word": "算了",
+              "roles": []
+            },
+            {
+              "word": "嗎",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 6
+              },
+              "predicate": {
+                "word": "在",
+                "index": 3
               },
               "object": {
                 "word": "我",
@@ -4241,7 +6451,7 @@
           ]
         },
         {
-          "line": "你是我最初和最後的天堂",
+          "line": "你是我最初和最後的天堂，你就是我的天使 保護著我的天使",
           "tokens": [
             {
               "word": "你",
@@ -4280,6 +6490,62 @@
             {
               "word": "天堂",
               "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "天使",
+              "roles": []
+            },
+            {
+              "word": "保護",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "天使",
+              "roles": []
             }
           ],
           "relations": [
@@ -4297,6 +6563,81 @@
                 "index": 2
               },
               "direction": "你→谓→我 (位置推断)"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 9
+              },
+              "predicate": {
+                "word": "是",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 2
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 0
+              },
+              "predicate": {
+                "word": "是",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 12
+              },
+              "direction": "你→谓→我 (位置推断)"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 9
+              },
+              "predicate": {
+                "word": "是",
+                "index": 11
+              },
+              "object": {
+                "word": "我",
+                "index": 12
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 0
+              },
+              "predicate": {
+                "word": "是",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 17
+              },
+              "direction": "你→谓→我 (位置推断)"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 9
+              },
+              "predicate": {
+                "word": "是",
+                "index": 11
+              },
+              "object": {
+                "word": "我",
+                "index": 17
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -4383,6 +6724,66 @@
             },
             {
               "word": "臉龐",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 0
+              },
+              "predicate": {
+                "word": "是",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 2
+              },
+              "direction": "你→谓→我 (位置推断)"
+            }
+          ]
+        },
+        {
+          "line": "你是我最初和最後的天堂",
+          "tokens": [
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "是",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "最初",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "最後",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "天堂",
               "roles": []
             }
           ],
@@ -4556,6 +6957,117 @@
               "object": {
                 "word": "我",
                 "index": 3
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "從我故事裡甦醒，如果我們不曾相遇 你又會在哪裡？",
+          "tokens": [
+            {
+              "word": "從",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "故事",
+              "roles": []
+            },
+            {
+              "word": "裡",
+              "roles": []
+            },
+            {
+              "word": "甦醒",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "如果",
+              "roles": []
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "不曾",
+              "roles": []
+            },
+            {
+              "word": "相遇",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "又",
+              "roles": []
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "哪裡",
+              "roles": []
+            },
+            {
+              "word": "？",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "甦醒",
+                "index": 4
+              },
+              "object": {
+                "word": "我",
+                "index": 1
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "在",
+                "index": 13
+              },
+              "object": {
+                "word": "我們",
+                "index": 7
               },
               "direction": "你→谓→我"
             }
@@ -5050,6 +7562,171 @@
     {
       "title": "志明與春嬌",
       "lines": [
+        {
+          "line": "已經無人看 已經無人聽 啊，我跟你最好就到這 你對我已經沒感覺",
+          "tokens": [
+            {
+              "word": "已經",
+              "roles": []
+            },
+            {
+              "word": "無人",
+              "roles": []
+            },
+            {
+              "word": "看",
+              "roles": []
+            },
+            {
+              "word": "已經",
+              "roles": []
+            },
+            {
+              "word": "無人",
+              "roles": []
+            },
+            {
+              "word": "聽",
+              "roles": []
+            },
+            {
+              "word": "啊",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "跟",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "最好",
+              "roles": []
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "到",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "對",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "已經",
+              "roles": []
+            },
+            {
+              "word": "沒",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "感覺",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "到",
+                "index": 13
+              },
+              "object": {
+                "word": "你",
+                "index": 10
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "沒",
+                "index": 19
+              },
+              "object": {
+                "word": "我",
+                "index": 8
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "沒",
+                "index": 19
+              },
+              "object": {
+                "word": "我",
+                "index": 17
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 15
+              },
+              "predicate": {
+                "word": "沒",
+                "index": 19
+              },
+              "object": {
+                "word": "我",
+                "index": 17
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
         {
           "line": "我跟你最好就到這 你對我已經沒感覺，到這凍止 你也免愛我",
           "tokens": [
@@ -5926,7 +8603,7 @@
           ]
         },
         {
-          "line": "麥閣傷心 麥閣我這愛你 你不愛我",
+          "line": "麥閣傷心 麥閣我這愛你 你不愛我，志明心情真正有影寒",
           "tokens": [
             {
               "word": "麥閣",
@@ -5987,6 +8664,30 @@
               "roles": [
                 "object"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "志明",
+              "roles": []
+            },
+            {
+              "word": "心情",
+              "roles": []
+            },
+            {
+              "word": "真正",
+              "roles": []
+            },
+            {
+              "word": "有",
+              "roles": []
+            },
+            {
+              "word": "影寒",
+              "roles": []
             }
           ],
           "relations": [
@@ -6266,6 +8967,169 @@
               "object": {
                 "word": "我",
                 "index": 5
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "麥閣傷心 麥閣我這愛你 你不愛我，走到淡水的海岸 兩個人的愛情",
+          "tokens": [
+            {
+              "word": "麥閣",
+              "roles": []
+            },
+            {
+              "word": "傷心",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "麥閣",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "走到",
+              "roles": []
+            },
+            {
+              "word": "淡水",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "海岸",
+              "roles": []
+            },
+            {
+              "word": "兩個",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "愛情",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 3
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 5
+              },
+              "object": {
+                "word": "你",
+                "index": 6
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 7
+              },
+              "predicate": {
+                "word": "傷心",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 3
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 6
+              },
+              "predicate": {
+                "word": "傷心",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 7
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 10
               },
               "direction": "你→谓→我"
             }
@@ -6642,6 +9506,133 @@
               "object": {
                 "word": "我",
                 "index": 21
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "麥閣傷心 麥閣我這愛你 你不愛我",
+          "tokens": [
+            {
+              "word": "麥閣",
+              "roles": []
+            },
+            {
+              "word": "傷心",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "麥閣",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 3
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 5
+              },
+              "object": {
+                "word": "你",
+                "index": 6
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 7
+              },
+              "predicate": {
+                "word": "傷心",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 3
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 6
+              },
+              "predicate": {
+                "word": "傷心",
+                "index": 1
+              },
+              "object": {
+                "word": "我",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 7
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 10
               },
               "direction": "你→谓→我"
             }
@@ -7293,11 +10284,13 @@
           ]
         },
         {
-          "line": "帶走迴盪的回憶 你像流浪的流星 把我丟在黑夜 想著你",
+          "line": "帶走迴盪的回憶 你像流浪的流星 把我丟在黑夜 想著你，你要離開的黎明 我的眼淚在眼睛 下定決心 我決定",
           "tokens": [
             {
               "word": "帶走",
-              "roles": []
+              "roles": [
+                "predicate"
+              ]
             },
             {
               "word": "迴盪",
@@ -7371,6 +10364,72 @@
               "roles": [
                 "object"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "離開",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "黎明",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "眼淚",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "眼睛",
+              "roles": []
+            },
+            {
+              "word": "下定決心",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "決定",
+              "roles": []
             }
           ],
           "relations": [
@@ -7403,6 +10462,111 @@
                 "index": 16
               },
               "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 18
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 23
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 23
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "你",
+                "index": 16
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 18
+              },
+              "predicate": {
+                "word": "下定決心",
+                "index": 28
+              },
+              "object": {
+                "word": "我",
+                "index": 23
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 29
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 29
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "你",
+                "index": 16
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 18
+              },
+              "predicate": {
+                "word": "帶走",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 29
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -7734,6 +10898,230 @@
           ]
         },
         {
+          "line": "我不是很聰明 我以為我可以，守護你 一直到最後一絲呼吸",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "不是",
+              "roles": []
+            },
+            {
+              "word": "很",
+              "roles": []
+            },
+            {
+              "word": "聰明",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "以為",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "可以",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "守護",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一直",
+              "roles": []
+            },
+            {
+              "word": "到",
+              "roles": []
+            },
+            {
+              "word": "最後",
+              "roles": []
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "絲",
+              "roles": []
+            },
+            {
+              "word": "呼吸",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "聰明",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 10
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 4
+              },
+              "predicate": {
+                "word": "以為",
+                "index": 5
+              },
+              "object": {
+                "word": "你",
+                "index": 10
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 6
+              },
+              "predicate": {
+                "word": "以為",
+                "index": 5
+              },
+              "object": {
+                "word": "你",
+                "index": 10
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "守護你 一直到最後一絲呼吸，我 只是沒發現 故事已結局",
+          "tokens": [
+            {
+              "word": "守護",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一直",
+              "roles": []
+            },
+            {
+              "word": "到",
+              "roles": []
+            },
+            {
+              "word": "最後",
+              "roles": []
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "絲",
+              "roles": []
+            },
+            {
+              "word": "呼吸",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "只是",
+              "roles": []
+            },
+            {
+              "word": "沒",
+              "roles": []
+            },
+            {
+              "word": "發現",
+              "roles": []
+            },
+            {
+              "word": "故事",
+              "roles": []
+            },
+            {
+              "word": "已",
+              "roles": []
+            },
+            {
+              "word": "結局",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "守護",
+                "index": 0
+              },
+              "object": {
+                "word": "你",
+                "index": 1
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
           "line": "我 只是沒發現 故事已結局，你早已離去 我還在堅定",
           "tokens": [
             {
@@ -8052,293 +11440,6 @@
                 "index": 24
               },
               "direction": "我→谓→你"
-            }
-          ]
-        },
-        {
-          "line": "帶走迴盪的回憶 你像流浪的流星 把我丟在黑夜 想著你，你要離開的黎明 我的眼淚在眼睛 下定決心 我決定",
-          "tokens": [
-            {
-              "word": "帶走",
-              "roles": [
-                "predicate"
-              ]
-            },
-            {
-              "word": "迴盪",
-              "roles": []
-            },
-            {
-              "word": "的",
-              "roles": []
-            },
-            {
-              "word": "回憶",
-              "roles": []
-            },
-            {
-              "word": "你",
-              "roles": [
-                "subject"
-              ]
-            },
-            {
-              "word": "像",
-              "roles": []
-            },
-            {
-              "word": "流浪",
-              "roles": []
-            },
-            {
-              "word": "的",
-              "roles": []
-            },
-            {
-              "word": "流星",
-              "roles": []
-            },
-            {
-              "word": "把",
-              "roles": []
-            },
-            {
-              "word": "我",
-              "roles": [
-                "object",
-                "subject"
-              ]
-            },
-            {
-              "word": "丟",
-              "roles": [
-                "predicate"
-              ]
-            },
-            {
-              "word": "在",
-              "roles": []
-            },
-            {
-              "word": "黑夜",
-              "roles": []
-            },
-            {
-              "word": "想",
-              "roles": []
-            },
-            {
-              "word": "著",
-              "roles": []
-            },
-            {
-              "word": "你",
-              "roles": [
-                "object"
-              ]
-            },
-            {
-              "word": "，",
-              "roles": []
-            },
-            {
-              "word": "你",
-              "roles": [
-                "subject"
-              ]
-            },
-            {
-              "word": "要",
-              "roles": []
-            },
-            {
-              "word": "離開",
-              "roles": []
-            },
-            {
-              "word": "的",
-              "roles": []
-            },
-            {
-              "word": "黎明",
-              "roles": []
-            },
-            {
-              "word": "我",
-              "roles": [
-                "object",
-                "subject"
-              ]
-            },
-            {
-              "word": "的",
-              "roles": []
-            },
-            {
-              "word": "眼淚",
-              "roles": []
-            },
-            {
-              "word": "在",
-              "roles": []
-            },
-            {
-              "word": "眼睛",
-              "roles": []
-            },
-            {
-              "word": "下定決心",
-              "roles": [
-                "predicate"
-              ]
-            },
-            {
-              "word": "我",
-              "roles": [
-                "object",
-                "subject"
-              ]
-            },
-            {
-              "word": "決定",
-              "roles": []
-            }
-          ],
-          "relations": [
-            {
-              "subject": {
-                "word": "你",
-                "index": 4
-              },
-              "predicate": {
-                "word": "丟",
-                "index": 11
-              },
-              "object": {
-                "word": "我",
-                "index": 10
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
-                "word": "我",
-                "index": 10
-              },
-              "predicate": {
-                "word": "丟",
-                "index": 11
-              },
-              "object": {
-                "word": "你",
-                "index": 16
-              },
-              "direction": "我→谓→你"
-            },
-            {
-              "subject": {
-                "word": "你",
-                "index": 18
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "我",
-                "index": 10
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
-                "word": "你",
-                "index": 4
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "我",
-                "index": 23
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
-                "word": "我",
-                "index": 23
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "你",
-                "index": 16
-              },
-              "direction": "我→谓→你"
-            },
-            {
-              "subject": {
-                "word": "你",
-                "index": 18
-              },
-              "predicate": {
-                "word": "下定決心",
-                "index": 28
-              },
-              "object": {
-                "word": "我",
-                "index": 23
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
-                "word": "你",
-                "index": 4
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "我",
-                "index": 29
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
-                "word": "我",
-                "index": 29
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "你",
-                "index": 16
-              },
-              "direction": "我→谓→你"
-            },
-            {
-              "subject": {
-                "word": "你",
-                "index": 18
-              },
-              "predicate": {
-                "word": "帶走",
-                "index": 0
-              },
-              "object": {
-                "word": "我",
-                "index": 29
-              },
-              "direction": "你→谓→我"
             }
           ]
         },
@@ -8862,6 +11963,152 @@
               "object": {
                 "word": "你",
                 "index": 2
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "不能再等 不能再等 讓熱情變冷，就讓我吻你吻你吻你 直到天明",
+          "tokens": [
+            {
+              "word": "不能",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": []
+            },
+            {
+              "word": "不能",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "熱情",
+              "roles": []
+            },
+            {
+              "word": "變",
+              "roles": []
+            },
+            {
+              "word": "冷",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "就讓",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "吻",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "吻",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "吻",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "直到",
+              "roles": []
+            },
+            {
+              "word": "天明",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 12
+              },
+              "predicate": {
+                "word": "吻",
+                "index": 13
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 12
+              },
+              "predicate": {
+                "word": "吻",
+                "index": 13
+              },
+              "object": {
+                "word": "你",
+                "index": 16
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 12
+              },
+              "predicate": {
+                "word": "吻",
+                "index": 13
+              },
+              "object": {
+                "word": "你",
+                "index": 18
               },
               "direction": "我→谓→你"
             }
@@ -10045,6 +13292,103 @@
           ]
         },
         {
+          "line": "黎明之前只要和你盡情嬉戲，我不在乎你的姓名",
+          "tokens": [
+            {
+              "word": "黎明",
+              "roles": []
+            },
+            {
+              "word": "之前",
+              "roles": []
+            },
+            {
+              "word": "只要",
+              "roles": []
+            },
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "盡情",
+              "roles": []
+            },
+            {
+              "word": "嬉戲",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "不在乎",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "姓名",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "嬉戲",
+                "index": 6
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "嬉戲",
+                "index": 6
+              },
+              "object": {
+                "word": "你",
+                "index": 10
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
           "line": "我不在乎你的姓名，你的明天你的過去你是男是女",
           "tokens": [
             {
@@ -10693,7 +14037,7 @@
           ]
         },
         {
-          "line": "希望你我講過的話 放在心肝內 總有一天",
+          "line": "希望你我講過的話 放在心肝內 總有一天，看到滿天全金條 要煞無半項 環境來戲弄",
           "tokens": [
             {
               "word": "希望",
@@ -10751,6 +14095,46 @@
             },
             {
               "word": "有一天",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "看到",
+              "roles": []
+            },
+            {
+              "word": "滿天全金條",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "煞",
+              "roles": []
+            },
+            {
+              "word": "無",
+              "roles": []
+            },
+            {
+              "word": "半項",
+              "roles": []
+            },
+            {
+              "word": "環境",
+              "roles": []
+            },
+            {
+              "word": "來",
+              "roles": []
+            },
+            {
+              "word": "戲弄",
               "roles": []
             }
           ],
@@ -10946,24 +14330,22 @@
           ]
         },
         {
-          "line": "希望你我講過的話 放在心肝內 總有一天，我知總會有一天 yeah",
+          "line": "希望你我講過的話 放在心肝內 總有一天，我知總會有一天",
           "tokens": [
             {
               "word": "希望",
-              "roles": [
-                "predicate"
-              ]
+              "roles": []
             },
             {
               "word": "你",
               "roles": [
-                "subject"
+                "object"
               ]
             },
             {
               "word": "我",
               "roles": [
-                "object"
+                "subject"
               ]
             },
             {
@@ -11006,7 +14388,9 @@
             },
             {
               "word": "有一天",
-              "roles": []
+              "roles": [
+                "predicate"
+              ]
             },
             {
               "word": "，",
@@ -11015,7 +14399,7 @@
             {
               "word": "我",
               "roles": [
-                "object"
+                "subject"
               ]
             },
             {
@@ -11029,42 +14413,38 @@
             {
               "word": "有一天",
               "roles": []
-            },
-            {
-              "word": "yeah",
-              "roles": []
             }
           ],
           "relations": [
             {
               "subject": {
-                "word": "你",
-                "index": 1
+                "word": "我",
+                "index": 2
               },
               "predicate": {
                 "word": "講",
                 "index": 3
               },
               "object": {
-                "word": "我",
-                "index": 2
-              },
-              "direction": "你→谓→我"
-            },
-            {
-              "subject": {
                 "word": "你",
                 "index": 1
               },
-              "predicate": {
-                "word": "希望",
-                "index": 0
-              },
-              "object": {
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
                 "word": "我",
                 "index": 14
               },
-              "direction": "你→谓→我"
+              "predicate": {
+                "word": "有一天",
+                "index": 12
+              },
+              "object": {
+                "word": "你",
+                "index": 1
+              },
+              "direction": "我→谓→你"
             }
           ]
         }
@@ -11330,6 +14710,133 @@
     {
       "title": "我不願讓你一個人",
       "lines": [
+        {
+          "line": "怎麼為你多留一份?，我不願讓你一個人 一個人在人海浮沉",
+          "tokens": [
+            {
+              "word": "怎麼",
+              "roles": []
+            },
+            {
+              "word": "為",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "多",
+              "roles": []
+            },
+            {
+              "word": "留",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "份",
+              "roles": []
+            },
+            {
+              "word": "?",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "不願",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一個",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "一個",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "人海",
+              "roles": []
+            },
+            {
+              "word": "浮沉",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "留",
+                "index": 4
+              },
+              "object": {
+                "word": "你",
+                "index": 2
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 11
+              },
+              "object": {
+                "word": "你",
+                "index": 12
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
         {
           "line": "我不願讓你一個人 一個人在人海浮沉，我不願你獨自走過 風雨的時分",
           "tokens": [
@@ -11808,11 +15315,12 @@
           ]
         },
         {
-          "line": "我不願眼淚陪你到永恆",
+          "line": "我不願眼淚陪你到永恆，你走後 愛情的遺跡像是空城",
           "tokens": [
             {
               "word": "我",
               "roles": [
+                "object",
                 "subject"
               ]
             },
@@ -11843,6 +15351,44 @@
             {
               "word": "永恆",
               "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "走",
+              "roles": []
+            },
+            {
+              "word": "後",
+              "roles": []
+            },
+            {
+              "word": "愛情",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "遺跡",
+              "roles": []
+            },
+            {
+              "word": "像是",
+              "roles": []
+            },
+            {
+              "word": "空城",
+              "roles": []
             }
           ],
           "relations": [
@@ -11860,6 +15406,21 @@
                 "index": 4
               },
               "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 8
+              },
+              "predicate": {
+                "word": "陪",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 0
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -11975,6 +15536,351 @@
                 "index": 10
               },
               "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "和我最放不下的人，也許未來 你會找到",
+          "tokens": [
+            {
+              "word": "和",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "最",
+              "roles": []
+            },
+            {
+              "word": "放不下",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "也許",
+              "roles": []
+            },
+            {
+              "word": "未來",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "找到",
+              "roles": [
+                "predicate"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 9
+              },
+              "predicate": {
+                "word": "找到",
+                "index": 11
+              },
+              "object": {
+                "word": "我",
+                "index": 1
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "下段旅程 你一定要更幸福豐盛，我不願讓你一個人 一個人在人海浮沉",
+          "tokens": [
+            {
+              "word": "下",
+              "roles": []
+            },
+            {
+              "word": "段",
+              "roles": []
+            },
+            {
+              "word": "旅程",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "一定",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "更",
+              "roles": []
+            },
+            {
+              "word": "幸福",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "豐盛",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "不願",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一個",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "一個",
+              "roles": []
+            },
+            {
+              "word": "人",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "人海",
+              "roles": []
+            },
+            {
+              "word": "浮沉",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "幸福",
+                "index": 7
+              },
+              "object": {
+                "word": "我",
+                "index": 10
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 10
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 12
+              },
+              "object": {
+                "word": "你",
+                "index": 13
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "我不願眼淚陪你到永恆，你說呢? 明知你不在還是會問",
+          "tokens": [
+            {
+              "word": "我",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "不願",
+              "roles": []
+            },
+            {
+              "word": "眼淚",
+              "roles": []
+            },
+            {
+              "word": "陪",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "到",
+              "roles": []
+            },
+            {
+              "word": "永恆",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "說",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "呢",
+              "roles": []
+            },
+            {
+              "word": "?",
+              "roles": []
+            },
+            {
+              "word": "明知",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "不在",
+              "roles": []
+            },
+            {
+              "word": "還是",
+              "roles": []
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "問",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "陪",
+                "index": 3
+              },
+              "object": {
+                "word": "你",
+                "index": 4
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 8
+              },
+              "predicate": {
+                "word": "說",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 0
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 0
+              },
+              "predicate": {
+                "word": "說",
+                "index": 9
+              },
+              "object": {
+                "word": "你",
+                "index": 13
+              },
+              "direction": "我→谓→你"
             }
           ]
         },
@@ -12151,6 +16057,123 @@
     {
       "title": "星空",
       "lines": [
+        {
+          "line": "你來過然後你走後 只留下星空，那一年我們望著星空",
+          "tokens": [
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "來",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "過",
+              "roles": []
+            },
+            {
+              "word": "然後",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "走",
+              "roles": []
+            },
+            {
+              "word": "後",
+              "roles": []
+            },
+            {
+              "word": "只",
+              "roles": []
+            },
+            {
+              "word": "留下",
+              "roles": []
+            },
+            {
+              "word": "星空",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "那",
+              "roles": []
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "年",
+              "roles": []
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "望",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "星空",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 0
+              },
+              "predicate": {
+                "word": "來",
+                "index": 1
+              },
+              "object": {
+                "word": "我們",
+                "index": 14
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "來",
+                "index": 1
+              },
+              "object": {
+                "word": "我們",
+                "index": 14
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
         {
           "line": "為什麼靜靜看我淚流?，如果你在的時候",
           "tokens": [
@@ -12711,6 +16734,106 @@
       "title": "最重要的小事",
       "lines": [
         {
+          "line": "也要分分秒秒 年年日日 全心守護你 最小的事，我就算壯烈前世 征服滾滾亂世",
+          "tokens": [
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "分分秒秒",
+              "roles": []
+            },
+            {
+              "word": "年年日日",
+              "roles": []
+            },
+            {
+              "word": "全心",
+              "roles": []
+            },
+            {
+              "word": "守護",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "最小",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "事",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "就算",
+              "roles": []
+            },
+            {
+              "word": "壯烈",
+              "roles": []
+            },
+            {
+              "word": "前世",
+              "roles": []
+            },
+            {
+              "word": "征服",
+              "roles": []
+            },
+            {
+              "word": "滾滾",
+              "roles": []
+            },
+            {
+              "word": "亂世",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 11
+              },
+              "predicate": {
+                "word": "守護",
+                "index": 5
+              },
+              "object": {
+                "word": "你",
+                "index": 6
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
           "line": "萬人為我寫詩，而幸福卻是此時 靜靜幫你提著",
           "tokens": [
             {
@@ -12964,7 +17087,7 @@
           ]
         },
         {
-          "line": "如果是你發現了我 也別將我挽回",
+          "line": "如果是你發現了我 也別將我挽回，想了你一整夜 再也想不起你的臉",
           "tokens": [
             {
               "word": "如果",
@@ -12982,7 +17105,9 @@
             },
             {
               "word": "發現",
-              "roles": []
+              "roles": [
+                "predicate"
+              ]
             },
             {
               "word": "了",
@@ -13009,7 +17134,8 @@
             {
               "word": "我",
               "roles": [
-                "object"
+                "object",
+                "subject"
               ]
             },
             {
@@ -13017,6 +17143,64 @@
               "roles": [
                 "predicate"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "想",
+              "roles": []
+            },
+            {
+              "word": "了",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "一整夜",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "想",
+              "roles": []
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "起",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "臉",
+              "roles": []
             }
           ],
           "relations": [
@@ -13024,6 +17208,36 @@
               "subject": {
                 "word": "你",
                 "index": 2
+              },
+              "predicate": {
+                "word": "發現",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 5
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 14
+              },
+              "predicate": {
+                "word": "挽回",
+                "index": 10
+              },
+              "object": {
+                "word": "我",
+                "index": 5
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 21
               },
               "predicate": {
                 "word": "挽回",
@@ -13049,6 +17263,36 @@
                 "index": 9
               },
               "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "挽回",
+                "index": 10
+              },
+              "object": {
+                "word": "你",
+                "index": 14
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "挽回",
+                "index": 10
+              },
+              "object": {
+                "word": "你",
+                "index": 21
+              },
+              "direction": "我→谓→你"
             }
           ]
         },
@@ -13203,21 +17447,16 @@
               "direction": "你→谓→我"
             }
           ]
-        }
-      ]
-    },
-    {
-      "title": "相信",
-      "lines": [
+        },
         {
-          "line": "阿信，你給我一個秘密 讓我觸摸到星星",
+          "line": "如果是你發現了我 也別將我挽回",
           "tokens": [
             {
-              "word": "阿信",
+              "word": "如果",
               "roles": []
             },
             {
-              "word": "，",
+              "word": "是",
               "roles": []
             },
             {
@@ -13227,46 +17466,42 @@
               ]
             },
             {
-              "word": "給",
+              "word": "發現",
+              "roles": []
+            },
+            {
+              "word": "了",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "別",
+              "roles": []
+            },
+            {
+              "word": "將",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "挽回",
               "roles": [
                 "predicate"
               ]
-            },
-            {
-              "word": "我",
-              "roles": [
-                "object"
-              ]
-            },
-            {
-              "word": "一個",
-              "roles": []
-            },
-            {
-              "word": "秘密",
-              "roles": []
-            },
-            {
-              "word": "讓",
-              "roles": []
-            },
-            {
-              "word": "我",
-              "roles": [
-                "object"
-              ]
-            },
-            {
-              "word": "觸摸",
-              "roles": []
-            },
-            {
-              "word": "到",
-              "roles": []
-            },
-            {
-              "word": "星星",
-              "roles": []
             }
           ],
           "relations": [
@@ -13276,12 +17511,12 @@
                 "index": 2
               },
               "predicate": {
-                "word": "給",
-                "index": 3
+                "word": "挽回",
+                "index": 10
               },
               "object": {
                 "word": "我",
-                "index": 4
+                "index": 5
               },
               "direction": "你→谓→我"
             },
@@ -13291,17 +17526,22 @@
                 "index": 2
               },
               "predicate": {
-                "word": "給",
-                "index": 3
+                "word": "挽回",
+                "index": 10
               },
               "object": {
                 "word": "我",
-                "index": 8
+                "index": 9
               },
               "direction": "你→谓→我"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "title": "相信",
+      "lines": [
         {
           "line": "你給我一個秘密 讓我觸摸到星星，在一個夏日夜裡",
           "tokens": [
@@ -13496,7 +17736,7 @@
           ]
         },
         {
-          "line": "我和你永遠在一起",
+          "line": "我和你永遠在一起，看著我的眼睛 為什麼要哭泣?",
           "tokens": [
             {
               "word": "我",
@@ -13519,13 +17759,51 @@
               "roles": []
             },
             {
-              "word": "在",
+              "word": "在一起",
               "roles": [
                 "predicate"
               ]
             },
             {
-              "word": "一起",
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "看",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "眼睛",
+              "roles": []
+            },
+            {
+              "word": "為什麼",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "哭泣",
+              "roles": []
+            },
+            {
+              "word": "?",
               "roles": []
             }
           ],
@@ -13536,7 +17814,7 @@
                 "index": 0
               },
               "predicate": {
-                "word": "在",
+                "word": "在一起",
                 "index": 4
               },
               "object": {
@@ -13544,6 +17822,125 @@
                 "index": 2
               },
               "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 8
+              },
+              "predicate": {
+                "word": "在一起",
+                "index": 4
+              },
+              "object": {
+                "word": "你",
+                "index": 2
+              },
+              "direction": "我→谓→你"
+            }
+          ]
+        },
+        {
+          "line": "那幸福太容易 讓我不敢相信，一起穿一件雨衣 後座你抱得好緊",
+          "tokens": [
+            {
+              "word": "那",
+              "roles": []
+            },
+            {
+              "word": "幸福",
+              "roles": []
+            },
+            {
+              "word": "太",
+              "roles": []
+            },
+            {
+              "word": "容易",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "不敢",
+              "roles": []
+            },
+            {
+              "word": "相信",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "一起",
+              "roles": []
+            },
+            {
+              "word": "穿",
+              "roles": []
+            },
+            {
+              "word": "一件",
+              "roles": []
+            },
+            {
+              "word": "雨衣",
+              "roles": []
+            },
+            {
+              "word": "後座",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "抱",
+              "roles": []
+            },
+            {
+              "word": "得",
+              "roles": []
+            },
+            {
+              "word": "好",
+              "roles": []
+            },
+            {
+              "word": "緊",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 14
+              },
+              "predicate": {
+                "word": "容易",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 5
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -13640,7 +18037,7 @@
           ]
         },
         {
-          "line": "我想你知道原因",
+          "line": "我想你知道原因，黑夜終究要黎明",
           "tokens": [
             {
               "word": "我",
@@ -13666,6 +18063,26 @@
             },
             {
               "word": "原因",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "黑夜",
+              "roles": []
+            },
+            {
+              "word": "終究",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "黎明",
               "roles": []
             }
           ],
@@ -13784,7 +18201,7 @@
           ]
         },
         {
-          "line": "如果我 如果你 天一亮要往哪裡去?",
+          "line": "如果我 如果你 天一亮要往哪裡去?，看著我的眼睛 為什麼要哭泣?",
           "tokens": [
             {
               "word": "如果",
@@ -13837,6 +18254,44 @@
               ]
             },
             {
+              "word": "?，",
+              "roles": []
+            },
+            {
+              "word": "看",
+              "roles": []
+            },
+            {
+              "word": "著",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "眼睛",
+              "roles": []
+            },
+            {
+              "word": "為什麼",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": []
+            },
+            {
+              "word": "哭泣",
+              "roles": []
+            },
+            {
               "word": "?",
               "roles": []
             }
@@ -13854,6 +18309,21 @@
               "object": {
                 "word": "我",
                 "index": 1
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "去",
+                "index": 10
+              },
+              "object": {
+                "word": "我",
+                "index": 14
               },
               "direction": "你→谓→我"
             }
@@ -14166,7 +18636,7 @@
           ]
         },
         {
-          "line": "最後還是我一個人 沒有神 你孤獨的生存",
+          "line": "最後還是我一個人 沒有神 你孤獨的生存，你才剛出了門 你就開始在等",
           "tokens": [
             {
               "word": "最後",
@@ -14217,6 +18687,58 @@
             {
               "word": "生存",
               "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "才",
+              "roles": []
+            },
+            {
+              "word": "剛",
+              "roles": []
+            },
+            {
+              "word": "出",
+              "roles": []
+            },
+            {
+              "word": "了",
+              "roles": []
+            },
+            {
+              "word": "門",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "就",
+              "roles": []
+            },
+            {
+              "word": "開始",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "等",
+              "roles": []
             }
           ],
           "relations": [
@@ -14224,6 +18746,36 @@
               "subject": {
                 "word": "你",
                 "index": 7
+              },
+              "predicate": {
+                "word": "沒有",
+                "index": 5
+              },
+              "object": {
+                "word": "我",
+                "index": 2
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 12
+              },
+              "predicate": {
+                "word": "沒有",
+                "index": 5
+              },
+              "object": {
+                "word": "我",
+                "index": 2
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 18
               },
               "predicate": {
                 "word": "沒有",
@@ -14242,6 +18794,117 @@
     {
       "title": "約翰藍儂",
       "lines": [
+        {
+          "line": "猜忌 戰火 還跟著我一起生活，能不能暫時把你的勇氣給我",
+          "tokens": [
+            {
+              "word": "猜忌",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "戰火",
+              "roles": []
+            },
+            {
+              "word": "還",
+              "roles": []
+            },
+            {
+              "word": "跟著",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "一起",
+              "roles": []
+            },
+            {
+              "word": "生活",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "能不能",
+              "roles": []
+            },
+            {
+              "word": "暫時",
+              "roles": []
+            },
+            {
+              "word": "把",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "勇氣",
+              "roles": []
+            },
+            {
+              "word": "給",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "猜忌",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 4
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "給",
+                "index": 14
+              },
+              "object": {
+                "word": "我",
+                "index": 15
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
         {
           "line": "能不能暫時把你的勇氣給我，在夢想快消失的時候",
           "tokens": [
@@ -14529,6 +19192,121 @@
               "object": {
                 "word": "我",
                 "index": 5
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "kay 再來 要世界為我們感動，能不能暫時把你的勇氣給我",
+          "tokens": [
+            {
+              "word": "kay",
+              "roles": []
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "來",
+              "roles": []
+            },
+            {
+              "word": "要",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "世界",
+              "roles": []
+            },
+            {
+              "word": "為",
+              "roles": []
+            },
+            {
+              "word": "我們",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "感動",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "能不能",
+              "roles": []
+            },
+            {
+              "word": "暫時",
+              "roles": []
+            },
+            {
+              "word": "把",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "勇氣",
+              "roles": []
+            },
+            {
+              "word": "給",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 12
+              },
+              "predicate": {
+                "word": "要",
+                "index": 3
+              },
+              "object": {
+                "word": "我們",
+                "index": 6
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 12
+              },
+              "predicate": {
+                "word": "給",
+                "index": 15
+              },
+              "object": {
+                "word": "我",
+                "index": 16
               },
               "direction": "你→谓→我"
             }
@@ -15063,7 +19841,7 @@
           ]
         },
         {
-          "line": "你有的不爽 讓我來分擔",
+          "line": "你有的不爽 讓我來分擔，太陽依然燦爛 嘿 地球繼續轉",
           "tokens": [
             {
               "word": "你",
@@ -15077,13 +19855,13 @@
             },
             {
               "word": "不爽",
-              "roles": [
-                "predicate"
-              ]
+              "roles": []
             },
             {
               "word": "讓",
-              "roles": []
+              "roles": [
+                "predicate"
+              ]
             },
             {
               "word": "我",
@@ -15098,6 +19876,38 @@
             {
               "word": "分擔",
               "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "太陽",
+              "roles": []
+            },
+            {
+              "word": "依然",
+              "roles": []
+            },
+            {
+              "word": "燦爛",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "地球",
+              "roles": []
+            },
+            {
+              "word": "繼續",
+              "roles": []
+            },
+            {
+              "word": "轉",
+              "roles": []
             }
           ],
           "relations": [
@@ -15107,8 +19917,8 @@
                 "index": 0
               },
               "predicate": {
-                "word": "不爽",
-                "index": 2
+                "word": "讓",
+                "index": 3
               },
               "object": {
                 "word": "我",
@@ -15215,7 +20025,7 @@
           ]
         },
         {
-          "line": "有我的陪伴 你再也不孤單",
+          "line": "有我的陪伴 你再也不孤單，衛冕者接受挑戰 難免也會失敗",
           "tokens": [
             {
               "word": "有",
@@ -15258,6 +20068,38 @@
               "roles": [
                 "predicate"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "衛冕者",
+              "roles": []
+            },
+            {
+              "word": "接受",
+              "roles": []
+            },
+            {
+              "word": "挑戰",
+              "roles": []
+            },
+            {
+              "word": "難免",
+              "roles": []
+            },
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "會",
+              "roles": []
+            },
+            {
+              "word": "失敗",
+              "roles": []
             }
           ],
           "relations": [
@@ -15478,6 +20320,134 @@
               "object": {
                 "word": "我",
                 "index": 13
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "有我的陪伴 你再也不孤單，嘿-嘿-嘿-嘿-嘿-嘿-嘿-嘿",
+          "tokens": [
+            {
+              "word": "有",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "陪伴",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "再",
+              "roles": []
+            },
+            {
+              "word": "也",
+              "roles": []
+            },
+            {
+              "word": "不",
+              "roles": []
+            },
+            {
+              "word": "孤單",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            },
+            {
+              "word": "-",
+              "roles": []
+            },
+            {
+              "word": "嘿",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 4
+              },
+              "predicate": {
+                "word": "孤單",
+                "index": 8
+              },
+              "object": {
+                "word": "我",
+                "index": 1
               },
               "direction": "你→谓→我"
             }
@@ -15775,6 +20745,134 @@
                 "index": 6
               },
               "direction": "你→谓→我 (位置推断)"
+            }
+          ]
+        },
+        {
+          "line": "今天想要讓你 都遺忘，是你 愛你讓我變得更強",
+          "tokens": [
+            {
+              "word": "今天",
+              "roles": []
+            },
+            {
+              "word": "想要",
+              "roles": []
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "都",
+              "roles": []
+            },
+            {
+              "word": "遺忘",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "愛",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "變得",
+              "roles": []
+            },
+            {
+              "word": "更",
+              "roles": []
+            },
+            {
+              "word": "強",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "是",
+                "index": 7
+              },
+              "object": {
+                "word": "我",
+                "index": 12
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 8
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 12
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "愛",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 12
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -16481,7 +21579,7 @@
           ]
         },
         {
-          "line": "讓我照顧你 讓你未來放在我肩上",
+          "line": "讓我照顧你 讓你未來放在我肩上，新的冷笑話 巧克力糖",
           "tokens": [
             {
               "word": "讓",
@@ -16539,6 +21637,30 @@
             },
             {
               "word": "肩上",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "新",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "冷笑話",
+              "roles": []
+            },
+            {
+              "word": "巧克力",
+              "roles": []
+            },
+            {
+              "word": "糖",
               "roles": []
             }
           ],
@@ -16686,7 +21808,7 @@
           ]
         },
         {
-          "line": "你也許會說 一聲謝謝我",
+          "line": "你也許會說 一聲謝謝我，如果這一生 到盡頭",
           "tokens": [
             {
               "word": "你",
@@ -16725,6 +21847,30 @@
               "roles": [
                 "object"
               ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "如果",
+              "roles": []
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "一生",
+              "roles": []
+            },
+            {
+              "word": "到",
+              "roles": []
+            },
+            {
+              "word": "盡頭",
+              "roles": []
             }
           ],
           "relations": [
@@ -16740,6 +21886,142 @@
               "object": {
                 "word": "我",
                 "index": 7
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "換你的這句話 很足夠，是你 愛你讓我變得更強",
+          "tokens": [
+            {
+              "word": "換",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "句",
+              "roles": []
+            },
+            {
+              "word": "話",
+              "roles": []
+            },
+            {
+              "word": "很",
+              "roles": []
+            },
+            {
+              "word": "足夠",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "是",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "愛",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "讓",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "變得",
+              "roles": []
+            },
+            {
+              "word": "更",
+              "roles": []
+            },
+            {
+              "word": "強",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 1
+              },
+              "predicate": {
+                "word": "足夠",
+                "index": 7
+              },
+              "object": {
+                "word": "我",
+                "index": 14
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 10
+              },
+              "predicate": {
+                "word": "是",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 14
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 12
+              },
+              "predicate": {
+                "word": "是",
+                "index": 9
+              },
+              "object": {
+                "word": "我",
+                "index": 14
               },
               "direction": "你→谓→我"
             }
@@ -17099,12 +22381,221 @@
               "direction": "你→谓→我"
             }
           ]
+        },
+        {
+          "line": "讓我照顧你 讓你未來放在我肩上",
+          "tokens": [
+            {
+              "word": "讓",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "照顧",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "讓",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "未來",
+              "roles": []
+            },
+            {
+              "word": "放",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "肩上",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 1
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 5
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 0
+              },
+              "object": {
+                "word": "我",
+                "index": 1
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 0
+              },
+              "object": {
+                "word": "你",
+                "index": 3
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "我",
+                "index": 9
+              },
+              "predicate": {
+                "word": "讓",
+                "index": 4
+              },
+              "object": {
+                "word": "你",
+                "index": 5
+              },
+              "direction": "我→谓→你"
+            }
+          ]
         }
       ]
     },
     {
       "title": "超人",
       "lines": [
+        {
+          "line": "展開披風 帶你飛行，誰賜予我這一身 無助的能力",
+          "tokens": [
+            {
+              "word": "展開",
+              "roles": []
+            },
+            {
+              "word": "披風",
+              "roles": []
+            },
+            {
+              "word": "帶",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "飛行",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "誰",
+              "roles": []
+            },
+            {
+              "word": "賜予",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "一身",
+              "roles": []
+            },
+            {
+              "word": "無助",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "能力",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "賜予",
+                "index": 7
+              },
+              "object": {
+                "word": "我",
+                "index": 8
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
         {
           "line": "誰賜予我這一身 無助的能力，神也不能阻擋 你想離開的心",
           "tokens": [
@@ -17528,7 +23019,7 @@
           ]
         },
         {
-          "line": "為什麼我卻沒辦法 長驅直入你的心",
+          "line": "為什麼我卻沒辦法 長驅直入你的心，曾經你讚美我手臂",
           "tokens": [
             {
               "word": "為什麼",
@@ -17537,6 +23028,7 @@
             {
               "word": "我",
               "roles": [
+                "object",
                 "subject"
               ]
             },
@@ -17561,7 +23053,8 @@
             {
               "word": "你",
               "roles": [
-                "object"
+                "object",
+                "subject"
               ]
             },
             {
@@ -17570,6 +23063,36 @@
             },
             {
               "word": "心",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "曾經",
+              "roles": []
+            },
+            {
+              "word": "你",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "讚美",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "手臂",
               "roles": []
             }
           ],
@@ -17588,6 +23111,51 @@
                 "index": 6
               },
               "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "沒",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 1
+              },
+              "direction": "你→谓→我"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 6
+              },
+              "predicate": {
+                "word": "沒",
+                "index": 3
+              },
+              "object": {
+                "word": "我",
+                "index": 13
+              },
+              "direction": "你→谓→我 (位置推断)"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 11
+              },
+              "predicate": {
+                "word": "讚美",
+                "index": 12
+              },
+              "object": {
+                "word": "我",
+                "index": 13
+              },
+              "direction": "你→谓→我"
             }
           ]
         },
@@ -17880,6 +23448,120 @@
               "object": {
                 "word": "我",
                 "index": 7
+              },
+              "direction": "你→谓→我"
+            }
+          ]
+        },
+        {
+          "line": "那為何害怕你的淚滴，我給了我這一幕 難堪的結局",
+          "tokens": [
+            {
+              "word": "那",
+              "roles": []
+            },
+            {
+              "word": "為何",
+              "roles": []
+            },
+            {
+              "word": "害怕",
+              "roles": [
+                "predicate"
+              ]
+            },
+            {
+              "word": "你",
+              "roles": [
+                "object",
+                "subject"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "淚滴",
+              "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "subject"
+              ]
+            },
+            {
+              "word": "給",
+              "roles": []
+            },
+            {
+              "word": "了",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "這",
+              "roles": []
+            },
+            {
+              "word": "一",
+              "roles": []
+            },
+            {
+              "word": "幕",
+              "roles": []
+            },
+            {
+              "word": "難堪",
+              "roles": []
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "結局",
+              "roles": []
+            }
+          ],
+          "relations": [
+            {
+              "subject": {
+                "word": "我",
+                "index": 7
+              },
+              "predicate": {
+                "word": "害怕",
+                "index": 2
+              },
+              "object": {
+                "word": "你",
+                "index": 3
+              },
+              "direction": "我→谓→你"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 3
+              },
+              "predicate": {
+                "word": "害怕",
+                "index": 2
+              },
+              "object": {
+                "word": "我",
+                "index": 10
               },
               "direction": "你→谓→我"
             }
@@ -18388,7 +24070,7 @@
           ]
         },
         {
-          "line": "在你的眼中 我似乎健忘 因為我腦海 已有最難忘 最難遺忘",
+          "line": "在你的眼中 我似乎健忘 因為我腦海 已有最難忘 最難遺忘，在我的時代 還有唱片行 如同博物館 裝滿了希望",
           "tokens": [
             {
               "word": "在",
@@ -18406,7 +24088,11 @@
               "roles": []
             },
             {
-              "word": "眼中",
+              "word": "眼",
+              "roles": []
+            },
+            {
+              "word": "中",
               "roles": []
             },
             {
@@ -18466,17 +24152,67 @@
             {
               "word": "遺忘",
               "roles": []
+            },
+            {
+              "word": "，",
+              "roles": []
+            },
+            {
+              "word": "在",
+              "roles": []
+            },
+            {
+              "word": "我",
+              "roles": [
+                "object"
+              ]
+            },
+            {
+              "word": "的",
+              "roles": []
+            },
+            {
+              "word": "時代",
+              "roles": []
+            },
+            {
+              "word": "還有",
+              "roles": []
+            },
+            {
+              "word": "唱片行",
+              "roles": []
+            },
+            {
+              "word": "如同",
+              "roles": []
+            },
+            {
+              "word": "博物館",
+              "roles": []
+            },
+            {
+              "word": "裝滿",
+              "roles": []
+            },
+            {
+              "word": "了",
+              "roles": []
+            },
+            {
+              "word": "希望",
+              "roles": []
             }
           ],
           "relations": [
             {
               "subject": {
                 "word": "我",
-                "index": 4
+                "index": 5
               },
               "predicate": {
                 "word": "健忘",
-                "index": 6
+                "index": 7
               },
               "object": {
                 "word": "你",
@@ -18491,11 +24227,26 @@
               },
               "predicate": {
                 "word": "健忘",
-                "index": 6
+                "index": 7
               },
               "object": {
                 "word": "我",
-                "index": 8
+                "index": 9
+              },
+              "direction": "你→谓→我 (位置推断)"
+            },
+            {
+              "subject": {
+                "word": "你",
+                "index": 1
+              },
+              "predicate": {
+                "word": "健忘",
+                "index": 7
+              },
+              "object": {
+                "word": "我",
+                "index": 20
               },
               "direction": "你→谓→我 (位置推断)"
             }

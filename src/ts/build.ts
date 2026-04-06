@@ -411,7 +411,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   }
 
-  const filtered = await applyInkBleedFilter(final, 3);
+  const filtered = await applyInkBleedFilter(final, 1);
   const out = `${OUTPUT_DIR}/${config.id}.png`;
   writeFileSync(out, filtered.toBuffer("image/png"));
   console.log(`Saved: ${out}`);
