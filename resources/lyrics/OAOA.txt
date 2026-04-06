@@ -1,4 +1,3 @@
-verse
 舔一下飢渴的味蕾
 跳一下期盼的腳尖
 恨一種無止盡的和諧
@@ -6,11 +5,9 @@ verse
 喝一滴甜美的眼淚
 唱一首透明搖滾樂
 創一個顛峰的瘋癲
-pre-chorus
 這一生太多的妥協
 這一刻徹底的打碎
 這一次丟掉名字性別
-chorus
 快張開你的嘴 OAOA
 再不管你是誰 OAOA
 人生都太短暫
@@ -21,7 +18,6 @@ chorus
 人生都太短暫
 去瘋 去愛 去浪費
 和我再唱 OA-OAOA
-verse
 舔一下飢渴的味蕾
 跳一下期盼的腳尖
 恨一種無止盡的和諧
@@ -29,11 +25,9 @@ verse
 喝一滴甜美的眼淚
 唱一首透明搖滾樂
 創一個顛峰的瘋癲
-pre-chorus
 這一生太多的妥協
 這一刻徹底的打碎
 這一次丟掉名字性別
-chorus
 快張開你的嘴 OAOA
 再不管你是誰 OAOA
 人生都太短暫
@@ -44,13 +38,9 @@ chorus
 人生都太短暫
 去瘋 去愛 去浪費
 和我再唱 OA-OAOA
-hook
-oaoa-oaoa-oaoa-oaoa
-pre-chorus
 這一生太多的妥協
 這一刻徹底的打碎
 這一次丟掉名字性別
-chorus
 快張開你的嘴 OAOA
 再不管你是誰 OAOA
 人生都太短暫
@@ -61,7 +51,3 @@ chorus
 人生都太短暫
 去瘋 去愛 去浪費
 和我再唱 OA-OAOA
-outro
-oaoa-oaoa-oaoa-oaoa
-oaoa-oaoa-oaoa-oaoa
-oaoa
