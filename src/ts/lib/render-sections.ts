@@ -50,8 +50,8 @@ export async function renderColumnSections(
       (ctx as any).letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
     }
 
-    const currentXPos = xStarts[col] * sx;
-    let currentY = colNextY[col] + gap;
+    const currentXPos = (xStarts[col] + (opts.x ?? 0)) * sx;
+    let currentY = colNextY[col] + gap + (opts.y ?? 0) * sy;
     const wrapWidth = colWidth[col] * ss;
 
     const rawLines = section.text.split("\n");
@@ -81,6 +81,6 @@ export async function renderColumnSections(
         currentY += lineHeight;
       }
     }
-    colNextY[col] = currentY;
+    colNextY[col] = currentY - (opts.y ?? 0) * sy;
   }
 }

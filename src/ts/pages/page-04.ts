@@ -82,6 +82,9 @@ for (const song of data.songs) {
       });
     }
 
+    const jitterX = (Math.random() - 0.5) * 3.0; // range [-1.5, 1.5]
+    const jitterY = (Math.random() - 0.5) * 2.0; // range [-1.0, 1.0]
+
     spreadSections.push({
       text: lineData.line + "    ", // 4 spaces as separator
       options: {
@@ -89,6 +92,8 @@ for (const song of data.songs) {
         color: COLOR_BLACK,
         lineHeight: LYRIC_LH,
         letterSpacing: -1.0,
+        x: jitterX,
+        y: jitterY,
         gap: 0,
         fontFamily: "ChenYuluoyan",
         bold: true,
