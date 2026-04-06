@@ -6,7 +6,7 @@ import type {
   CharHighlight,
   ColumnLayout,
 } from "../lib/types";
-import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
+import { COLOR_BLACK, COLOR_BLUE } from "../lib/typography";
 import { REF_W } from "../lib/render-utils";
 
 const RELATIONS_FILE = "resources/lyrics/pronoun_relations.json";
@@ -37,8 +37,8 @@ const LYRIC_FONT = 14;
 const LYRIC_LH = 13.5; // negative leading for overlap
 
 const HIGHLIGHTS: CharHighlight[] = [
-  { char: "你", color: COLOR_DEFAULT },
-  { char: "我", color: COLOR_DEFAULT },
+  { char: "你", color: COLOR_BLUE },
+  { char: "我", color: COLOR_BLUE },
 ];
 
 // ── 4 columns across the full spread (2 per page) ────────────────────────

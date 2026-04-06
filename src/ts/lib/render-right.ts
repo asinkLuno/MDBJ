@@ -4,7 +4,7 @@ import type { SharedAssets } from "./assets";
 import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
 import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
-import { FONT_SECTION_DEFAULT, COLOR_DEFAULT } from "./typography";
+import { FONT_SECTION_DEFAULT, COLOR_BLUE } from "./typography";
 
 export async function renderRight(
   sections: Section[],
@@ -49,7 +49,7 @@ export async function renderRight(
     for (const section of sections) {
       const opts = section.options ?? {};
       const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
-      const color = opts.color ?? COLOR_DEFAULT;
+      const color = opts.color ?? COLOR_BLUE;
       const lineHeight =
         (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
       const bold = opts.bold ?? false;

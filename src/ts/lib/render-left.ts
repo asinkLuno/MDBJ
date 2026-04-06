@@ -4,7 +4,7 @@ import type { SharedAssets } from "./assets";
 import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
 import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
-import { FONT_LEFT_TEXT_DEFAULT, COLOR_DEFAULT } from "./typography";
+import { FONT_LEFT_TEXT_DEFAULT, COLOR_BLUE } from "./typography";
 
 export async function renderLeft(
   photos: PhotoLayout[],
@@ -31,7 +31,7 @@ export async function renderLeft(
       const curFont = lt.fontFamily ?? fontName;
       ctx.font = `${lt.bold ? "bold " : ""}${fontSize}px "${curFont}"`;
       ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
-      ctx.fillStyle = lt.color || COLOR_DEFAULT;
+      ctx.fillStyle = lt.color || COLOR_BLUE;
 
       const rawLines = lt.text.split("\n");
       let currentY = lt.y * sy;

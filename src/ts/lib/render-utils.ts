@@ -7,7 +7,7 @@ import type {
   RelationArrow,
 } from "./types";
 import type { SharedAssets } from "./assets";
-import { FONT_TAPE_LABEL, COLOR_DEFAULT } from "./typography";
+import { FONT_TAPE_LABEL, COLOR_BLUE } from "./typography";
 
 /**
  * Reference dimensions from original field notes (per page)
@@ -348,7 +348,7 @@ export function drawHighlightedLine(
       const subjToken = rel.tokens[rel.subjectIdx];
       const objToken = rel.tokens[rel.objectIdx];
 
-      const dotColor = COLOR_DEFAULT;
+      const dotColor = COLOR_BLUE;
       const dotRadius = fontSize * 0.38;
       const dotY = baselineY - fontSize * 0.35;
 
@@ -438,7 +438,7 @@ function drawTapes(
 
     if (tc.label) {
       ctx.save();
-      ctx.fillStyle = COLOR_DEFAULT;
+      ctx.fillStyle = COLOR_BLUE;
       ctx.font = `${FONT_TAPE_LABEL}px "${fontName}"`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";

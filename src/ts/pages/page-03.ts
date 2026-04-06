@@ -1,5 +1,5 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
-import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
+import { COLOR_BLACK, COLOR_BLUE } from "../lib/typography";
 
 const PLANE = "resources/虾片/plane.png";
 
@@ -306,7 +306,7 @@ const trajectories: PageConfig["trajectories"] = [
     dash: [0, 8],
     lineWidth: 2,
     lineCap: "round",
-    color: COLOR_DEFAULT,
+    color: COLOR_BLUE,
   },
 ];
 

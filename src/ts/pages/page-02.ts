@@ -1,5 +1,5 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
-import { COLOR_DEFAULT } from "../lib/typography";
+import { COLOR_BLUE } from "../lib/typography";
 
 // Shape: Left page = dot matrix wavy tide.
 // Right page: clean member ID column.
@@ -317,7 +317,7 @@ const page: PageConfig = {
         y: 340,
         fontSize: 36,
         fontFamily: "ChenYuluoyan",
-        color: COLOR_DEFAULT,
+        color: COLOR_BLUE,
         wrapWidth: 600,
         lineHeight: 39,
       },

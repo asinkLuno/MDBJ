@@ -1,7 +1,7 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync, mkdirSync } from "fs";
 import { loadSharedAssets } from "./lib/assets";
-import { FONT_ANNOTATION, COLOR_DEFAULT } from "./lib/typography";
+import { FONT_ANNOTATION, COLOR_BLUE } from "./lib/typography";
 import {
   applyPaperTexture,
   drawTargetingFrame,
@@ -147,7 +147,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   // Draw dot matrix wave or explicit points
   if (config.dotMatrix) {
     const dm = config.dotMatrix;
-    const color = dm.color ?? COLOR_DEFAULT;
+    const color = dm.color ?? COLOR_BLUE;
     const dotSize = (dm.dotSize ?? 2) * ss;
 
     ctx.save();
@@ -229,7 +229,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         ctx.font = `bold ${fontSize}px "${assets.fontName}"`;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillStyle = sp.labelColor ?? COLOR_DEFAULT;
+        ctx.fillStyle = sp.labelColor ?? COLOR_BLUE;
         (ctx as any).letterSpacing = `${(sp.labelLetterSpacing ?? 0) * ss}px`;
         ctx.fillText(
           sp.label,
@@ -264,7 +264,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       const scaledW = sp.w * ss;
       const h = Math.round((scaledW * photo.height) / photo.width);
       const angle = (sp.rot * Math.PI) / 180;
-      const frameColor = sp.frameColor ?? COLOR_DEFAULT;
+      const frameColor = sp.frameColor ?? COLOR_BLUE;
       const curSx = sp.x <= REF_W ? sx_left : sx_right;
       const padX = (sp.framePadX ?? -12) * curSx,
         padY = (sp.framePadY ?? -28) * sy;
@@ -355,7 +355,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     for (const ann of config.annotations) {
       const ax = scaleX(ann.x);
       const ay = ann.y * sy;
-      const color = ann.color ?? COLOR_DEFAULT;
+      const color = ann.color ?? COLOR_BLUE;
       const scaledW = ann.w * ss;
       const scaledH = ann.h * ss;
       const cx = ax + scaledW / 2,

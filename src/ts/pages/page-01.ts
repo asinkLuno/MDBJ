@@ -1,12 +1,8 @@
 import type { PageConfig, TrajectoryPath, Annotation } from "../lib/types";
 import {
   COLOR_BLACK,
-  COLOR_DEFAULT,
-  COLOR_RED_ACCENT,
+  COLOR_BLUE,
   COLOR_BG_BLUE_TRANS,
-  COLOR_BG_RED_TRANS,
-  COLOR_TREND_BLUE,
-  COLOR_TREND_RED,
 } from "../lib/typography";
 
 const SONGS_5525 = [
@@ -189,7 +185,7 @@ for (let x = 8; x <= 22.5; x += 0.5) {
 for (let z = 8; z <= 22; z += 0.5) {
   trajectories.push({
     points: [project(0, 1999, z), project(0, 2024.5, z)],
-    color: COLOR_BG_RED_TRANS,
+    color: COLOR_BG_BLUE_TRANS,
     lineWidth: 8.5,
     dash: [],
   });
@@ -253,13 +249,13 @@ const points5526 = SONGS_5526.map((song, i) =>
 
 trajectories.push({
   points: points5525,
-  color: COLOR_DEFAULT,
+  color: COLOR_BLUE,
   lineWidth: 1.0,
   dash: [3, 3],
 });
 trajectories.push({
   points: points5526,
-  color: COLOR_RED_ACCENT,
+  color: COLOR_BLUE,
   lineWidth: 1.0,
   dash: [3, 3],
 });
@@ -279,7 +275,7 @@ SONGS_5525.forEach((song, idx) => {
       w: 55,
       h: 10,
       label: currentDate,
-      color: COLOR_DEFAULT,
+      color: COLOR_BLUE,
       noFrame: true,
       angle: -90,
       fontSize: 9, // 缩小字号，增强精密感
@@ -304,7 +300,7 @@ SONGS_5526.forEach((song, idx) => {
       w: 55,
       h: 10,
       label: currentDate,
-      color: COLOR_RED_ACCENT,
+      color: COLOR_BLUE,
       noFrame: true,
       angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
       fontSize: 9, // 缩小字号，增强精密感
@@ -389,7 +385,7 @@ const trendTextAnnotations: Annotation[] = [
     w: 160,
     h: 12,
     label: "TREND: ASCENDING [+]",
-    color: COLOR_TREND_BLUE,
+    color: COLOR_BLUE,
     noFrame: true,
     bold: true,
     angle: -90,
@@ -402,7 +398,7 @@ const trendTextAnnotations: Annotation[] = [
     w: 160,
     h: 12,
     label: "TREND: DESCENDING [-]",
-    color: COLOR_TREND_RED,
+    color: COLOR_BLUE,
     noFrame: true,
     bold: true,
     angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
@@ -422,13 +418,13 @@ const page: PageConfig = {
       ...points5525.map((p) => ({
         x: p.x,
         y: p.y,
-        color: COLOR_DEFAULT,
+        color: COLOR_BLUE,
         size: 4,
       })),
       ...points5526.map((p) => ({
         x: p.x,
         y: p.y,
-        color: COLOR_RED_ACCENT,
+        color: COLOR_BLUE,
         size: 4,
       })),
     ],
@@ -441,7 +437,7 @@ const page: PageConfig = {
         y: 764 - 39,
         fontSize: 36,
         fontFamily: "ChenYuluoyan",
-        color: COLOR_DEFAULT,
+        color: COLOR_BLUE,
         wrapWidth: 600,
         lineHeight: 39,
       },

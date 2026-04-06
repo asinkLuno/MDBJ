@@ -118,7 +118,7 @@ export interface SpreadPhotoLayout {
   blur?: number; // motion/depth-of-field blur in pixels
   opacity?: number; // photo opacity (0.0 to 1.0)
   showFrame?: boolean; // draw HUD targeting frame around the photo
-  frameColor?: string; // frame accent color, defaults to COLOR_DEFAULT
+  frameColor?: string; // frame accent color, defaults to COLOR_BLUE
   framePadX?: number; // horizontal inset in unscaled px (default -12; use 0 for tight fit)
   framePadY?: number; // vertical inset in unscaled px (default -28; use 0 for tight fit)
   frameCornersOnly?: boolean; // skip full rect + mid ticks, draw only corner brackets
