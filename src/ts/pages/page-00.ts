@@ -7,6 +7,7 @@ const page: PageConfig = {
   leftBgColor: COLOR_BLUE,
   rightBgColor: COLOR_BLUE,
   toTraditional: false,
+  inkBleedRadius: 5,
   leftPhotos: [],
   rightSections: [
     {

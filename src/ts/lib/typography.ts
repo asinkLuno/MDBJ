@@ -5,7 +5,7 @@ import type { Annotation } from "./types";
  */
 
 /** Ink black — warm dark ink, used for handwritten/archival text */
-export const COLOR_BLACK = "#2c1810";
+export const COLOR_BLACK = "#272727";
 
 /** Default text color across all pages (blue screen/print style) */
 export const COLOR_BLUE = "#4455ee";

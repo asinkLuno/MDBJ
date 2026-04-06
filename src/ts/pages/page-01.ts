@@ -296,6 +296,7 @@ const pile: SpreadPhotoLayout[] = [
 const page: PageConfig = {
   id: "page-01",
   toTraditional: true,
+  inkBleedRadius: 5,
   leftPhotos: [],
   rightSections: [
     {
