@@ -175,7 +175,7 @@ const annotations: Annotation[] = [];
 // ================= 背景色块区域 =================
 for (let x = 8; x <= 22.5; x += 0.5) {
   trajectories.push({
-    points: [project(x, 1999, 0), project(x, 2024.5, 0)],
+    points: [project(x, 1999, 0), project(x, 2025, 0)],
     color: COLOR_BG_BLUE_TRANS,
     lineWidth: 9.5,
     dash: [],
@@ -184,7 +184,7 @@ for (let x = 8; x <= 22.5; x += 0.5) {
 
 for (let z = 8; z <= 22; z += 0.5) {
   trajectories.push({
-    points: [project(0, 1999, z), project(0, 2024.5, z)],
+    points: [project(0, 1999, z), project(0, 2025, z)],
     color: COLOR_BG_BLUE_TRANS,
     lineWidth: 8.5,
     dash: [],
@@ -193,33 +193,33 @@ for (let z = 8; z <= 22; z += 0.5) {
 // =================================================
 
 // Grid lines
-for (let y = 2000; y <= 2023; y += 1) {
+for (let y = 2000; y <= 2024; y += 1) {
   const isMajor = y % 5 === 0;
   trajectories.push({
     points: [project(0, y, 0), project(32, y, 0)],
-    color: "rgba(200, 200, 200, 0.2)",
+    color: COLOR_BG_BLUE_TRANS,
     lineWidth: isMajor ? 1.0 : 0.5,
-    dash: isMajor ? [] : [2, 2],
+    dash: isMajor ? [] : [1, 3],
   });
   trajectories.push({
-    points: [project(0, y, 0), project(0, y, 30)],
-    color: "rgba(200, 200, 200, 0.2)",
+    points: [project(0, y, 0), project(0, y, 32)],
+    color: COLOR_BG_BLUE_TRANS,
     lineWidth: isMajor ? 1.0 : 0.5,
-    dash: isMajor ? [] : [2, 2],
+    dash: isMajor ? [] : [1, 3],
   });
 }
 
 const pOrigin = project(0, 1999, 0);
-const pTimeEnd = project(0, 2024.5, 0);
+const pTimeEnd = project(0, 2025, 0);
 const pXEnd = project(32, 1999, 0);
-const pZEnd = project(0, 1999, 28);
+const pZEnd = project(0, 1999, 32);
 
 // Axes
 trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [3, 3],
+  dash: [1, 3],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
 
@@ -227,7 +227,7 @@ trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [3, 3],
+  dash: [1, 3],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
 
@@ -235,7 +235,7 @@ trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [3, 3],
+  dash: [1, 3],
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
@@ -251,13 +251,13 @@ trajectories.push({
   points: points5525,
   color: COLOR_BLUE,
   lineWidth: 1.0,
-  dash: [3, 3],
+  dash: [6, 2, 1, 2],
 });
 trajectories.push({
   points: points5526,
   color: COLOR_BLUE,
   lineWidth: 1.0,
-  dash: [3, 3],
+  dash: [6, 2, 1, 2],
 });
 
 // ================= 标签 & 图例 (仅排版优化) =================
@@ -393,8 +393,9 @@ const trendTextAnnotations: Annotation[] = [
     fontFamily: "3270NerdFont-Regular",
   },
   {
-    x: pRedTextCenter.x - 300,
-    y: pRedTextCenter.y - 20,
+    // 保持 275 的法向距离：x 偏移约 238，y 偏移 137.5
+    x: pRedTextCenter.x - 275 - (275 - 238),
+    y: pRedTextCenter.y, // 注意这里是加号，基于 Canvas Y 轴向下
     w: 160,
     h: 12,
     label: "TREND: DESCENDING [-]",
@@ -431,15 +432,15 @@ const page: PageConfig = {
   },
   rightSections: [
     {
-      text: "歌曲发行年份的分布图谱显示\n5525 与 5526 在演变趋势上存在显著差异\n5525 在蓝色背景标注的观测区间内呈现增长趋势\n而 5526 呈现明显递减趋势\n这是否说明 5525 是顺时间而行而 5526 是逆时间而行？？？",
+      text: "图表以Y轴指示发行年份\nX轴与Z轴分别对应歌单5525和5526的曲目序号\n\n发行年份随曲目序号的分布特征显示\n两份歌单的演变趋势具有显著差异\n\n在蓝色背景标注的观测窗口内\n5525呈显著增长趋势\n而5526呈递减趋势\n\n该分布特征提示\n5525的选曲逻辑倾向于时序递进\n而5526则倾向于时序回溯",
       options: {
         x: 42,
-        y: 764 - 39,
+        y: 764 - 40 * 7,
         fontSize: 36,
         fontFamily: "ChenYuluoyan",
         color: COLOR_BLUE,
         wrapWidth: 600,
-        lineHeight: 39,
+        lineHeight: 40,
       },
     },
   ],
