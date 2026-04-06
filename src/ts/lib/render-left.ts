@@ -29,7 +29,7 @@ export async function renderLeft(
         (lt.lineHeight || (lt.fontSize || FONT_LEFT_TEXT_DEFAULT) * 1.4) * ss;
       const wrapWidth = lt.wrapWidth ? lt.wrapWidth * ss : null;
       const curFont = lt.fontFamily ?? fontName;
-      ctx.font = `${fontSize}px ${curFont}`;
+      ctx.font = `${lt.bold ? "bold " : ""}${fontSize}px "${curFont}"`;
       ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
       ctx.fillStyle = lt.color || COLOR_DEFAULT;
 

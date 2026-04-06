@@ -82,7 +82,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     const dotSize = (dm.dotSize ?? 2) * ss;
 
     ctx.save();
-    ctx.globalAlpha = 0.6;
+    ctx.globalAlpha = dm.opacity ?? 1.0;
     if (dm.points) {
       for (const p of dm.points) {
         ctx.fillStyle = p.color || color;
@@ -244,6 +244,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       if (traj.points.length < 2) continue;
       const color = traj.color ?? "rgba(80,160,220,0.7)";
       ctx.save();
+      ctx.globalAlpha = traj.opacity ?? 1.0;
       ctx.strokeStyle = color;
       ctx.lineWidth = (traj.lineWidth ?? 1.2) * ss;
       ctx.lineCap = traj.lineCap ?? "butt";
@@ -320,7 +321,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         ann.fontFamily ??
         (isChinese ? assets.chineseLabelFontName : assets.labelFontName);
       const annFontSize = ann.fontSize ?? FONT_ANNOTATION * 0.75;
-      ctx.font = `${annFontSize * ss}px "${fontName}"`;
+      ctx.font = `${ann.bold ? "bold " : ""}${annFontSize * ss}px "${fontName}"`;
       (ctx as any).letterSpacing = `${-1 * ss}px`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";

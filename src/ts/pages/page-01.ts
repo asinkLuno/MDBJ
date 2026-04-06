@@ -1,7 +1,13 @@
 import type { PageConfig, TrajectoryPath, Annotation } from "../lib/types";
-import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
-
-const COLOR_RED_ACCENT = "#ee4455";
+import {
+  COLOR_BLACK,
+  COLOR_DEFAULT,
+  COLOR_RED_ACCENT,
+  COLOR_BG_BLUE_TRANS,
+  COLOR_BG_RED_TRANS,
+  COLOR_TREND_BLUE,
+  COLOR_TREND_RED,
+} from "../lib/typography";
 
 const SONGS_5525 = [
   "OAOA",
@@ -174,7 +180,7 @@ const annotations: Annotation[] = [];
 for (let x = 8; x <= 22.5; x += 0.5) {
   trajectories.push({
     points: [project(x, 1999, 0), project(x, 2024.5, 0)],
-    color: "rgba(68, 85, 238, 0.12)",
+    color: COLOR_BG_BLUE_TRANS,
     lineWidth: 9.5,
     dash: [],
   });
@@ -183,7 +189,7 @@ for (let x = 8; x <= 22.5; x += 0.5) {
 for (let z = 8; z <= 22; z += 0.5) {
   trajectories.push({
     points: [project(0, 1999, z), project(0, 2024.5, z)],
-    color: "rgba(238, 68, 85, 0.12)",
+    color: COLOR_BG_RED_TRANS,
     lineWidth: 8.5,
     dash: [],
   });
@@ -217,7 +223,7 @@ trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
+  dash: [3, 3],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
 
@@ -225,7 +231,7 @@ trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
+  dash: [3, 3],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
 
@@ -233,7 +239,7 @@ trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [],
+  dash: [3, 3],
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
@@ -278,7 +284,9 @@ SONGS_5525.forEach((song, idx) => {
       angle: -90,
       fontSize: 9, // 缩小字号，增强精密感
       fontFamily: "3270NerdFont-Regular",
+      bold: true,
     });
+
     lastDate5525 = currentDate; // 更新上一個日期
   }
 });
@@ -299,9 +307,11 @@ SONGS_5526.forEach((song, idx) => {
       color: COLOR_RED_ACCENT,
       noFrame: true,
       angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
-      fontSize: 9, // 缩小字号
+      fontSize: 9, // 缩小字号，增强精密感
       fontFamily: "3270NerdFont-Regular",
+      bold: true,
     });
+
     lastDate5526 = currentDate; // 更新上一個日期
   }
 });
@@ -374,12 +384,12 @@ const pRedTextCenter = project(0, 2010, 18);
 
 const trendTextAnnotations: Annotation[] = [
   {
-    x: pBlueTextCenter.x - 275, // 微调偏移量放置在色块旁
+    x: pBlueTextCenter.x - 275, // 微调偏移量放置在色塊旁
     y: pBlueTextCenter.y,
     w: 160,
     h: 12,
     label: "TREND: ASCENDING [+]",
-    color: "rgba(68, 85, 238, 0.75)",
+    color: COLOR_TREND_BLUE,
     noFrame: true,
     bold: true,
     angle: -90,
@@ -392,7 +402,7 @@ const trendTextAnnotations: Annotation[] = [
     w: 160,
     h: 12,
     label: "TREND: DESCENDING [-]",
-    color: "rgba(238, 68, 85, 0.75)",
+    color: COLOR_TREND_RED,
     noFrame: true,
     bold: true,
     angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）

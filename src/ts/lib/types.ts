@@ -70,6 +70,7 @@ export interface Annotation {
   angle?: number; // rotation angle in degrees
   fontSize?: number; // override annotation font size in px (default: FONT_ANNOTATION * 0.75)
   fontFamily?: string; // override font family (default: auto-select by Chinese detection)
+  bold?: boolean;
 }
 
 export interface LeftText {
@@ -82,6 +83,7 @@ export interface LeftText {
   lineHeight?: number;
   fontFamily?: string;
   wrapWidth?: number;
+  bold?: boolean;
   highlights?: CharHighlight[];
 }
 
@@ -92,6 +94,7 @@ export interface TrajectoryPath {
   lineWidth?: number;
   lineCap?: CanvasLineCap;
   arrowEnd?: boolean;
+  opacity?: number;
 }
 
 export interface SpreadPhotoLayout {
@@ -158,6 +161,7 @@ export interface PageConfig {
     waveAmplitude?: number;
     waveFrequency?: number;
     dotSize?: number;
+    opacity?: number;
   };
   toTraditional?: boolean;
 }
