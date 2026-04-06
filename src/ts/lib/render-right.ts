@@ -12,11 +12,18 @@ export async function renderRight(
   toTrad = true,
   photos?: PhotoLayout[],
   columns?: ColumnLayout,
+  bgColor?: string,
 ) {
   const { bgRight, fontName } = assets;
   const canvas = createCanvas(bgRight.width, bgRight.height);
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(bgRight, 0, 0);
+
+  if (bgColor) {
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.drawImage(bgRight, 0, 0);
+  }
 
   const { sx, sy, ss } = getScaling(bgRight.width, bgRight.height);
 
@@ -62,7 +69,6 @@ export async function renderRight(
 
       const rawLines = section.text.split("\n");
       let currentY = opts.y ? opts.y * sy : nextY + (opts.gap ?? 0) * ss;
-      const xPos = (opts.x ?? 50) * sx;
 
       for (const rawLine of rawLines) {
         const converted = toTrad ? await toTraditional(rawLine) : rawLine;
@@ -70,6 +76,13 @@ export async function renderRight(
           ? wrapTextLine(ctx, converted, wrapWidth)
           : [converted];
         for (const line of drawLines) {
+          let xPos = (opts.x ?? 50) * sx;
+          if (opts.textAlign === "center") {
+            xPos -= ctx.measureText(line).width / 2;
+          } else if (opts.textAlign === "right") {
+            xPos -= ctx.measureText(line).width;
+          }
+
           if (bold) {
             ctx.save();
             ctx.globalAlpha = 0.4;

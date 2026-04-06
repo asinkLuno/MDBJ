@@ -25,6 +25,7 @@ export interface TextOptions {
   gap?: number;
   bold?: boolean;
   fontFamily?: string;
+  textAlign?: "left" | "center" | "right";
   wrapWidth?: number; // auto-wrap text within this pixel width
   highlights?: CharHighlight[]; // draw targeting frames around these characters
   dotHighlights?: CharHighlight[]; // draw dots over these characters
@@ -83,6 +84,7 @@ export interface LeftText {
   lineHeight?: number;
   fontFamily?: string;
   wrapWidth?: number;
+  textAlign?: "left" | "center" | "right";
   bold?: boolean;
   highlights?: CharHighlight[];
 }
@@ -135,6 +137,8 @@ export interface ColumnLayout {
 
 export interface PageConfig {
   id: string;
+  leftBgColor?: string;
+  rightBgColor?: string;
   leftPhotos: PhotoLayout[];
   leftTexts?: LeftText[];
   leftSections?: Section[]; // column-rendered sections on the left page

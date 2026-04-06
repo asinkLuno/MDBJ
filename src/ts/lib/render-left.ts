@@ -13,11 +13,18 @@ export async function renderLeft(
   toTrad = true,
   sections?: Section[],
   columns?: ColumnLayout,
+  bgColor?: string,
 ) {
   const { bgLeft, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(bgLeft, 0, 0);
+
+  if (bgColor) {
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.drawImage(bgLeft, 0, 0);
+  }
 
   const { sx, sy, ss } = getScaling(bgLeft.width, bgLeft.height);
 
@@ -41,18 +48,25 @@ export async function renderLeft(
           ? wrapTextLine(ctx, converted, wrapWidth)
           : [converted];
         for (const line of drawLines) {
+          let xPos = lt.x * sx;
+          if (lt.textAlign === "center") {
+            xPos -= ctx.measureText(line).width / 2;
+          } else if (lt.textAlign === "right") {
+            xPos -= ctx.measureText(line).width;
+          }
+
           if (lt.highlights?.length) {
             drawHighlightedLine(
               ctx as any,
               line,
-              lt.x * sx,
+              xPos,
               currentY,
               fontSize,
               lt.highlights,
               ss,
             );
           } else {
-            ctx.fillText(line, lt.x * sx, currentY);
+            ctx.fillText(line, xPos, currentY);
           }
           currentY += lineHeight;
         }

@@ -95,6 +95,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.toTraditional ?? true,
       config.leftSections,
       config.leftColumns,
+      config.leftBgColor,
     ),
     renderRight(
       config.rightSections ?? [],
@@ -102,6 +103,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.toTraditional ?? true,
       config.rightPhotos,
       config.rightColumns,
+      config.rightBgColor,
     ),
   ]);
 
@@ -411,7 +413,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
     }
   }
 
-  const filtered = await applyInkBleedFilter(final, 1);
+  const filtered = await applyInkBleedFilter(final, 1); // page 0-3 4 page 4 1
   const out = `${OUTPUT_DIR}/${config.id}.png`;
   writeFileSync(out, filtered.toBuffer("image/png"));
   console.log(`Saved: ${out}`);

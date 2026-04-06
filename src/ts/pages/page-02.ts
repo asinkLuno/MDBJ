@@ -220,7 +220,8 @@ trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [1, 3],
+  // dash: [1, 3],
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
 
@@ -228,7 +229,8 @@ trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [1, 3],
+  // dash: [1, 3],
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
 
@@ -236,7 +238,8 @@ trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  dash: [1, 3],
+  // dash: [1, 3],
+  dash: [],
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
@@ -363,7 +366,7 @@ const inChartTitleAndLegend: Annotation[] = [
     y: LEGEND_Y - 170,
     w: 400,
     h: 20,
-    label: "FIG.1 - RELEASE CHRONOLOGY (5525 v 5526)", // 全大写前缀编号
+    label: "FIG.1 - SONGSET (5525 v.s. 5526)", // 全大写前缀编号
     color: "#333333",
     fontSize: 18, // 收敛标题大小，作为图框标注
     bold: true,
