@@ -291,18 +291,6 @@ const pile: SpreadPhotoLayout[] = [
     frameCornersOnly: true,
     frameSameDir: true,
   },
-  {
-    file: "resources/虾片/hand_transparent.png",
-    x: 1020,
-    y: 820,
-    w: 180,
-    rot: -5,
-    opacity: 0.9,
-    showFrame: false,
-    framePadX: 0,
-    framePadY: 0,
-    sublabel: "",
-  },
 ];
 
 const page: PageConfig = {
