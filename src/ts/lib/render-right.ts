@@ -2,6 +2,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import type { Section, PhotoLayout, ColumnLayout } from "./types";
 import type { SharedAssets } from "./assets";
 import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
+import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_SECTION_DEFAULT, COLOR_DEFAULT } from "./typography";
 
@@ -25,72 +26,22 @@ export async function renderRight(
     }
   }
 
-  const maxContentY = canvas.height - 60 * sy;
-
   if (columns) {
     // ── Multi-column mode ─────────────────────────────────────────────────
-    const { count, xStarts, colWidth } = columns;
-    const colNextY = Array.from({ length: count }, () => 100 * sy);
-    let col = 0;
-
-    for (const section of sections) {
-      const opts = section.options ?? {};
-      const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
-      const color = opts.color ?? COLOR_DEFAULT;
-      const lineHeight =
-        (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
-      const bold = opts.bold ?? false;
-      const wrapWidth = colWidth[col] * ss;
-      const curFont = opts.fontFamily ?? fontName;
-
-      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
-      ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
-      ctx.fillStyle = color;
-
-      const gap = (opts.gap ?? 0) * ss;
-
-      // Advance column if current one is full
-      while (
-        col < count - 1 &&
-        colNextY[col] + gap + lineHeight > maxContentY
-      ) {
-        col++;
-        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
-        ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
-      }
-
-      const currentXPos = xStarts[col] * sx;
-      let currentY = colNextY[col] + gap;
-
-      const rawLines = section.text.split("\n");
-      for (const rawLine of rawLines) {
-        const converted = toTrad ? await toTraditional(rawLine) : rawLine;
-        const drawLines = wrapTextLine(ctx, converted, wrapWidth);
-        for (const line of drawLines) {
-          if (
-            opts.highlights?.length ||
-            opts.relationArrows?.length ||
-            opts.dotHighlights?.length
-          ) {
-            drawHighlightedLine(
-              ctx as any,
-              line,
-              currentXPos,
-              currentY,
-              fontSize,
-              opts.highlights ?? [],
-              ss,
-              opts.relationArrows,
-              opts.dotHighlights,
-            );
-          } else {
-            ctx.fillText(line, currentXPos, currentY);
-          }
-          currentY += lineHeight;
-        }
-      }
-      colNextY[col] = currentY;
-    }
+    const effectiveColumns = {
+      ...columns,
+      maxHeight: columns.maxHeight ?? canvas.height / sy - 35,
+    };
+    await renderColumnSections(
+      ctx as any,
+      sections,
+      effectiveColumns,
+      sx,
+      sy,
+      ss,
+      fontName,
+      toTrad,
+    );
   } else {
     // ── Single-column mode ──────────────────────────────────────────────
     let nextY = 100 * sy;

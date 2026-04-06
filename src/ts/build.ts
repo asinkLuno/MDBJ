@@ -10,6 +10,7 @@ import {
 } from "./lib/render-utils";
 import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
+import { renderColumnSections } from "./lib/render-sections";
 import { pages } from "./pages";
 import type { PageConfig, Annotation, SpreadPhotoLayout } from "./lib/types";
 import type { SharedAssets } from "./lib/assets";
@@ -27,7 +28,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.leftColumns,
     ),
     renderRight(
-      config.rightSections,
+      config.rightSections ?? [],
       assets,
       config.toTraditional ?? true,
       config.rightPhotos,
@@ -46,6 +47,24 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   const sx_right = rightCanvas.width / REF_W;
   const sy = leftCanvas.height / REF_H;
   const ss = Math.min(sx_left, sy);
+
+  // ── Spread sections: flow text across both pages as one canvas ───────────
+  if (config.spreadSections?.length && config.spreadColumns) {
+    // The spread canvas is 2×REF_W wide; sx maps spread REF coords → pixels.
+    const spreadSX = W / (2 * REF_W);
+    const spreadSY = H / REF_H;
+    const spreadSS = Math.min(spreadSX, spreadSY);
+    await renderColumnSections(
+      ctx as any,
+      config.spreadSections,
+      config.spreadColumns,
+      spreadSX,
+      spreadSY,
+      spreadSS,
+      assets.fontName,
+      config.toTraditional ?? true,
+    );
+  }
 
   // Helper for split-scaling across different page widths
   const scaleX = (x: number) => {

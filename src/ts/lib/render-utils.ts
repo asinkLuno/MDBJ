@@ -7,7 +7,7 @@ import type {
   RelationArrow,
 } from "./types";
 import type { SharedAssets } from "./assets";
-import { FONT_TAPE_LABEL } from "./typography";
+import { FONT_TAPE_LABEL, COLOR_DEFAULT } from "./typography";
 
 /**
  * Reference dimensions from original field notes (per page)
@@ -259,7 +259,7 @@ function drawArcArrow(
 
   ctx.save();
   ctx.strokeStyle = color;
-  ctx.lineWidth = 1.8 * ss;
+  ctx.lineWidth = 1.0 * ss;
   ctx.setLineDash([2.5 * ss, 2 * ss]);
   ctx.beginPath();
   ctx.moveTo(x1, y);
@@ -268,7 +268,7 @@ function drawArcArrow(
 
   // Arrowhead: tangent at t=1 of quadratic bezier = 2*(end - cp)
   ctx.setLineDash([]);
-  ctx.lineWidth = 1.6 * ss;
+  ctx.lineWidth = 1.2 * ss;
   const tdx = x2 - mx;
   const tdy = y - cpY;
   const angle = Math.atan2(tdy, tdx);
@@ -306,7 +306,7 @@ export function drawHighlightedLine(
   const frameLW = fontSize * 0.1;
 
   if (dotHighlights?.length) {
-    const dotRadius = fontSize * 0.55;
+    const dotRadius = fontSize * 0.38;
     const dotY = baselineY - fontSize * 0.35;
     for (const hl of dotHighlights) {
       let startPos = 0;
@@ -348,8 +348,8 @@ export function drawHighlightedLine(
       const subjToken = rel.tokens[rel.subjectIdx];
       const objToken = rel.tokens[rel.objectIdx];
 
-      const dotColor = "#4455ee";
-      const dotRadius = fontSize * 0.55;
+      const dotColor = COLOR_DEFAULT;
+      const dotRadius = fontSize * 0.38;
       const dotY = baselineY - fontSize * 0.35;
 
       const getCenterX = (p: { x: number; w: number }, token: string) => {

@@ -2,12 +2,9 @@ import { createCanvas } from "@napi-rs/canvas";
 import type { PhotoLayout, LeftText, Section, ColumnLayout } from "./types";
 import type { SharedAssets } from "./assets";
 import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
+import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
-import {
-  FONT_LEFT_TEXT_DEFAULT,
-  FONT_SECTION_DEFAULT,
-  COLOR_DEFAULT,
-} from "./typography";
+import { FONT_LEFT_TEXT_DEFAULT, COLOR_DEFAULT } from "./typography";
 
 export async function renderLeft(
   photos: PhotoLayout[],
@@ -63,65 +60,22 @@ export async function renderLeft(
     }
   }
 
-  // ── Column-rendered sections (mirrors render-right multi-column logic) ──
+  // ── Column-rendered sections ─────────────────────────────────────────────
   if (sections?.length && columns) {
-    const { count, xStarts, colWidth } = columns;
-    const colNextY = Array.from({ length: count }, () => 100 * sy);
-    const maxContentY = canvas.height - 60 * sy;
-    let col = 0;
-
-    for (const section of sections) {
-      const opts = section.options ?? {};
-      const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
-      const color = opts.color ?? COLOR_DEFAULT;
-      const lineHeight =
-        (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
-      const bold = opts.bold ?? false;
-      const wrapWidth = colWidth[col] * ss;
-      const curFont = opts.fontFamily ?? fontName;
-
-      ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
-      ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
-      ctx.fillStyle = color;
-
-      const gap = (opts.gap ?? 0) * ss;
-
-      while (
-        col < count - 1 &&
-        colNextY[col] + gap + lineHeight > maxContentY
-      ) {
-        col++;
-        ctx.font = `${bold ? "bold " : ""}${fontSize}px ${curFont}`;
-        ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
-      }
-
-      const currentXPos = xStarts[col] * sx;
-      let currentY = colNextY[col] + gap;
-
-      const rawLines = section.text.split("\n");
-      for (const rawLine of rawLines) {
-        const converted = toTrad ? await toTraditional(rawLine) : rawLine;
-        const drawLines = wrapTextLine(ctx, converted, wrapWidth);
-        for (const line of drawLines) {
-          if (opts.highlights?.length || opts.relationArrows?.length) {
-            drawHighlightedLine(
-              ctx as any,
-              line,
-              currentXPos,
-              currentY,
-              fontSize,
-              opts.highlights ?? [],
-              ss,
-              opts.relationArrows,
-            );
-          } else {
-            ctx.fillText(line, currentXPos, currentY);
-          }
-          currentY += lineHeight;
-        }
-      }
-      colNextY[col] = currentY;
-    }
+    const effectiveColumns = {
+      ...columns,
+      maxHeight: columns.maxHeight ?? canvas.height / sy - 35,
+    };
+    await renderColumnSections(
+      ctx as any,
+      sections,
+      effectiveColumns,
+      sx,
+      sy,
+      ss,
+      fontName,
+      toTrad,
+    );
   }
 
   for (const photoConfig of photos) {

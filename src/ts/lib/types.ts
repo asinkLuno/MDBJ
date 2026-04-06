@@ -126,6 +126,8 @@ export interface ColumnLayout {
   count: number;
   xStarts: number[]; // reference-px x start for each column
   colWidth: number[]; // reference-px wrap width for each column
+  maxHeight?: number; // optional maximum content height in reference px (REF_H units)
+  startY?: number; // optional top margin in reference px (default 40)
 }
 
 export interface PageConfig {
@@ -134,9 +136,14 @@ export interface PageConfig {
   leftTexts?: LeftText[];
   leftSections?: Section[]; // column-rendered sections on the left page
   leftColumns?: ColumnLayout;
-  rightSections: Section[];
+  rightSections?: Section[];
   rightColumns?: ColumnLayout;
   rightPhotos?: PhotoLayout[];
+  /** Sections that flow across both pages as a single canvas. xStarts use
+   *  spread-space REF coordinates (0–2×REF_W), so right-page columns start
+   *  at REF_W + margin (e.g. REF_W=680, col at x=695). */
+  spreadSections?: Section[];
+  spreadColumns?: ColumnLayout;
   annotations?: Annotation[];
   spreadPhotos?: SpreadPhotoLayout[];
   trajectories?: TrajectoryPath[];

@@ -6,8 +6,8 @@ import type {
   CharHighlight,
   ColumnLayout,
 } from "../lib/types";
-import { COLOR_BLACK } from "../lib/typography";
-import { REF_W, REF_H } from "../lib/render-utils";
+import { COLOR_BLACK, COLOR_DEFAULT } from "../lib/typography";
+import { REF_W } from "../lib/render-utils";
 
 const RELATIONS_FILE = "resources/lyrics/pronoun_relations.json";
 
@@ -35,29 +35,35 @@ const data: RelationsData = JSON.parse(readFileSync(RELATIONS_FILE, "utf-8"));
 // ── typography ────────────────────────────────────────────────────────────
 const LYRIC_FONT = 15;
 const LYRIC_LH = 13.5; // negative leading for overlap
-const TITLE_FONT = 16;
-const TITLE_LH = 15;
-const TITLE_GAP = 0;
-const REL_GAP = 0;
 
 const HIGHLIGHTS: CharHighlight[] = [
-  { char: "你", color: "#4455ee" },
-  { char: "我", color: "#4455ee" },
+  { char: "你", color: COLOR_DEFAULT },
+  { char: "我", color: COLOR_DEFAULT },
 ];
 
-// ── 3-column layout ──────────────
-const COLS = 3;
-const COL_X: number[] = [15, 235, 455];
-const COL_W: number[] = [210, 210, 210];
+// ── 4 columns across the full spread (2 per page) ────────────────────────
+// xStarts are in spread-space REF coordinates (0–2×REF_W).
+// Right-page columns start at REF_W + left-margin.
+const COL_MARGIN = 15;
+const COL_W = 318;
+const COL_GAP = 347 - COL_MARGIN; // = 332: gap between col-0 and col-1 start
 
-const colLayout: ColumnLayout = {
-  count: COLS,
-  xStarts: COL_X,
-  colWidth: COL_W,
+const spreadColumns: ColumnLayout = {
+  count: 4,
+  xStarts: [
+    COL_MARGIN,
+    COL_MARGIN + COL_GAP,
+    REF_W + COL_MARGIN,
+    REF_W + COL_MARGIN + COL_GAP,
+  ],
+  colWidth: [COL_W, COL_W, COL_W, COL_W],
+  maxHeight: 1000,
+  // Extra top margin so relation arrows arcing above the first baseline aren't clipped.
+  startY: 60,
 };
 
 // ── build ALL sections ────────────────────────────────────────────────────
-const allSections: Section[] = [];
+const spreadSections: Section[] = [];
 
 for (const song of data.songs) {
   for (const lineData of song.lines) {
@@ -76,7 +82,7 @@ for (const song of data.songs) {
       });
     }
 
-    allSections.push({
+    spreadSections.push({
       text: lineData.line + "    ", // 4 spaces as separator
       options: {
         fontSize: LYRIC_FONT,
@@ -84,7 +90,8 @@ for (const song of data.songs) {
         lineHeight: LYRIC_LH,
         letterSpacing: -1.0,
         gap: 0,
-        fontFamily: "SarasaFixedTC-Light",
+        fontFamily: "ChenYuluoyan",
+        bold: true,
         relationArrows: arrows,
         dotHighlights:
           lineData.line.includes("我") || lineData.line.includes("你")
@@ -95,44 +102,12 @@ for (const song of data.songs) {
   }
 }
 
-// ── simulate column fill to find the right/left split point ──────────────
-// Approximate canvas: bgRight ≈ bgLeft ≈ 2672 × 4224 → ss ≈ 3.93
-const SS = Math.min(2672 / REF_W, 4224 / REF_H);
-const maxY = 4224 - 30 * SS;
-const startY = 30 * SS;
-
-let col = 0;
-let y = startY;
-let splitIdx = allSections.length; // default: all on right
-
-for (let i = 0; i < allSections.length; i++) {
-  const opts = allSections[i].options ?? {};
-  const lh = (opts.lineHeight ?? LYRIC_LH) * SS;
-  const gap = (opts.gap ?? 0) * SS;
-
-  if (y + gap + lh > maxY) {
-    col++;
-    y = startY;
-    if (col >= COLS) {
-      splitIdx = i;
-      break;
-    }
-  }
-  y += gap + lh;
-}
-
-const rightSections = allSections.slice(0, splitIdx);
-const leftSections = allSections.slice(splitIdx);
-
 const page: PageConfig = {
   id: "page-04",
   toTraditional: false,
   leftPhotos: [],
-  leftTexts: [],
-  leftSections,
-  leftColumns: colLayout,
-  rightSections,
-  rightColumns: colLayout,
+  spreadSections,
+  spreadColumns,
 };
 
 export default page;
