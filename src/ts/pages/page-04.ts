@@ -33,7 +33,7 @@ interface RelationsData {
 const data: RelationsData = JSON.parse(readFileSync(RELATIONS_FILE, "utf-8"));
 
 // ── typography ────────────────────────────────────────────────────────────
-const LYRIC_FONT = 15;
+const LYRIC_FONT = 16;
 const LYRIC_LH = 13.5; // negative leading for overlap
 
 const HIGHLIGHTS: CharHighlight[] = [
@@ -44,8 +44,8 @@ const HIGHLIGHTS: CharHighlight[] = [
 // ── 4 columns across the full spread (2 per page) ────────────────────────
 // xStarts are in spread-space REF coordinates (0–2×REF_W).
 // Right-page columns start at REF_W + left-margin.
-const COL_MARGIN = 15;
-const COL_W = 318;
+const COL_MARGIN = 50;
+const COL_W = 290;
 const COL_GAP = 347 - COL_MARGIN; // = 332: gap between col-0 and col-1 start
 
 const spreadColumns: ColumnLayout = {
@@ -57,9 +57,9 @@ const spreadColumns: ColumnLayout = {
     REF_W + COL_MARGIN + COL_GAP,
   ],
   colWidth: [COL_W, COL_W, COL_W, COL_W],
-  maxHeight: 1000,
+  maxHeight: 980,
   // Extra top margin so relation arrows arcing above the first baseline aren't clipped.
-  startY: 60,
+  startY: 90,
 };
 
 // ── build ALL sections ────────────────────────────────────────────────────
