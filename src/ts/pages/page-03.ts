@@ -321,7 +321,7 @@ const page: PageConfig = {
   rightSections: [],
   spreadPhotos: planes,
   trajectories,
-  annotations: [createPageAnnotation("03")],
+  annotations: [createPageAnnotation("3")],
 };
 
 export default page;

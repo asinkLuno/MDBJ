@@ -299,7 +299,7 @@ const page: PageConfig = {
   leftPhotos: [],
   rightSections: [
     {
-      text: "本次现场共采集纸质标本25件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能",
+      text: "本次现场共采集纸质标本 5*5=25 件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能",
       options: {
         x: 42,
         y: 340,
@@ -312,7 +312,7 @@ const page: PageConfig = {
     },
   ],
   spreadPhotos: pile,
-  annotation: createPageAnnotation("01"),
+  annotations: [createPageAnnotation("1")],
 };
 
 export default page;

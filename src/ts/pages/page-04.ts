@@ -117,7 +117,7 @@ const page: PageConfig = {
   leftPhotos: [],
   spreadSections,
   spreadColumns,
-  annotations: [createPageAnnotation("04")],
+  annotations: [createPageAnnotation("4")],
 };
 
 export default page;

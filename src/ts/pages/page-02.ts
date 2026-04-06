@@ -453,7 +453,7 @@ const page: PageConfig = {
     ...axisAnnotations,
     ...inChartTitleAndLegend,
     ...trendTextAnnotations, // 加入图上的趋势说明文字
-    createPageAnnotation("02"),
+    createPageAnnotation("2"),
   ],
 };
 
