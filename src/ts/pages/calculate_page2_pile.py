@@ -140,7 +140,7 @@ lines = [entry(r) for r in raw]
 block = "const pile: SpreadPhotoLayout[] = [\n" + "\n".join(lines) + "\n];"
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-ts_path = os.path.join(script_dir, "page-02.ts")
+ts_path = os.path.join(script_dir, "page-01.ts")
 
 if os.path.exists(ts_path):
     with open(ts_path, "r", encoding="utf-8") as f:

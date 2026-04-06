@@ -6,7 +6,11 @@ import type {
   CharHighlight,
   ColumnLayout,
 } from "../lib/types";
-import { COLOR_BLACK, COLOR_BLUE } from "../lib/typography";
+import {
+  COLOR_BLACK,
+  COLOR_BLUE,
+  createPageAnnotation,
+} from "../lib/typography";
 import { REF_W } from "../lib/render-utils";
 
 const RELATIONS_FILE = "resources/lyrics/pronoun_relations.json";
@@ -113,6 +117,7 @@ const page: PageConfig = {
   leftPhotos: [],
   spreadSections,
   spreadColumns,
+  annotations: [createPageAnnotation("04")],
 };
 
 export default page;

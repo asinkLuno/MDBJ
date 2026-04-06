@@ -1,5 +1,5 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
-import { COLOR_BLUE } from "../lib/typography";
+import { COLOR_BLUE, createPageAnnotation } from "../lib/typography";
 
 // Shape: Left page = dot matrix wavy tide.
 // Right page: clean member ID column.
@@ -186,6 +186,7 @@ const pile: SpreadPhotoLayout[] = [
     file: "resources/虾片/masa.png",
     x: 187,
     y: 532,
+    w: 120,
     rot: 30,
     showFrame: true,
     framePadX: 0,
@@ -311,6 +312,7 @@ const page: PageConfig = {
     },
   ],
   spreadPhotos: pile,
+  annotation: createPageAnnotation("01"),
 };
 
 export default page;

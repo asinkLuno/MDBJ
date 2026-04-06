@@ -1,5 +1,9 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
-import { COLOR_BLACK, COLOR_BLUE } from "../lib/typography";
+import {
+  COLOR_BLACK,
+  COLOR_BLUE,
+  createPageAnnotation,
+} from "../lib/typography";
 
 const PLANE = "resources/虾片/plane.png";
 
@@ -317,6 +321,7 @@ const page: PageConfig = {
   rightSections: [],
   spreadPhotos: planes,
   trajectories,
+  annotations: [createPageAnnotation("03")],
 };
 
 export default page;

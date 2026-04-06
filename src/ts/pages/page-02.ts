@@ -3,6 +3,7 @@ import {
   COLOR_BLACK,
   COLOR_BLUE,
   COLOR_BG_BLUE_TRANS,
+  createPageAnnotation,
 } from "../lib/typography";
 
 const SONGS_5525 = [
@@ -452,6 +453,7 @@ const page: PageConfig = {
     ...axisAnnotations,
     ...inChartTitleAndLegend,
     ...trendTextAnnotations, // 加入图上的趋势说明文字
+    createPageAnnotation("02"),
   ],
 };
 

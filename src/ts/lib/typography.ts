@@ -1,5 +1,6 @@
-/**
- * Centralised typography constants.
+import type { Annotation } from "./types";
+
+/** Centralised typography constants.
  * All font sizes and colors in the project should reference these values.
  */
 
@@ -23,3 +24,20 @@ export const FONT_SECTION_DEFAULT = 26;
 
 /** Fallback when no fontSize is specified for left texts */
 export const FONT_LEFT_TEXT_DEFAULT = 22;
+
+/**
+ * Standard page number annotation (fixed style/position at bottom-middle of left page)
+ */
+export function createPageAnnotation(pageNo: string): Annotation {
+  return {
+    x: 340, // Left-page middle
+    y: 960, // Near bottom
+    w: 0,
+    h: 0,
+    label: pageNo,
+    noFrame: true,
+    fontFamily: "ChenYuluoyan",
+    fontSize: 36,
+    color: COLOR_BLUE,
+  };
+}
