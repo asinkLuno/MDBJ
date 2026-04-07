@@ -1,6 +1,7 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { writeFileSync, mkdirSync } from "fs";
 import { loadSharedAssets } from "./lib/assets";
+import { ensureBlurredLogo } from "./lib/image-utils";
 import { FONT_ANNOTATION, COLOR_BLUE } from "./lib/typography";
 import {
   applyPaperTexture,
@@ -451,6 +452,9 @@ async function main() {
     );
     process.exit(1);
   }
+
+  // Ensure any necessary blurred assets are generated
+  await ensureBlurredLogo();
 
   console.log("Loading shared assets...");
   const assets = await loadSharedAssets();
