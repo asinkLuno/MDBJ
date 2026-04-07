@@ -296,11 +296,11 @@ const pile: SpreadPhotoLayout[] = [
 const page: PageConfig = {
   id: "page-01",
   toTraditional: true,
-  inkBleedRadius: 5,
+  inkBleedRadius: 0,
   leftPhotos: [],
   rightSections: [
     {
-      text: "本次现场共采集纸质标本 5*5=25 件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能\n\n经研究，该图案代表\nMONSTER\nSTONE\nMASA\nMING\nASHIN\nYOU\n\n我？我不在上面ㄟ\n我在写野簿",
+      text: "本次现场共采集纸质标本 5*5=25 件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能\n\n经研究，该图案代表\nMONSTER\nSTONE\nMASA\nMING\nASHIN\n\n我？我不在上面ㄟ\n我在写野簿",
       options: {
         x: 42,
         y: 340 + 38 * 2,

@@ -300,8 +300,8 @@ const planes: SpreadPhotoLayout[] = [
 planes.forEach((p) => {
   p.labelColor = COLOR_BLACK;
   p.showFrame = true;
-  p.labelOffsetX = -10;
-  p.labelLetterSpacing = -2;
+  p.labelOffsetX = -7;
+  p.labelLetterSpacing = -4;
 });
 
 const trajectories: PageConfig["trajectories"] = [
@@ -317,7 +317,7 @@ const trajectories: PageConfig["trajectories"] = [
 const page: PageConfig = {
   id: "page-03",
   toTraditional: false,
-  inkBleedRadius: 5,
+  inkBleedRadius: 0,
   leftPhotos: [],
   rightSections: [],
   spreadPhotos: planes,

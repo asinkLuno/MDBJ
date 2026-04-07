@@ -114,7 +114,7 @@ for (const song of data.songs) {
 const page: PageConfig = {
   id: "page-04",
   toTraditional: false,
-  inkBleedRadius: 1,
+  inkBleedRadius: 0,
   leftPhotos: [],
   spreadSections,
   spreadColumns,

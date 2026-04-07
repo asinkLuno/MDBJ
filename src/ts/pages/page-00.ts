@@ -1,12 +1,16 @@
 import { PageConfig } from "../lib/types";
 import { COLOR_BLUE } from "../lib/typography";
 
+const y_offset = 100;
+const bg_color = "#fff";
+const text_color = COLOR_BLUE;
+
 const page: PageConfig = {
   id: "page-00",
   toTraditional: true,
   inkBleedRadius: 0,
-  leftBgColor: "#fff",
-  rightBgColor: "#fff",
+  leftBgColor: bg_color,
+  rightBgColor: bg_color,
   leftPhotos: [],
   rightSections: [],
   halftones: [
@@ -14,22 +18,35 @@ const page: PageConfig = {
       text: "FIELD NOTEBOOK",
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
-      blur: 4,
+      blur: 7,
       x: 1020, // Center of the right page
-      y: 420,
+      y: 420 - y_offset,
       w: 580,
-      color: COLOR_BLUE,
+      color: text_color,
+      spacing: 2,
+      maxDotSize: 1,
+    },
+    {
+      text: "for    use only",
+      fontSize: 120,
+      fontFamily: "3270NerdFont-Regular",
+      blur: 7,
+      x: 1020, // Center of the right page
+      y: 505 - y_offset,
+      w: 350,
+      color: text_color,
       spacing: 2,
       maxDotSize: 1,
     },
     {
       file: "resources/虾片/guided_mayday_logo.png",
-      x: 1020,
-      y: 650,
-      w: 400,
-      color: COLOR_BLUE,
-      spacing: 8,
-      maxDotSize: 5,
+      x: 955,
+      y: 490 - y_offset,
+      w: 100,
+      blur: 1,
+      color: text_color,
+      spacing: 2,
+      maxDotSize: 1,
     },
   ],
 };
