@@ -5,8 +5,8 @@ const page: PageConfig = {
   id: "page-00",
   toTraditional: true,
   inkBleedRadius: 0,
-  leftBgColor: "#ffffff",
-  rightBgColor: "#ffffff",
+  leftBgColor: "#fff",
+  rightBgColor: "#fff",
   leftPhotos: [],
   rightSections: [],
   halftone: {
@@ -16,7 +16,7 @@ const page: PageConfig = {
     w: 680,
     color: COLOR_BLUE,
     spacing: 8,
-    maxDotSize: 4,
+    maxDotSize: 5,
   },
 };
 
