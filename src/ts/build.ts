@@ -97,6 +97,7 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.leftSections,
       config.leftColumns,
       config.leftBgColor,
+      config.halftone, // Pass halftone config to renderLeft
     ),
     renderRight(
       config.rightSections ?? [],

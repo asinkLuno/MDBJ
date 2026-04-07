@@ -1,7 +1,18 @@
 import { createCanvas } from "@napi-rs/canvas";
-import type { PhotoLayout, LeftText, Section, ColumnLayout } from "./types";
+import type {
+  PhotoLayout,
+  LeftText,
+  Section,
+  ColumnLayout,
+  HalftoneConfig,
+} from "./types";
 import type { SharedAssets } from "./assets";
-import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
+import {
+  getScaling,
+  drawPhoto,
+  drawHighlightedLine,
+  drawHalftone,
+} from "./render-utils";
 import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_LEFT_TEXT_DEFAULT, COLOR_BLUE } from "./typography";
@@ -14,6 +25,7 @@ export async function renderLeft(
   sections?: Section[],
   columns?: ColumnLayout,
   bgColor?: string,
+  halftone?: HalftoneConfig,
 ) {
   const { bgLeft, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
@@ -94,6 +106,22 @@ export async function renderLeft(
 
   for (const photoConfig of photos) {
     await drawPhoto(ctx as any, photoConfig, assets, ss, sx, sy);
+  }
+
+  if (halftone) {
+    await drawHalftone(
+      ctx as any,
+      halftone.file,
+      halftone.x * sx,
+      halftone.y * sy,
+      halftone.w,
+      halftone.color,
+      halftone.spacing,
+      halftone.minDotSize,
+      halftone.maxDotSize,
+      halftone.opacity,
+      ss,
+    );
   }
 
   return canvas;
