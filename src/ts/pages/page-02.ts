@@ -415,7 +415,7 @@ const trendTextAnnotations: Annotation[] = [
 const page: PageConfig = {
   id: "page-02",
   toTraditional: true,
-  inkBleedRadius: 0,
+  inkBleedRadius: 1,
   leftPhotos: [],
   dotMatrix: {
     points: [

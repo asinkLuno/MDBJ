@@ -317,7 +317,7 @@ const trajectories: PageConfig["trajectories"] = [
 const page: PageConfig = {
   id: "page-03",
   toTraditional: false,
-  inkBleedRadius: 0,
+  inkBleedRadius: 1,
   leftPhotos: [],
   rightSections: [],
   spreadPhotos: planes,

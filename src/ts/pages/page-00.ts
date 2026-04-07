@@ -8,7 +8,7 @@ const text_color = COLOR_BLUE;
 const page: PageConfig = {
   id: "page-00",
   toTraditional: true,
-  inkBleedRadius: 0,
+  inkBleedRadius: 1,
   leftBgColor: bg_color,
   rightBgColor: bg_color,
   leftPhotos: [],
