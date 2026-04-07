@@ -27,6 +27,7 @@ export interface TextOptions {
   fontFamily?: string;
   textAlign?: "left" | "center" | "right";
   wrapWidth?: number; // auto-wrap text within this pixel width
+  blur?: number; // blur radius in pixels
   highlights?: CharHighlight[]; // draw targeting frames around these characters
   dotHighlights?: CharHighlight[]; // draw dots over these characters
   relationArrows?: RelationArrow[]; // draw subject→predicate→object frames + arc arrow
@@ -85,6 +86,7 @@ export interface LeftText {
   lineHeight?: number;
   fontFamily?: string;
   wrapWidth?: number;
+  blur?: number;
   textAlign?: "left" | "center" | "right";
   bold?: boolean;
   highlights?: CharHighlight[];
@@ -136,6 +138,22 @@ export interface ColumnLayout {
   startY?: number; // optional top margin in reference px (default 40)
 }
 
+export interface HalftoneConfig {
+  file?: string;
+  text?: string;
+  blur?: number;
+  fontFamily?: string;
+  fontSize?: number;
+  x: number;
+  y: number;
+  w: number;
+  color?: string;
+  spacing?: number;
+  minDotSize?: number;
+  maxDotSize?: number;
+  opacity?: number;
+}
+
 export interface PageConfig {
   id: string;
   leftBgColor?: string;
@@ -170,15 +188,5 @@ export interface PageConfig {
   };
   toTraditional?: boolean;
   inkBleedRadius?: number;
-  halftone?: {
-    file: string;
-    x: number;
-    y: number;
-    w: number;
-    color?: string;
-    spacing?: number;
-    minDotSize?: number;
-    maxDotSize?: number;
-    opacity?: number;
-  };
+  halftones?: HalftoneConfig[];
 }

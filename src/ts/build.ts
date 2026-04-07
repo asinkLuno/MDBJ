@@ -190,21 +190,44 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   }
 
   // Draw halftone image (spread or single-page)
-  if (config.halftone) {
-    const ht = config.halftone;
-    await drawHalftone(
-      ctx as any,
-      ht.file,
-      scaleX(ht.x),
-      ht.y * sy,
-      ht.w,
-      ht.color ?? COLOR_BLUE,
-      ht.spacing ?? 10,
-      ht.minDotSize ?? 0,
-      ht.maxDotSize ?? 4,
-      ht.opacity ?? 1.0,
-      ss,
-    );
+  if (config.halftones) {
+    for (const ht of config.halftones) {
+      let source: string | Canvas = ht.file!;
+
+      if (ht.text) {
+        const fontSize = (ht.fontSize ?? 120) * ss;
+        const fontName = ht.fontFamily ?? assets.fontName;
+        const font = `bold ${fontSize}px "${fontName}"`;
+        const off = createCanvas(1, 1);
+        const octx = off.getContext("2d");
+        octx.font = font;
+        const metrics = octx.measureText(ht.text);
+        const w = Math.ceil(metrics.width);
+        const h = Math.ceil(fontSize * 1.2);
+
+        const textCanvas = createCanvas(w, h);
+        const tctx = textCanvas.getContext("2d");
+        tctx.font = font;
+        tctx.fillStyle = "black";
+        tctx.textBaseline = "middle";
+        tctx.fillText(ht.text, 0, h / 2);
+        source = textCanvas;
+      }
+      await drawHalftone(
+        ctx as any,
+        source,
+        scaleX(ht.x),
+        ht.y * sy,
+        ht.w,
+        ht.color ?? COLOR_BLUE,
+        ht.spacing ?? 10,
+        ht.minDotSize ?? 0,
+        ht.maxDotSize ?? 4,
+        ht.opacity ?? 1.0,
+        ss,
+        ht.blur,
+      );
+    }
   }
 
   // Draw spread photos (span both pages)

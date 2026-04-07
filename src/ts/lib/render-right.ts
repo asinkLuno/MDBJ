@@ -67,6 +67,10 @@ export async function renderRight(
       ctx.letterSpacing = `${(opts.letterSpacing ?? 0) * ss}px`;
       ctx.fillStyle = color;
 
+      if (opts.blur) {
+        (ctx as any).filter = `blur(${opts.blur * ss}px)`;
+      }
+
       const rawLines = section.text.split("\n");
       let currentY = opts.y ? opts.y * sy : nextY + (opts.gap ?? 0) * ss;
 
@@ -112,6 +116,11 @@ export async function renderRight(
           currentY += lineHeight;
         }
       }
+
+      if (opts.blur) {
+        (ctx as any).filter = "none";
+      }
+
       nextY = currentY;
     }
   }

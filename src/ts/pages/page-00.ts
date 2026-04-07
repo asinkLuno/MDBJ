@@ -9,15 +9,29 @@ const page: PageConfig = {
   rightBgColor: "#fff",
   leftPhotos: [],
   rightSections: [],
-  halftone: {
-    file: "resources/虾片/guided_mayday_logo.png",
-    x: 1020, // Center of the right page (680 + 340)
-    y: 611, // Bottom-aligned: 1036 - (680 * 320/256 / 2)
-    w: 680,
-    color: COLOR_BLUE,
-    spacing: 8,
-    maxDotSize: 5,
-  },
+  halftones: [
+    {
+      text: "FIELD NOTEBOOK",
+      fontSize: 120,
+      fontFamily: "3270NerdFont-Regular",
+      blur: 4,
+      x: 1020, // Center of the right page
+      y: 420,
+      w: 580,
+      color: COLOR_BLUE,
+      spacing: 2,
+      maxDotSize: 1,
+    },
+    {
+      file: "resources/虾片/guided_mayday_logo.png",
+      x: 1020,
+      y: 650,
+      w: 400,
+      color: COLOR_BLUE,
+      spacing: 8,
+      maxDotSize: 5,
+    },
+  ],
 };
 
 export default page;

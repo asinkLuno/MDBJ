@@ -25,7 +25,7 @@ export async function renderLeft(
   sections?: Section[],
   columns?: ColumnLayout,
   bgColor?: string,
-  halftone?: HalftoneConfig,
+  halftones?: HalftoneConfig[],
 ) {
   const { bgLeft, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
@@ -51,6 +51,10 @@ export async function renderLeft(
       ctx.font = `${lt.bold ? "bold " : ""}${fontSize}px "${curFont}"`;
       ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
       ctx.fillStyle = lt.color || COLOR_BLUE;
+
+      if (lt.blur) {
+        (ctx as any).filter = `blur(${lt.blur * ss}px)`;
+      }
 
       const rawLines = lt.text.split("\n");
       let currentY = lt.y * sy;
@@ -83,6 +87,10 @@ export async function renderLeft(
           currentY += lineHeight;
         }
       }
+
+      if (lt.blur) {
+        (ctx as any).filter = "none";
+      }
     }
   }
 
@@ -108,20 +116,44 @@ export async function renderLeft(
     await drawPhoto(ctx as any, photoConfig, assets, ss, sx, sy);
   }
 
-  if (halftone) {
-    await drawHalftone(
-      ctx as any,
-      halftone.file,
-      halftone.x * sx,
-      halftone.y * sy,
-      halftone.w,
-      halftone.color,
-      halftone.spacing,
-      halftone.minDotSize,
-      halftone.maxDotSize,
-      halftone.opacity,
-      ss,
-    );
+  if (halftones) {
+    for (const ht of halftones) {
+      let source: string | any = ht.file;
+
+      if (ht.text) {
+        const fontSize = (ht.fontSize ?? 120) * ss;
+        const curFontFamily = ht.fontFamily ?? fontName;
+        const font = `bold ${fontSize}px "${curFontFamily}"`;
+        const off = createCanvas(1, 1);
+        const octx = off.getContext("2d");
+        octx.font = font;
+        const metrics = octx.measureText(ht.text);
+        const w = Math.ceil(metrics.width);
+        const h = Math.ceil(fontSize * 1.2);
+
+        const textCanvas = createCanvas(w, h);
+        const tctx = textCanvas.getContext("2d");
+        tctx.font = font;
+        tctx.fillStyle = "black";
+        tctx.textBaseline = "middle";
+        tctx.fillText(ht.text, 0, h / 2);
+        source = textCanvas;
+      }
+      await drawHalftone(
+        ctx as any,
+        source,
+        ht.x * sx,
+        ht.y * sy,
+        ht.w,
+        ht.color,
+        ht.spacing,
+        ht.minDotSize,
+        ht.maxDotSize,
+        ht.opacity,
+        ss,
+        ht.blur,
+      );
+    }
   }
 
   return canvas;

@@ -462,7 +462,7 @@ function drawTapes(
  * Draw a halftone dot pattern based on an image's luminance/alpha.
  *
  * @param ctx       Canvas context
- * @param file      Image file path
+ * @param source    Image file path, Image object, or Canvas object
  * @param centerX   Center X coordinate in canvas pixels
  * @param centerY   Center Y coordinate in canvas pixels
  * @param w_ref     Target width in REF units
@@ -472,10 +472,11 @@ function drawTapes(
  * @param maxDotSize Maximum dot radius for foreground (default 0.9 * spacing / 2)
  * @param opacity   Overall opacity (default 1.0)
  * @param ss        Min scale factor
+ * @param blur      Optional blur radius in pixels
  */
 export async function drawHalftone(
   ctx: CanvasRenderingContext2D,
-  file: string,
+  source: string | Image | Canvas,
   centerX: number,
   centerY: number,
   w_ref: number,
@@ -485,15 +486,25 @@ export async function drawHalftone(
   maxDotSize: number = 4,
   opacity: number = 1.0,
   ss: number,
+  blur?: number,
 ) {
-  const img = await loadImage(file);
+  let img: Image | Canvas;
+  if (typeof source === "string") {
+    img = await loadImage(source);
+  } else {
+    img = source;
+  }
+
   const scaledW = Math.round(w_ref * ss);
   const scaledH = Math.round((scaledW * img.height) / img.width);
 
   // Draw image to offscreen canvas to sample pixels
   const off = createCanvas(scaledW, scaledH);
   const octx = off.getContext("2d");
-  octx.drawImage(img, 0, 0, scaledW, scaledH);
+  if (blur) {
+    (octx as any).filter = `blur(${blur * ss}px)`;
+  }
+  octx.drawImage(img as any, 0, 0, scaledW, scaledH);
   const pixels = octx.getImageData(0, 0, scaledW, scaledH).data;
 
   ctx.save();
