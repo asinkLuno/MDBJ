@@ -170,4 +170,15 @@ export interface PageConfig {
   };
   toTraditional?: boolean;
   inkBleedRadius?: number;
+  halftone?: {
+    file: string;
+    x: number;
+    y: number;
+    w: number;
+    color?: string;
+    spacing?: number;
+    minDotSize?: number;
+    maxDotSize?: number;
+    opacity?: number;
+  };
 }

@@ -5,6 +5,7 @@ import { FONT_ANNOTATION, COLOR_BLUE } from "./lib/typography";
 import {
   applyPaperTexture,
   drawTargetingFrame,
+  drawHalftone,
   REF_W,
   REF_H,
 } from "./lib/render-utils";
@@ -184,6 +185,24 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       }
     }
     ctx.restore();
+  }
+
+  // Draw halftone image (spread or single-page)
+  if (config.halftone) {
+    const ht = config.halftone;
+    await drawHalftone(
+      ctx as any,
+      ht.file,
+      scaleX(ht.x),
+      ht.y * sy,
+      ht.w,
+      ht.color ?? COLOR_BLUE,
+      ht.spacing ?? 10,
+      ht.minDotSize ?? 0,
+      ht.maxDotSize ?? 4,
+      ht.opacity ?? 1.0,
+      ss,
+    );
   }
 
   // Draw spread photos (span both pages)

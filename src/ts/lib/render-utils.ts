@@ -457,3 +457,77 @@ function drawTapes(
     }
   }
 }
+
+/**
+ * Draw a halftone dot pattern based on an image's luminance/alpha.
+ *
+ * @param ctx       Canvas context
+ * @param file      Image file path
+ * @param centerX   Center X coordinate in canvas pixels
+ * @param centerY   Center Y coordinate in canvas pixels
+ * @param w_ref     Target width in REF units
+ * @param color     Dot color (default COLOR_BLUE)
+ * @param spacing   Dot spacing in pixels (default 10)
+ * @param minDotSize Minimum dot radius for background (default 0)
+ * @param maxDotSize Maximum dot radius for foreground (default 0.9 * spacing / 2)
+ * @param opacity   Overall opacity (default 1.0)
+ * @param ss        Min scale factor
+ */
+export async function drawHalftone(
+  ctx: CanvasRenderingContext2D,
+  file: string,
+  centerX: number,
+  centerY: number,
+  w_ref: number,
+  color: string = COLOR_BLUE,
+  spacing: number = 8,
+  minDotSize: number = 0,
+  maxDotSize: number = 4,
+  opacity: number = 1.0,
+  ss: number,
+) {
+  const img = await loadImage(file);
+  const scaledW = Math.round(w_ref * ss);
+  const scaledH = Math.round((scaledW * img.height) / img.width);
+
+  // Draw image to offscreen canvas to sample pixels
+  const off = createCanvas(scaledW, scaledH);
+  const octx = off.getContext("2d");
+  octx.drawImage(img, 0, 0, scaledW, scaledH);
+  const pixels = octx.getImageData(0, 0, scaledW, scaledH).data;
+
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.fillStyle = color;
+
+  const px = centerX - scaledW / 2;
+  const py = centerY - scaledH / 2;
+  const step = Math.round(spacing * ss);
+
+  const minR = minDotSize * ss;
+  const maxR = maxDotSize * ss;
+
+  for (let ly = 0; ly < scaledH; ly += step) {
+    for (let lx = 0; lx < scaledW; lx += step) {
+      const idx = (ly * scaledW + lx) * 4;
+      const r = pixels[idx];
+      const g = pixels[idx + 1];
+      const b = pixels[idx + 2];
+      const a = pixels[idx + 3];
+
+      // Luminance: 0 to 1, where 1 is white (no ink) and 0 is black (max ink)
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      const alpha = a / 255;
+      const density = (1 - luminance) * alpha;
+
+      const radius = minR + (maxR - minR) * density;
+      if (radius > 0.1) {
+        ctx.beginPath();
+        ctx.arc(px + lx, py + ly, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  ctx.restore();
+}
