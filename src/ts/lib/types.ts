@@ -53,6 +53,7 @@ export interface PhotoLayout {
   rot: number;
   tapes: TapeConfig[];
   opacity?: number;
+  tint?: string; // CSS color for tinting (e.g., 'white')
 }
 
 export interface Annotation {

@@ -43,8 +43,18 @@ export async function drawPhoto(
     rot,
     tapes: photoTapes = [],
     opacity = 1.0,
+    tint,
   } = photoConfig;
-  const photo = await loadImage(file);
+  let photo: Image | Canvas = await loadImage(file);
+  if (tint) {
+    const off = createCanvas(photo.width, photo.height);
+    const octx = off.getContext("2d");
+    octx.drawImage(photo, 0, 0);
+    octx.globalCompositeOperation = "source-in";
+    octx.fillStyle = tint;
+    octx.fillRect(0, 0, photo.width, photo.height);
+    photo = off;
+  }
   const scaledW = w * ss;
   const h = Math.round((scaledW * photo.height) / photo.width);
   const angle = (rot * Math.PI) / 180;
