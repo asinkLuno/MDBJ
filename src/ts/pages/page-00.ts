@@ -18,19 +18,20 @@ const page: PageConfig = {
       text: "FIELD NOTEBOOK",
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
-      blur: 7,
+      blur: 8,
       x: 1020, // Center of the right page
       y: 420 - y_offset,
       w: 580,
       color: text_color,
       spacing: 2,
       maxDotSize: 1,
+      bold: true,
     },
     {
       text: "for    use only",
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
-      blur: 7,
+      blur: 4,
       x: 1020, // Center of the right page
       y: 505 - y_offset,
       w: 350,

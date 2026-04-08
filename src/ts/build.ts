@@ -197,13 +197,14 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       if (ht.text) {
         const fontSize = (ht.fontSize ?? 120) * ss;
         const fontName = ht.fontFamily ?? assets.fontName;
-        const font = `bold ${fontSize}px "${fontName}"`;
+        const isBold = ht.bold ?? true;
+        const font = `${isBold ? "bold " : ""}${fontSize}px "${fontName}"`;
         const off = createCanvas(1, 1);
         const octx = off.getContext("2d");
         octx.font = font;
         const metrics = octx.measureText(ht.text);
         const w = Math.ceil(metrics.width);
-        const h = Math.ceil(fontSize * 1.2);
+        const h = Math.ceil(fontSize * 1.4);
 
         const textCanvas = createCanvas(w, h);
         const tctx = textCanvas.getContext("2d");
@@ -211,6 +212,11 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         tctx.fillStyle = "black";
         tctx.textBaseline = "middle";
         tctx.fillText(ht.text, 0, h / 2);
+        if (isBold) {
+          tctx.strokeStyle = "black";
+          tctx.lineWidth = fontSize * 0.05;
+          tctx.strokeText(ht.text, 0, h / 2);
+        }
         source = textCanvas;
       }
       await drawHalftone(
