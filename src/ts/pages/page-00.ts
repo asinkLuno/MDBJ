@@ -30,7 +30,7 @@ const page: PageConfig = {
     },
     {
       file: "resources/虾片/mayday_logo.png",
-      x: 1020,
+      x: 680,
       y: 765 - y_offset,
       w: 1000,
       blur: 40,
