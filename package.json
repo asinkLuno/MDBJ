@@ -5,6 +5,7 @@
   "scripts": {
     "process-stickers": "npx tsx src/ts/process-stickers.ts",
     "build": "npx tsx src/ts/build.ts",
+    "build:riso": "npx tsx src/ts/build_riso.ts",
     "lint": "npx knip"
   },
   "repository": {

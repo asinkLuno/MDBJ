@@ -367,7 +367,7 @@ const inChartTitleAndLegend: Annotation[] = [
     w: 400,
     h: 20,
     label: "FIG.1 - SONGSET (5525 v.s. 5526)", // 全大写前缀编号
-    color: "#333333",
+    color: COLOR_BLACK,
     fontSize: 18, // 收敛标题大小，作为图框标注
     bold: true,
     fontFamily: "3270NerdFont-Regular",

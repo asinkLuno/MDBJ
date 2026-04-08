@@ -22,6 +22,7 @@ export async function renderColumnSections(
   ss: number,
   fontName: string,
   toTrad: boolean,
+  colorFilter?: (color: string) => boolean,
 ): Promise<void> {
   const { count, xStarts, colWidth, maxHeight, startY: startYRef } = columns;
   const colNextY = Array.from({ length: count }, () => (startYRef ?? 40) * sy);
@@ -59,24 +60,28 @@ export async function renderColumnSections(
       const converted = toTrad ? await toTraditional(rawLine) : rawLine;
       const drawLines = wrapTextLine(ctx as any, converted, wrapWidth);
       for (const line of drawLines) {
-        if (
-          opts.highlights?.length ||
-          opts.relationArrows?.length ||
-          opts.dotHighlights?.length
-        ) {
-          drawHighlightedLine(
-            ctx as any,
-            line,
-            currentXPos,
-            currentY,
-            fontSize,
-            opts.highlights ?? [],
-            ss,
-            opts.relationArrows,
-            opts.dotHighlights,
-          );
+        if (colorFilter && !colorFilter(color)) {
+          // Skip
         } else {
-          ctx.fillText(line, currentXPos, currentY);
+          if (
+            opts.highlights?.length ||
+            opts.relationArrows?.length ||
+            opts.dotHighlights?.length
+          ) {
+            drawHighlightedLine(
+              ctx as any,
+              line,
+              currentXPos,
+              currentY,
+              fontSize,
+              opts.highlights ?? [],
+              ss,
+              opts.relationArrows,
+              opts.dotHighlights,
+            );
+          } else {
+            ctx.fillText(line, currentXPos, currentY);
+          }
         }
         currentY += lineHeight;
       }

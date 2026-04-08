@@ -5,9 +5,12 @@ import type {
   CharHighlight,
   PhotoLayout,
   RelationArrow,
+  SpreadPhotoLayout,
+  TrajectoryPath,
+  Annotation,
 } from "./types";
 import type { SharedAssets } from "./assets";
-import { FONT_TAPE_LABEL, COLOR_BLUE } from "./typography";
+import { FONT_TAPE_LABEL, COLOR_BLUE, FONT_ANNOTATION } from "./typography";
 
 /**
  * Reference dimensions from original field notes (per page)
@@ -72,6 +75,266 @@ export async function drawPhoto(
 
   drawTapes(ctx, assets.tapes, photoTapes, scaledW, h, assets.fontName);
 
+  ctx.restore();
+}
+
+export async function drawSpreadPhoto(
+  ctx: CanvasRenderingContext2D,
+  sp: SpreadPhotoLayout,
+  assets: SharedAssets,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  sx_left: number,
+  sx_right: number,
+) {
+  const photo = await loadImage(sp.file);
+  const scaledW = sp.w * ss;
+  const h = Math.round((scaledW * photo.height) / photo.width);
+  const angle = (sp.rot * Math.PI) / 180;
+
+  ctx.save();
+  if (sp.opacity !== undefined) ctx.globalAlpha = sp.opacity;
+  if (sp.blur) (ctx as any).filter = `blur(${sp.blur * ss}px)`;
+
+  ctx.translate(scaleX(sp.x), sp.y * sy);
+  ctx.rotate(angle);
+  if (sp.scaleY !== undefined) ctx.scale(1, sp.scaleY);
+
+  // Composite plane + texture on an offscreen canvas first
+  const off = applyPaperTexture(photo, assets.texture, 0.18, scaledW, h);
+
+  (ctx as any).shadowBlur = (sp.shadowBlur ?? 8) * ss;
+  (ctx as any).shadowOffsetX =
+    (sp.shadowOffsetX ?? 2) * (sp.x <= REF_W ? sx_left : sx_right);
+  (ctx as any).shadowOffsetY = (sp.shadowOffsetY ?? 4) * sy;
+  (ctx as any).shadowColor = sp.shadowColor ?? "rgba(0,0,0,0.22)";
+
+  ctx.drawImage(off, -scaledW / 2, -h / 2);
+  ctx.restore();
+}
+
+export async function drawSpreadPhotoLabel(
+  ctx: CanvasRenderingContext2D,
+  sp: SpreadPhotoLayout,
+  assets: SharedAssets,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  colorOverride?: string,
+) {
+  if (!sp.label) return;
+  const scaledW = sp.w * ss;
+  const angle = (sp.rot * Math.PI) / 180;
+
+  ctx.save();
+  ctx.translate(scaleX(sp.x), sp.y * sy);
+  ctx.rotate(angle);
+  if (sp.scaleY !== undefined) ctx.scale(1, sp.scaleY);
+
+  const fontSize = Math.max(11, Math.round(scaledW * 0.11));
+  ctx.font = `bold ${fontSize}px "${assets.fontName}"`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = colorOverride ?? sp.labelColor ?? COLOR_BLUE;
+  (ctx as any).letterSpacing = `${(sp.labelLetterSpacing ?? 0) * ss}px`;
+  ctx.fillText(
+    sp.label,
+    (sp.labelOffsetX ?? 0) * ss,
+    (sp.labelOffsetY ?? 0) * ss,
+  );
+  ctx.restore();
+}
+
+export async function drawSpreadPhotoFrame(
+  ctx: CanvasRenderingContext2D,
+  sp: SpreadPhotoLayout,
+  assets: SharedAssets,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  curSx: number,
+  colorOverride?: string,
+) {
+  if (!sp.showFrame) return;
+  const photo = await loadImage(sp.file);
+  const scaledW = sp.w * ss;
+  const h = Math.round((scaledW * photo.height) / photo.width);
+  const angle = (sp.rot * Math.PI) / 180;
+  const frameColor = colorOverride ?? sp.frameColor ?? COLOR_BLUE;
+  const padX = (sp.framePadX ?? -12) * curSx,
+    padY = (sp.framePadY ?? -28) * sy;
+  const fw = scaledW + padX * 2,
+    fh = h + padY * 2;
+
+  ctx.save();
+  ctx.translate(scaleX(sp.x), sp.y * sy);
+  ctx.rotate(sp.frameSameDir ? angle : angle + Math.PI);
+  drawTargetingFrame(
+    ctx,
+    -fw / 2,
+    -fh / 2,
+    fw,
+    fh,
+    frameColor,
+    ss,
+    sp.frameCornersOnly ?? false,
+  );
+  ctx.restore();
+}
+
+export async function drawSpreadPhotoSublabel(
+  ctx: CanvasRenderingContext2D,
+  sp: SpreadPhotoLayout,
+  assets: SharedAssets,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  curSx: number,
+  colorOverride?: string,
+) {
+  if (!sp.sublabel) return;
+  const photo = await loadImage(sp.file);
+  const scaledW = sp.w * ss;
+  const h = Math.round((scaledW * photo.height) / photo.width);
+  const angle = (sp.rot * Math.PI) / 180;
+  const frameColor = sp.frameColor ?? COLOR_BLUE;
+  const padX = (sp.framePadX ?? -12) * curSx,
+    padY = (sp.framePadY ?? -28) * sy;
+  const fw = scaledW + padX * 2,
+    fh = h + padY * 2;
+
+  ctx.save();
+  ctx.translate(scaleX(sp.x), sp.y * sy);
+  ctx.rotate(sp.frameSameDir ? angle : angle + Math.PI);
+
+  const subFontSize = Math.max(9, Math.round(scaledW * 0.075));
+  ctx.font = `bold ${subFontSize}px "${assets.labelFontName}"`;
+  (ctx as any).letterSpacing = `${-0.5 * ss}px`;
+  ctx.fillStyle = colorOverride ?? frameColor;
+  ctx.globalAlpha = 0.85;
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  const lines = sp.sublabel.split("\n");
+  const lineH = subFontSize * 1.3;
+  const startY = fh / 2 + 4 * ss;
+  const startX = -fw / 2 + (sp.labelOffsetX ?? 0) * ss;
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], startX, startY + i * lineH);
+  }
+  ctx.restore();
+}
+
+export function drawTrajectory(
+  ctx: CanvasRenderingContext2D,
+  traj: TrajectoryPath,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  colorOverride?: string,
+) {
+  if (traj.points.length < 2) return;
+  const color = colorOverride ?? traj.color ?? "rgba(80,160,220,0.7)";
+  ctx.save();
+  ctx.globalAlpha = traj.opacity ?? 1.0;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = (traj.lineWidth ?? 1.2) * ss;
+  ctx.lineCap = traj.lineCap ?? "butt";
+  ctx.setLineDash((traj.dash ?? [5, 4]).map((d) => d * ss));
+  ctx.beginPath();
+  ctx.moveTo(scaleX(traj.points[0].x), traj.points[0].y * sy);
+  for (let i = 1; i < traj.points.length; i++) {
+    ctx.lineTo(scaleX(traj.points[i].x), traj.points[i].y * sy);
+  }
+  ctx.stroke();
+
+  if (traj.arrowEnd) {
+    const last = traj.points[traj.points.length - 1];
+    const prev = traj.points[traj.points.length - 2];
+    const dx = scaleX(last.x) - scaleX(prev.x);
+    const dy = (last.y - prev.y) * sy;
+    const ang = Math.atan2(dy, dx);
+    const alen = 10 * ss;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(scaleX(last.x), last.y * sy);
+    ctx.lineTo(
+      scaleX(last.x) - alen * Math.cos(ang - 0.4),
+      last.y * sy - alen * Math.sin(ang - 0.4),
+    );
+    ctx.moveTo(scaleX(last.x), last.y * sy);
+    ctx.lineTo(
+      scaleX(last.x) - alen * Math.cos(ang + 0.4),
+      last.y * sy - alen * Math.sin(ang + 0.4),
+    );
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+export function drawAnnotation(
+  ctx: CanvasRenderingContext2D,
+  ann: Annotation,
+  assets: SharedAssets,
+  ss: number,
+  scaleX: (x: number) => number,
+  sy: number,
+  colorOverride?: string,
+) {
+  const ax = scaleX(ann.x);
+  const ay = ann.y * sy;
+  const color = colorOverride ?? ann.color ?? COLOR_BLUE;
+  const scaledW = ann.w * ss;
+  const scaledH = ann.h * ss;
+  const cx = ax + scaledW / 2,
+    cy = ay + scaledH / 2;
+
+  if (!ann.noFrame) {
+    drawTargetingFrame(ctx, ax, ay, scaledW, scaledH, color, ss);
+  }
+
+  // Center crosshair (opt-in)
+  if (ann.crosshair) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.0 * ss;
+    ctx.setLineDash([]);
+    const cSize = 6 * ss;
+    ctx.beginPath();
+    ctx.moveTo(cx - cSize, cy);
+    ctx.lineTo(cx + cSize, cy);
+    ctx.moveTo(cx, cy - cSize);
+    ctx.lineTo(cx, cy + cSize);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Label below box
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.9;
+  const isChinese = /[\u4e00-\u9fa5]/.test(ann.label);
+  const fontName =
+    ann.fontFamily ??
+    (isChinese ? assets.chineseLabelFontName : assets.labelFontName);
+  const annFontSize = ann.fontSize ?? FONT_ANNOTATION * 0.75;
+  ctx.font = `${ann.bold ? "bold " : ""}${annFontSize * ss}px "${fontName}"`;
+  (ctx as any).letterSpacing = `${-1 * ss}px`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+
+  const labelX = cx;
+  const labelY = ay + scaledH + 5 * sy;
+
+  if (ann.angle !== undefined) {
+    ctx.translate(labelX, labelY);
+    ctx.rotate((ann.angle * Math.PI) / 180);
+    ctx.fillText(ann.label, 0, 0);
+  } else {
+    ctx.fillText(ann.label, labelX, labelY);
+  }
+
+  (ctx as any).letterSpacing = "0px";
   ctx.restore();
 }
 

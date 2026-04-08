@@ -13,6 +13,7 @@ export async function renderRight(
   photos?: PhotoLayout[],
   columns?: ColumnLayout,
   bgColor?: string,
+  colorFilter?: (color: string) => boolean,
 ) {
   const { bgRight, fontName } = assets;
   const canvas = createCanvas(bgRight.width, bgRight.height);
@@ -21,13 +22,13 @@ export async function renderRight(
   if (bgColor) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
+  } else if (!colorFilter) {
     ctx.drawImage(bgRight, 0, 0);
   }
 
   const { sx, sy, ss } = getScaling(bgRight.width, bgRight.height);
 
-  if (photos) {
+  if (photos && !colorFilter) {
     for (const photoConfig of photos) {
       await drawPhoto(ctx as any, photoConfig, assets, ss, sx, sy);
     }
@@ -48,6 +49,7 @@ export async function renderRight(
       ss,
       fontName,
       toTrad,
+      colorFilter,
     );
   } else {
     // ── Single-column mode ──────────────────────────────────────────────
@@ -55,8 +57,16 @@ export async function renderRight(
 
     for (const section of sections) {
       const opts = section.options ?? {};
-      const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
       const color = opts.color ?? COLOR_BLUE;
+
+      if (colorFilter && !colorFilter(color)) {
+        // We still need to calculate nextY to keep layout consistent?
+        // Actually, in single column mode, if we skip rendering, nextY might be wrong.
+        // But for RISO layers, we probably WANT the same layout.
+        // Let's just calculate layout but skip fillText.
+      }
+
+      const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
       const lineHeight =
         (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
       const bold = opts.bold ?? false;
@@ -80,38 +90,42 @@ export async function renderRight(
           ? wrapTextLine(ctx, converted, wrapWidth)
           : [converted];
         for (const line of drawLines) {
-          let xPos = (opts.x ?? 50) * sx;
-          if (opts.textAlign === "center") {
-            xPos -= ctx.measureText(line).width / 2;
-          } else if (opts.textAlign === "right") {
-            xPos -= ctx.measureText(line).width;
-          }
-
-          if (bold) {
-            ctx.save();
-            ctx.globalAlpha = 0.4;
-            ctx.fillText(line, xPos - 0.5, currentY);
-            ctx.fillText(line, xPos + 0.5, currentY);
-            ctx.restore();
-          }
-          if (
-            opts.highlights?.length ||
-            opts.relationArrows?.length ||
-            opts.dotHighlights?.length
-          ) {
-            drawHighlightedLine(
-              ctx as any,
-              line,
-              xPos,
-              currentY,
-              fontSize,
-              opts.highlights ?? [],
-              ss,
-              opts.relationArrows,
-              opts.dotHighlights,
-            );
+          if (colorFilter && !colorFilter(color)) {
+            // Skip rendering but still advance currentY
           } else {
-            ctx.fillText(line, xPos, currentY);
+            let xPos = (opts.x ?? 50) * sx;
+            if (opts.textAlign === "center") {
+              xPos -= ctx.measureText(line).width / 2;
+            } else if (opts.textAlign === "right") {
+              xPos -= ctx.measureText(line).width;
+            }
+
+            if (bold) {
+              ctx.save();
+              ctx.globalAlpha = 0.4;
+              ctx.fillText(line, xPos - 0.5, currentY);
+              ctx.fillText(line, xPos + 0.5, currentY);
+              ctx.restore();
+            }
+            if (
+              opts.highlights?.length ||
+              opts.relationArrows?.length ||
+              opts.dotHighlights?.length
+            ) {
+              drawHighlightedLine(
+                ctx as any,
+                line,
+                xPos,
+                currentY,
+                fontSize,
+                opts.highlights ?? [],
+                ss,
+                opts.relationArrows,
+                opts.dotHighlights,
+              );
+            } else {
+              ctx.fillText(line, xPos, currentY);
+            }
           }
           currentY += lineHeight;
         }
