@@ -153,6 +153,7 @@ export interface HalftoneConfig {
   maxDotSize?: number;
   opacity?: number;
   bold?: boolean;
+  scaleY?: number;
 }
 
 export interface PageConfig {
