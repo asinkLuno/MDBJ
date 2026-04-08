@@ -19,9 +19,9 @@ const page: PageConfig = {
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
       blur: 7,
-      x: 1030, // Center of the right page
+      x: 1005, // Center of the right page
       y: 200 - y_offset,
-      w: 600,
+      w: 660,
       color: text_color,
       spacing: 4,
       maxDotSize: 2,
@@ -29,14 +29,14 @@ const page: PageConfig = {
       scaleY: 4,
     },
     {
-      file: "resources/虾片/guided_mayday_logo.png",
-      x: 1030,
+      file: "resources/虾片/mayday_logo.png",
+      x: 1020,
       y: 765 - y_offset,
       w: 1000,
-      blur: 7,
+      blur: 40,
       color: text_color,
-      spacing: 8,
-      maxDotSize: 4,
+      spacing: 4,
+      maxDotSize: 2,
     },
   ],
 };
