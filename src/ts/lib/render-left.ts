@@ -26,6 +26,7 @@ export async function renderLeft(
   columns?: ColumnLayout,
   bgColor?: string,
   halftones?: HalftoneConfig[],
+  colorFilter?: (color: string) => boolean,
 ) {
   const { bgLeft, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
@@ -34,7 +35,7 @@ export async function renderLeft(
   if (bgColor) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-  } else {
+  } else if (!colorFilter) {
     ctx.drawImage(bgLeft, 0, 0);
   }
 
@@ -43,6 +44,9 @@ export async function renderLeft(
   // ── Legacy leftTexts (fixed-position) ────────────────────────────────────
   if (leftTexts) {
     for (const lt of leftTexts) {
+      const itemColor = lt.color || COLOR_BLUE;
+      if (colorFilter && !colorFilter(itemColor)) continue;
+
       const fontSize = (lt.fontSize || FONT_LEFT_TEXT_DEFAULT) * ss;
       const lineHeight =
         (lt.lineHeight || (lt.fontSize || FONT_LEFT_TEXT_DEFAULT) * 1.4) * ss;
@@ -50,7 +54,7 @@ export async function renderLeft(
       const curFont = lt.fontFamily ?? fontName;
       ctx.font = `${lt.bold ? "bold " : ""}${fontSize}px "${curFont}"`;
       ctx.letterSpacing = `${(lt.letterSpacing || 0) * ss}px`;
-      ctx.fillStyle = lt.color || COLOR_BLUE;
+      ctx.fillStyle = itemColor;
 
       if (lt.blur) {
         (ctx as any).filter = `blur(${lt.blur * ss}px)`;
@@ -109,15 +113,19 @@ export async function renderLeft(
       ss,
       fontName,
       toTrad,
+      colorFilter,
     );
   }
 
   for (const photoConfig of photos) {
+    if (colorFilter) continue;
     await drawPhoto(ctx as any, photoConfig, assets, ss, sx, sy);
   }
 
   if (halftones) {
     for (const ht of halftones) {
+      const itemColor = ht.color || COLOR_BLUE;
+      if (colorFilter && !colorFilter(itemColor)) continue;
       let source: string | any = ht.file;
 
       if (ht.text) {
