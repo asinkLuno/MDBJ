@@ -8,7 +8,7 @@ const text_color = COLOR_BLUE;
 const page: PageConfig = {
   id: "page-00",
   toTraditional: true,
-  inkBleedRadius: 1,
+  inkBleedRadius: 0,
   leftBgColor: bg_color,
   rightBgColor: bg_color,
   leftPhotos: [],
@@ -19,7 +19,7 @@ const page: PageConfig = {
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
       blur: 8,
-      x: 1020, // Center of the right page
+      x: 1030, // Center of the right page
       y: 420 - y_offset,
       w: 600,
       color: text_color,
@@ -34,7 +34,7 @@ const page: PageConfig = {
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
       blur: 8,
-      x: 1020, // Center of the right page
+      x: 1030, // Center of the right page
       y: 595 - y_offset,
       w: 350,
       color: text_color,
@@ -44,7 +44,7 @@ const page: PageConfig = {
     },
     {
       file: "resources/虾片/guided_mayday_logo.png",
-      x: 955,
+      x: 965,
       y: 585 - y_offset,
       w: 120,
       blur: 1,
