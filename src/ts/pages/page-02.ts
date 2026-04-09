@@ -7,10 +7,7 @@ import {
 } from "../lib/typography";
 
 import songData from "../../../resources/song_data.json";
-const SONG_RELEASE_DATES = songData.SONG_RELEASE_DATES as Record<
-  string,
-  string
->;
+const SONG_RELEASE_DATES = songData.SONG_RELEASE_DATES as Record<string, string>;
 
 const SONGS_5525 = [
   "OAOA",
@@ -204,12 +201,8 @@ trajectories.push({
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
 
 // ================= 数据线 =================
-const points5525 = SONGS_5525.map((song, i) =>
-  project(i + 1, getYearValue(song), 0),
-);
-const points5526 = SONGS_5526.map((song, i) =>
-  project(0, getYearValue(song), i + 1),
-);
+const points5525 = SONGS_5525.map((song, i) => project(i + 1, getYearValue(song), 0));
+const points5526 = SONGS_5526.map((song, i) => project(0, getYearValue(song), i + 1));
 
 trajectories.push({
   points: points5525,

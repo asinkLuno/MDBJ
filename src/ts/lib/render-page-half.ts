@@ -60,9 +60,7 @@ export async function renderPageHalf(
         const opts = section.options ?? {};
         const color = opts.color ?? COLOR_BLUE;
         const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
-        const lineHeight =
-          (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) *
-          ss;
+        const lineHeight = (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
         const bold = opts.bold ?? false;
         const wrapWidth = opts.wrapWidth ? opts.wrapWidth * ss : null;
         const curFont = opts.fontFamily ?? fontName;

@@ -25,27 +25,17 @@ const TAPE_DIR = "resources/tapes/individual";
 const TEXTURE_PATH = "resources/虾片/paper-texture.png";
 
 async function prepareTexture(): Promise<Buffer> {
-  return sharp(TEXTURE_PATH)
-    .grayscale()
-    .normalize()
-    .linear(0.6, 80)
-    .png()
-    .toBuffer();
+  return sharp(TEXTURE_PATH).grayscale().normalize().linear(0.6, 80).png().toBuffer();
 }
 
 export async function loadSharedAssets(): Promise<SharedAssets> {
-  const fontName = path
-    .basename(FONT_PATH)
-    .replace(".ttf", "")
-    .replace("-2.0-Thin", "");
+  const fontName = path.basename(FONT_PATH).replace(".ttf", "").replace("-2.0-Thin", "");
   GlobalFonts.registerFromPath(FONT_PATH, fontName);
 
   const labelFontName = path.basename(LABEL_FONT_PATH).replace(".ttf", "");
   GlobalFonts.registerFromPath(LABEL_FONT_PATH, labelFontName);
 
-  const chineseLabelFontName = path
-    .basename(CHINESE_LABEL_FONT_PATH)
-    .replace(".ttf", "");
+  const chineseLabelFontName = path.basename(CHINESE_LABEL_FONT_PATH).replace(".ttf", "");
   GlobalFonts.registerFromPath(CHINESE_LABEL_FONT_PATH, chineseLabelFontName);
 
   const sarasaFontName = path.basename(SARASA_FONT_PATH).replace(".ttf", "");

@@ -25,8 +25,7 @@ export async function renderColumnSections(
     const opts = section.options ?? {};
     const fontSize = (opts.fontSize ?? FONT_SECTION_DEFAULT) * ss;
     const color = opts.color ?? COLOR_BLUE;
-    const lineHeight =
-      (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
+    const lineHeight = (opts.lineHeight ?? (opts.fontSize ?? FONT_SECTION_DEFAULT) * 1.4) * ss;
     const bold = opts.bold ?? false;
     const curFont = opts.fontFamily ?? fontName;
 
@@ -52,11 +51,7 @@ export async function renderColumnSections(
       const converted = toTrad ? await toTraditional(rawLine) : rawLine;
       const drawLines = wrapTextLine(ctx as any, converted, wrapWidth);
       for (const line of drawLines) {
-        if (
-          opts.highlights?.length ||
-          opts.relationArrows?.length ||
-          opts.dotHighlights?.length
-        ) {
+        if (opts.highlights?.length || opts.relationArrows?.length || opts.dotHighlights?.length) {
           drawHighlightedLine(
             rc,
             line,

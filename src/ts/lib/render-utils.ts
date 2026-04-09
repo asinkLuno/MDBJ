@@ -44,14 +44,8 @@ function boxBlur1D(
       dst[idx + 2] = b / weight;
       dst[idx + 3] = a / weight;
 
-      const prevPos = Math.min(
-        Math.max(j - radius, 0),
-        (horizontal ? w : h) - 1,
-      );
-      const nextPos = Math.min(
-        Math.max(j + radius + 1, 0),
-        (horizontal ? w : h) - 1,
-      );
+      const prevPos = Math.min(Math.max(j - radius, 0), (horizontal ? w : h) - 1);
+      const nextPos = Math.min(Math.max(j + radius + 1, 0), (horizontal ? w : h) - 1);
       const prevIdx = (horizontal ? i * w + prevPos : prevPos * w + i) * 4;
       const nextIdx = (horizontal ? i * w + nextPos : nextPos * w + i) * 4;
 
@@ -93,18 +87,9 @@ export function applyGaussianBlur(canvas: Canvas, sigma: number) {
  * Draw a photo with paper texture and optional tapes
  */
 export async function drawPhoto(rc: RenderContext, photoConfig: PhotoLayout) {
-  const { ctx, assets, scaling } = rc;
+  const { ctx, assets, scaling } = rc as any;
   const { sx, sy, ss } = scaling;
-  const {
-    file,
-    x,
-    y,
-    w,
-    rot,
-    tapes: photoTapes = [],
-    opacity = 1.0,
-    tint,
-  } = photoConfig;
+  const { file, x, y, w, rot, tapes: photoTapes = [], opacity = 1.0, tint } = photoConfig;
   let photo: Image | Canvas = await loadImage(file);
   if (tint) {
     const off = createCanvas(photo.width, photo.height);
@@ -124,11 +109,7 @@ export async function drawPhoto(rc: RenderContext, photoConfig: PhotoLayout) {
   ctx.translate(x * sx + scaledW / 2, y * sy + h / 2);
   ctx.rotate(angle);
 
-  ctx.drawImage(
-    applyPaperTexture(photo, assets.texture, 0.18, scaledW, h),
-    -scaledW / 2,
-    -h / 2,
-  );
+  ctx.drawImage(applyPaperTexture(photo, assets.texture, 0.18, scaledW, h), -scaledW / 2, -h / 2);
 
   drawTapes(rc, photoTapes, scaledW, h);
 
@@ -140,7 +121,7 @@ export async function drawSpreadPhoto(
   sp: SpreadPhotoLayout,
   scaleX: (x: number) => number,
 ) {
-  const { ctx, assets, scaling } = rc;
+  const { ctx, assets, scaling } = rc as any;
   const { sy, ss, sx: sx_main } = scaling;
   const photo = await loadImage(sp.file);
   const scaledW = sp.w * ss;
@@ -193,11 +174,7 @@ export async function drawSpreadPhotoLabel(
   ctx.textBaseline = "middle";
   ctx.fillStyle = colorOverride ?? sp.labelColor ?? COLOR_BLUE;
   (ctx as any).letterSpacing = `${(sp.labelLetterSpacing ?? 0) * ss}px`;
-  ctx.fillText(
-    sp.label,
-    (sp.labelOffsetX ?? 0) * ss,
-    (sp.labelOffsetY ?? 0) * ss,
-  );
+  ctx.fillText(sp.label, (sp.labelOffsetX ?? 0) * ss, (sp.labelOffsetY ?? 0) * ss);
   ctx.restore();
 }
 
@@ -209,7 +186,7 @@ export async function drawSpreadPhotoFrame(
   colorOverride?: string,
 ) {
   if (!sp.showFrame) return;
-  const { ctx, assets, scaling } = rc;
+  const { ctx, scaling } = rc;
   const { sy, ss } = scaling;
   const photo = await loadImage(sp.file);
   const scaledW = sp.w * ss;
@@ -224,16 +201,7 @@ export async function drawSpreadPhotoFrame(
   ctx.save();
   ctx.translate(scaleX(sp.x), sp.y * sy);
   ctx.rotate(sp.frameSameDir ? angle : angle + Math.PI);
-  drawTargetingFrame(
-    ctx,
-    -fw / 2,
-    -fh / 2,
-    fw,
-    fh,
-    frameColor,
-    ss,
-    sp.frameCornersOnly ?? false,
-  );
+  drawTargetingFrame(ctx, -fw / 2, -fh / 2, fw, fh, frameColor, ss, sp.frameCornersOnly ?? false);
   ctx.restore();
 }
 
@@ -365,8 +333,7 @@ export function drawAnnotation(
   ctx.globalAlpha = 0.9;
   const isChinese = /[\u4e00-\u9fa5]/.test(ann.label);
   const fontName =
-    ann.fontFamily ??
-    (isChinese ? assets.chineseLabelFontName : assets.labelFontName);
+    ann.fontFamily ?? (isChinese ? assets.chineseLabelFontName : assets.labelFontName);
   const annFontSize = ann.fontSize ?? FONT_ANNOTATION * 0.75;
   ctx.font = `${ann.bold ? "bold " : ""}${annFontSize * ss}px "${fontName}"`;
   (ctx as any).letterSpacing = `${-1 * ss}px`;
@@ -601,10 +568,7 @@ export function drawHighlightedLine(
         const before = text.substring(0, idx);
         let charX = x + ctx.measureText(before).width;
 
-        if (
-          hl.char.length > 1 &&
-          (hl.char.startsWith("我") || hl.char.startsWith("你"))
-        ) {
+        if (hl.char.length > 1 && (hl.char.startsWith("我") || hl.char.startsWith("你"))) {
           charX += ctx.measureText(hl.char[0]).width / 2;
         } else {
           charX += ctx.measureText(hl.char).width / 2;
@@ -638,10 +602,7 @@ export function drawHighlightedLine(
       const dotY = baselineY - fontSize * 0.35;
 
       const getCenterX = (p: { x: number; w: number }, token: string) => {
-        if (
-          token.length > 1 &&
-          (token.startsWith("我") || token.startsWith("你"))
-        ) {
+        if (token.length > 1 && (token.startsWith("我") || token.startsWith("你"))) {
           return p.x + ctx.measureText(token[0]).width / 2;
         }
         return p.x + p.w / 2;
@@ -675,30 +636,15 @@ export function drawHighlightedLine(
     if (hlMap.has(char)) {
       const hlColor = hlMap.get(char)!;
       if (!colorFilter || colorFilter(hlColor)) {
-        drawTargetingFrame(
-          ctx,
-          curX,
-          frameTop,
-          cw,
-          frameH,
-          hlColor,
-          ss,
-          true,
-          frameLW,
-        );
+        drawTargetingFrame(ctx, curX, frameTop, cw, frameH, hlColor, ss, true, frameLW);
       }
     }
     curX += cw;
   }
 }
 
-function drawTapes(
-  rc: RenderContext,
-  configs: TapeConfig[],
-  w: number,
-  h: number,
-): void {
-  const { ctx, assets } = rc;
+function drawTapes(rc: RenderContext, configs: TapeConfig[], w: number, h: number): void {
+  const { ctx, assets } = rc as any;
   const { tapes, fontName } = assets;
   for (const tc of configs) {
     const t = tapes[tc.idx % tapes.length];
@@ -847,13 +793,7 @@ export async function drawHalftone(
   ctx.restore();
 }
 
-export async function drawBackgroundGrid(
-  ctx: CanvasRenderingContext2D,
-  w: number,
-  h: number,
-  ss: number,
-  config?: any,
-) {
+export async function drawBackgroundGrid(ctx: any, w: number, h: number, ss: number, config?: any) {
   const color = config?.color ?? "rgb(145, 203, 174)";
   const step = Math.round((config?.step ?? 250) * ss);
   const lineWidth = Math.round((config?.lineWidth ?? 15) * ss);
@@ -901,10 +841,7 @@ export async function drawBackgroundGrid(
 
   if (config?.halftone) {
     const pixels = off.getContext("2d").getImageData(0, 0, offW, offH).data;
-    const spacing = Math.max(
-      1,
-      Math.round((config.halftone.spacing ?? 10) * ss),
-    );
+    const spacing = Math.max(1, Math.round((config.halftone.spacing ?? 10) * ss));
     const minR = (config.halftone.minDotSize ?? 0) * ss;
     const maxR = (config.halftone.maxDotSize ?? 4) * ss;
 
@@ -933,17 +870,7 @@ export async function drawBackgroundGrid(
       }
     }
   } else {
-    ctx.drawImage(
-      off,
-      bleed,
-      bleed,
-      innerW,
-      innerH,
-      margin,
-      margin,
-      innerW,
-      innerH,
-    );
+    ctx.drawImage(off, bleed, bleed, innerW, innerH, margin, margin, innerW, innerH);
   }
   ctx.restore();
 }

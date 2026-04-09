@@ -1,9 +1,7 @@
 import { execSync } from "child_process";
-import { readFileSync, writeFileSync, copyFileSync, mkdirSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { readFileSync, writeFileSync, copyFileSync } from "fs";
+import { join } from "path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = "resources/field_notes/output";
 const SOURCE_FILE = join(__dirname, "pages/page-00.ts");
 const BACKUP_FILE = join(__dirname, "pages/page-00.ts.bak");
@@ -15,8 +13,7 @@ const BLURS = Array.from({ length: 9 }, (_, i) => 2 + i); // 2-10
 
 // Total combinations: 21 * 10 * 9 = 1890
 // That's a lot. Let's start with a subset if needed, but let's do all.
-const combinations: Array<{ step: number; linewidth: number; blur: number }> =
-  [];
+const combinations: Array<{ step: number; linewidth: number; blur: number }> = [];
 
 for (const step of STEPS) {
   for (const linewidth of LINEWIDTHS) {

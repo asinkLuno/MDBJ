@@ -1,16 +1,6 @@
 import { readFileSync } from "fs";
-import type {
-  PageConfig,
-  Section,
-  RelationArrow,
-  CharHighlight,
-  ColumnLayout,
-} from "../lib/types";
-import {
-  COLOR_BLACK,
-  COLOR_BLUE,
-  createPageAnnotation,
-} from "../lib/typography";
+import type { PageConfig, Section, RelationArrow, CharHighlight, ColumnLayout } from "../lib/types";
+import { COLOR_BLACK, COLOR_BLUE, createPageAnnotation } from "../lib/typography";
 import { REF_W } from "../lib/context";
 
 const RELATIONS_FILE = "resources/lyrics/pronoun_relations.json";
@@ -50,12 +40,7 @@ const COL_GAP = 360 - COL_MARGIN;
 
 const spreadColumns: ColumnLayout = {
   count: 4,
-  xStarts: [
-    COL_MARGIN,
-    COL_MARGIN + COL_GAP,
-    REF_W + COL_MARGIN,
-    REF_W + COL_MARGIN + COL_GAP,
-  ],
+  xStarts: [COL_MARGIN, COL_MARGIN + COL_GAP, REF_W + COL_MARGIN, REF_W + COL_MARGIN + COL_GAP],
   colWidth: [COL_W, COL_W, COL_W, COL_W],
   maxHeight: 980,
   startY: 90,
@@ -97,9 +82,7 @@ for (const song of data.songs) {
         bold: true,
         relationArrows: arrows,
         dotHighlights:
-          lineData.line.includes("我") || lineData.line.includes("你")
-            ? HIGHLIGHTS
-            : [],
+          lineData.line.includes("我") || lineData.line.includes("你") ? HIGHLIGHTS : [],
       },
     });
   }

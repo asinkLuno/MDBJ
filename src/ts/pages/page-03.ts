@@ -1,9 +1,5 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
-import {
-  COLOR_BLACK,
-  COLOR_BLUE,
-  createPageAnnotation,
-} from "../lib/typography";
+import { COLOR_BLACK, COLOR_BLUE, createPageAnnotation } from "../lib/typography";
 
 const PLANE = "resources/虾片/plane.png";
 
@@ -38,8 +34,7 @@ const planes: SpreadPhotoLayout[] = [
   {
     file: PLANE,
     label: "北京",
-    sublabel:
-      "240518  240519\n240521  240522\n240524  240525\n240526  240530\n240531  240601",
+    sublabel: "240518  240519\n240521  240522\n240524  240525\n240526  240530\n240531  240601",
     x: 188,
     y: 593,
     w: 160,
@@ -300,7 +295,7 @@ planes.forEach((p) => {
   p.labelLetterSpacing = -4;
 });
 
-const trajectories: PageConfig["spread"]["trajectories"] = [
+const trajectories: NonNullable<PageConfig["spread"]>["trajectories"] = [
   {
     points: [
       { x: 60, y: 800 },

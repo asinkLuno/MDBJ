@@ -1,15 +1,13 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
 import * as path from "path";
-import { createCanvas, type Canvas, loadImage } from "@napi-rs/canvas";
+import { createCanvas, type Canvas } from "@napi-rs/canvas";
 import sharp from "sharp";
 
 import { loadSharedAssets } from "./lib/assets";
 import { renderPage } from "./lib/renderer";
 import { getScaling } from "./lib/context";
 import { COLOR_BLACK, COLOR_BLUE, COLOR_BG_BLUE_TRANS } from "./lib/typography";
-import type { PageConfig } from "./lib/types";
-
 const OUTPUT_DIR_NORMAL = "resources/field_notes/output";
 const OUTPUT_DIR_RISO = "resources/field_notes/output_riso";
 
@@ -27,10 +25,7 @@ const RISO_LAYERS = [
 /**
  * Post-process the final canvas with an ink-bleed effect.
  */
-async function applyInkBleedFilter(
-  canvas: Canvas,
-  radius = 3,
-): Promise<Canvas> {
+async function applyInkBleedFilter(canvas: Canvas, radius = 3): Promise<Canvas> {
   if (radius <= 0) return canvas;
   const W = canvas.width;
   const H = canvas.height;
@@ -102,11 +97,7 @@ async function exportRisoBackground(assets: any) {
   const stitchedBuffer = canvas.toBuffer("image/png");
   const risoPath = path.join(OUTPUT_DIR_RISO, "stitched_background_riso.png");
 
-  const alphaBuffer = await sharp(stitchedBuffer)
-    .grayscale()
-    .normalize()
-    .negate()
-    .toBuffer();
+  const alphaBuffer = await sharp(stitchedBuffer).grayscale().normalize().negate().toBuffer();
 
   await sharp({
     create: {
@@ -129,17 +120,17 @@ async function runBuild() {
     console.log(`  -> Executing ${script}`);
     try {
       execSync(`python3 ${script}`, { stdio: "inherit" });
-    } catch (e) {
+    } catch (_e) {
       console.warn(`Warning: Failed to run ${script}. Using existing data.`);
     }
   }
 
   // Dynamically import pages to get the updated data written by Python scripts
-  const { pages } = await import("./pages");
+  const { pages } = await import("./pages/index.js");
 
   const isRiso = process.argv.includes("--riso");
   const filter = process.argv.find((arg) => arg.startsWith("page-"));
-  const targets = filter ? pages.filter((p) => p.id === filter) : pages;
+  const targets = filter ? pages.filter((p: any) => p.id === filter) : pages;
 
   if (filter && targets.length === 0) {
     console.error(`No page found with id "${filter}".`);
@@ -169,10 +160,7 @@ async function runBuild() {
         });
 
         const buffer = canvas.toBuffer("image/png");
-        const outPath = path.join(
-          OUTPUT_DIR_RISO,
-          `${page.id}_${layerDef.id}_master.png`,
-        );
+        const outPath = path.join(OUTPUT_DIR_RISO, `${page.id}_${layerDef.id}_master.png`);
         await sharp(buffer)
           .ensureAlpha()
           .linear([0, 0, 0, 1], [0, 0, 0, 0]) // Black on transparent
@@ -187,10 +175,7 @@ async function runBuild() {
         toTrad: page.toTraditional ?? true,
       });
 
-      const filtered = await applyInkBleedFilter(
-        canvas,
-        page.inkBleedRadius ?? 0,
-      );
+      const filtered = await applyInkBleedFilter(canvas, page.inkBleedRadius ?? 0);
       const outPath = path.join(OUTPUT_DIR_NORMAL, `${page.id}.png`);
       writeFileSync(outPath, filtered.toBuffer("image/png"));
       console.log(`  -> Saved: ${outPath}`);

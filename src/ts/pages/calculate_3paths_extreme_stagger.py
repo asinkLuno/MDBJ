@@ -227,7 +227,7 @@ for i in range(40):
     traj_pts.append(f"{{ x: {int(tx)}, y: {int(ty)} }}")
 
 traj_points_str = ",\n    ".join(traj_pts)
-traj_block = f"""const trajectories: PageConfig["spread"]["trajectories"] = [
+traj_block = f"""const trajectories: NonNullable<PageConfig["spread"]>["trajectories"] = [
   {{
     points: [
     {traj_points_str}
@@ -253,13 +253,7 @@ if os.path.exists(ts_path):
         content,
     )
     content = re.sub(
-        r"const trajectories: PageConfig\['spread'\]\['trajectories'\] = \[[\s\S]*?\];",
-        lambda _: traj_block,
-        content,
-    )
-    # Also handle double quotes in regex
-    content = re.sub(
-        r'const trajectories: PageConfig\["spread"\]\["trajectories"\] = \[[\s\S]*?\];',
+        r"const trajectories: .*? = \[[\s\S]*?\];",
         lambda _: traj_block,
         content,
     )

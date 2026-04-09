@@ -1,6 +1,5 @@
 import OpenCC from "opencc";
-
-const converter = new OpenCC("s2t.json");
+const converter = new (OpenCC as any)("s2t.json");
 
 /**
  * 将简体中文转换为繁体中文

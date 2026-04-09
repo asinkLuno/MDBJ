@@ -2,7 +2,7 @@ import { createCanvas } from "@napi-rs/canvas";
 import type { Canvas } from "@napi-rs/canvas";
 import type { PageConfig } from "./types";
 import type { RenderContext } from "./context";
-import { getScaling, REF_W, REF_H, createSpreadXScaler } from "./context";
+import { getScaling, REF_W, createSpreadXScaler } from "./context";
 import { renderPageHalf } from "./render-page-half";
 import {
   drawBackgroundGrid,
@@ -17,10 +17,7 @@ import {
 import { renderColumnSections } from "./render-sections";
 import { COLOR_BLUE } from "./typography";
 
-export async function renderPage(
-  config: PageConfig,
-  rc: RenderContext,
-): Promise<Canvas> {
+export async function renderPage(config: PageConfig, rc: RenderContext): Promise<Canvas> {
   const { assets, colorFilter } = rc;
 
   // 1. Render halves
@@ -73,11 +70,7 @@ export async function renderPage(
 
   // 3. Spread Sections
   if (config.spread?.sections?.length && config.spread.columns) {
-    await renderColumnSections(
-      rcFull,
-      config.spread.sections,
-      config.spread.columns,
-    );
+    await renderColumnSections(rcFull, config.spread.sections, config.spread.columns);
   }
 
   // 4. Dot Matrix
@@ -137,54 +130,27 @@ export async function renderPage(
       if (!colorFilter) {
         await drawSpreadPhoto(rcFull, sp, scaleX);
       }
-      await drawSpreadPhotoLabel(
-        rcFull,
-        sp,
-        scaleX,
-        colorFilter ? "black" : undefined,
-      );
+      await drawSpreadPhotoLabel(rcFull, sp, scaleX, colorFilter ? "black" : undefined);
     }
 
     for (const sp of config.spread.photos) {
       const curSx = sp.x <= REF_W ? sx_left : sx_right;
-      await drawSpreadPhotoFrame(
-        rcFull,
-        sp,
-        scaleX,
-        curSx,
-        colorFilter ? "black" : undefined,
-      );
-      await drawSpreadPhotoSublabel(
-        rcFull,
-        sp,
-        scaleX,
-        curSx,
-        colorFilter ? "black" : undefined,
-      );
+      await drawSpreadPhotoFrame(rcFull, sp, scaleX, curSx, colorFilter ? "black" : undefined);
+      await drawSpreadPhotoSublabel(rcFull, sp, scaleX, curSx, colorFilter ? "black" : undefined);
     }
   }
 
   // 7. Trajectories
   if (config.spread?.trajectories) {
     for (const traj of config.spread.trajectories) {
-      await drawTrajectory(
-        rcFull,
-        traj,
-        scaleX,
-        colorFilter ? "black" : undefined,
-      );
+      await drawTrajectory(rcFull, traj, scaleX, colorFilter ? "black" : undefined);
     }
   }
 
   // 8. Annotations
   if (config.annotations) {
     for (const ann of config.annotations) {
-      await drawAnnotation(
-        rcFull,
-        ann,
-        scaleX,
-        colorFilter ? "black" : undefined,
-      );
+      await drawAnnotation(rcFull, ann, scaleX, colorFilter ? "black" : undefined);
     }
   }
 

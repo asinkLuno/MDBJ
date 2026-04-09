@@ -3,7 +3,7 @@ import type { SharedAssets } from "./assets";
 
 /** Reference dimensions from original field notes (per page) */
 export const REF_W = 680;
-export const REF_H = 1036;
+const REF_H = 1036;
 
 export interface Scaling {
   sx: number;
@@ -33,11 +33,7 @@ export function getScaling(canvasW: number, canvasH: number): Scaling {
  * If x <= REF_W, it uses left page scaling.
  * If x > REF_W, it uses right page scaling.
  */
-export function createSpreadXScaler(
-  leftW: number,
-  sxLeft: number,
-  sxRight: number,
-) {
+export function createSpreadXScaler(leftW: number, sxLeft: number, sxRight: number) {
   return (x: number) => {
     if (x <= REF_W) {
       return x * sxLeft;
