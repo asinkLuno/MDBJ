@@ -915,6 +915,7 @@ export async function drawBackgroundGrid(
     lineWidth?: number;
     blur?: number;
     opacity?: number;
+    margin?: number;
     halftone?: {
       spacing?: number;
       minDotSize?: number;
@@ -923,32 +924,45 @@ export async function drawBackgroundGrid(
   },
 ) {
   const color = config?.color ?? "rgb(145, 203, 174)";
-  const step = (config?.step ?? 250) * ss;
-  const lineWidth = (config?.lineWidth ?? 15) * ss;
+  const step = Math.round((config?.step ?? 250) * ss);
+  const lineWidth = Math.round((config?.lineWidth ?? 15) * ss);
   const blur = (config?.blur ?? 20) * ss;
   const opacity = config?.opacity ?? 1.0;
+  const margin = Math.round((config?.margin ?? 0) * ss);
 
-  // Create a temporary canvas for the grid to apply blur if needed
-  let off = createCanvas(w, h);
+  const innerW = Math.floor(w - margin * 2);
+  const innerH = Math.floor(h - margin * 2);
+
+  if (innerW <= 0 || innerH <= 0) return;
+
+  // Bleed area to prevent edge darkness during blur
+  const bleed = Math.round(blur * 3);
+  const offW = innerW + bleed * 2;
+  const offH = innerH + bleed * 2;
+
+  // Create an oversized temporary canvas
+  let off = createCanvas(offW, offH);
   const octx = off.getContext("2d");
 
   // If we're doing halftone, draw lines in black to get max density/sampling
   octx.strokeStyle = config?.halftone ? "black" : color;
   octx.lineWidth = lineWidth;
 
-  // Draw vertical lines
-  for (let x = 0; x <= w; x += step) {
+  // Draw vertical lines with bleed offset
+  for (let x = 0; x <= innerW; x += step) {
+    const tx = x + bleed;
     octx.beginPath();
-    octx.moveTo(x, 0);
-    octx.lineTo(x, h);
+    octx.moveTo(tx, 0);
+    octx.lineTo(tx, offH);
     octx.stroke();
   }
 
-  // Draw horizontal lines
-  for (let y = 0; y <= h; y += step) {
+  // Draw horizontal lines with bleed offset
+  for (let y = 0; y <= innerH; y += step) {
+    const ty = y + bleed;
     octx.beginPath();
-    octx.moveTo(0, y);
-    octx.lineTo(w, y);
+    octx.moveTo(0, ty);
+    octx.lineTo(offW, ty);
     octx.stroke();
   }
 
@@ -960,16 +974,23 @@ export async function drawBackgroundGrid(
   ctx.globalAlpha = opacity;
 
   if (config?.halftone) {
-    // Halftone dot rendering of the blurred grid
-    const pixels = off.getContext("2d").getImageData(0, 0, w, h).data;
-    const spacing = Math.round((config.halftone.spacing ?? 10) * ss);
+    // Halftone dot rendering of the blurred grid (sampling from center of oversized canvas)
+    const pixels = off.getContext("2d").getImageData(0, 0, offW, offH).data;
+    const spacing = Math.max(
+      1,
+      Math.round((config.halftone.spacing ?? 10) * ss),
+    );
     const minR = (config.halftone.minDotSize ?? 0) * ss;
     const maxR = (config.halftone.maxDotSize ?? 4) * ss;
 
     ctx.fillStyle = color;
-    for (let ly = 0; ly < h; ly += spacing) {
-      for (let lx = 0; lx < w; lx += spacing) {
-        const idx = (ly * w + lx) * 4;
+    for (let ly = 0; ly < innerH; ly += spacing) {
+      for (let lx = 0; lx < innerW; lx += spacing) {
+        // Sample from the center area (skip bleed)
+        const sampleX = Math.floor(lx + bleed);
+        const sampleY = Math.floor(ly + bleed);
+        const idx = (sampleY * offW + sampleX) * 4;
+
         const r = pixels[idx];
         const g = pixels[idx + 1];
         const b = pixels[idx + 2];
@@ -982,14 +1003,24 @@ export async function drawBackgroundGrid(
         const radius = minR + (maxR - minR) * density;
         if (radius > 0.1) {
           ctx.beginPath();
-          ctx.arc(lx, ly, radius, 0, Math.PI * 2);
+          ctx.arc(margin + lx, margin + ly, radius, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
   } else {
-    // Direct drawing of the blurred grid
-    ctx.drawImage(off, 0, 0);
+    // Direct drawing of the central part of the blurred grid
+    ctx.drawImage(
+      off,
+      bleed,
+      bleed,
+      innerW,
+      innerH, // source (skip bleed)
+      margin,
+      margin,
+      innerW,
+      innerH, // destination
+    );
   }
   ctx.restore();
 }

@@ -198,6 +198,7 @@ export interface PageConfig {
     blur?: number;
     opacity?: number;
     page?: "left" | "right" | "both";
+    margin?: number; // Inset from the edges in REF units
     halftone?: {
       spacing?: number;
       minDotSize?: number;
