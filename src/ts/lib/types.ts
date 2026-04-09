@@ -150,6 +150,10 @@ export interface GridConfig {
   margin?: number; // Inset from the edges in REF units (can be fraction for percentage of REF_W/REF_H)
   marginX?: number; // Inset from left/right edges in REF units (can be fraction)
   marginY?: number; // Inset from top/bottom edges in REF units (can be fraction)
+  marginLeft?: number;
+  marginRight?: number;
+  marginTop?: number;
+  marginBottom?: number;
   halftone?: {
     spacing?: number;
     minDotSize?: number;

@@ -134,18 +134,24 @@ export async function drawBackgroundGrid(ctx: any, w: number, h: number, ss: num
   const blur = (config?.blur ?? 20) * ss;
   const opacity = config?.opacity ?? 1.0;
 
-  let marginX_ref = config?.marginX ?? config?.margin ?? 0;
-  let marginY_ref = config?.marginY ?? config?.margin ?? 0;
+  let marginLeft_ref = config?.marginLeft ?? config?.marginX ?? config?.margin ?? 0;
+  let marginRight_ref = config?.marginRight ?? config?.marginX ?? config?.margin ?? 0;
+  let marginTop_ref = config?.marginTop ?? config?.marginY ?? config?.margin ?? 0;
+  let marginBottom_ref = config?.marginBottom ?? config?.marginY ?? config?.margin ?? 0;
 
   // Treat values <= 1 as percentages of REF dimensions
-  if (marginX_ref > 0 && marginX_ref <= 1) marginX_ref *= REF_W;
-  if (marginY_ref > 0 && marginY_ref <= 1) marginY_ref *= REF_H;
+  if (marginLeft_ref > 0 && marginLeft_ref <= 1) marginLeft_ref *= REF_W;
+  if (marginRight_ref > 0 && marginRight_ref <= 1) marginRight_ref *= REF_W;
+  if (marginTop_ref > 0 && marginTop_ref <= 1) marginTop_ref *= REF_H;
+  if (marginBottom_ref > 0 && marginBottom_ref <= 1) marginBottom_ref *= REF_H;
 
-  const marginX = Math.round(marginX_ref * ss);
-  const marginY = Math.round(marginY_ref * ss);
+  const marginLeft = Math.round(marginLeft_ref * ss);
+  const marginRight = Math.round(marginRight_ref * ss);
+  const marginTop = Math.round(marginTop_ref * ss);
+  const marginBottom = Math.round(marginBottom_ref * ss);
 
-  const innerW = Math.floor(w - marginX * 2);
-  const innerH = Math.floor(h - marginY * 2);
+  const innerW = Math.floor(w - (marginLeft + marginRight));
+  const innerH = Math.floor(h - (marginTop + marginBottom));
 
   if (innerW <= 0 || innerH <= 0) return;
 
@@ -207,13 +213,13 @@ export async function drawBackgroundGrid(ctx: any, w: number, h: number, ss: num
         const radius = minR + (maxR - minR) * density;
         if (radius > 0.1) {
           ctx.beginPath();
-          ctx.arc(marginX + lx, marginY + ly, radius, 0, Math.PI * 2);
+          ctx.arc(marginLeft + lx, marginTop + ly, radius, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
   } else {
-    ctx.drawImage(off, bleed, bleed, innerW, innerH, marginX, marginY, innerW, innerH);
+    ctx.drawImage(off, bleed, bleed, innerW, innerH, marginLeft, marginTop, innerW, innerH);
   }
   ctx.restore();
 }
