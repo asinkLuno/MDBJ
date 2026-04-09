@@ -7,10 +7,6 @@ import {
 
 const PLANE = "resources/虾片/plane.png";
 
-// Shape: Extreme Staggered Triple-Path Converging Fan (8-10-6 split).
-// Large perpendicular offsets (~90px) for a wide fleet distribution.
-// All planes are w: 165. Calculated via Python.
-
 const planes: SpreadPhotoLayout[] = [
   {
     file: PLANE,
@@ -304,9 +300,50 @@ planes.forEach((p) => {
   p.labelLetterSpacing = -4;
 });
 
-const trajectories: PageConfig["trajectories"] = [
+const trajectories: PageConfig["spread"]["trajectories"] = [
   {
-    points: planes.map((p) => ({ x: p.x, y: p.y })),
+    points: [
+      { x: 60, y: 800 },
+      { x: 105, y: 803 },
+      { x: 149, y: 804 },
+      { x: 192, y: 805 },
+      { x: 235, y: 804 },
+      { x: 277, y: 802 },
+      { x: 318, y: 799 },
+      { x: 359, y: 794 },
+      { x: 399, y: 788 },
+      { x: 438, y: 781 },
+      { x: 476, y: 773 },
+      { x: 514, y: 764 },
+      { x: 551, y: 754 },
+      { x: 587, y: 742 },
+      { x: 622, y: 730 },
+      { x: 657, y: 716 },
+      { x: 691, y: 702 },
+      { x: 724, y: 686 },
+      { x: 757, y: 670 },
+      { x: 789, y: 652 },
+      { x: 820, y: 634 },
+      { x: 850, y: 615 },
+      { x: 880, y: 595 },
+      { x: 909, y: 574 },
+      { x: 938, y: 552 },
+      { x: 965, y: 530 },
+      { x: 992, y: 507 },
+      { x: 1018, y: 483 },
+      { x: 1044, y: 458 },
+      { x: 1069, y: 433 },
+      { x: 1093, y: 407 },
+      { x: 1116, y: 381 },
+      { x: 1139, y: 354 },
+      { x: 1161, y: 326 },
+      { x: 1183, y: 298 },
+      { x: 1203, y: 269 },
+      { x: 1223, y: 240 },
+      { x: 1243, y: 210 },
+      { x: 1261, y: 180 },
+      { x: 1280, y: 150 },
+    ],
     dash: [0, 8],
     lineWidth: 2,
     lineCap: "round",
@@ -318,10 +355,10 @@ const page: PageConfig = {
   id: "page-03",
   toTraditional: false,
   inkBleedRadius: 1,
-  leftPhotos: [],
-  rightSections: [],
-  spreadPhotos: planes,
-  trajectories,
+  spread: {
+    photos: planes,
+    trajectories,
+  },
   annotations: [createPageAnnotation("3")],
 };
 

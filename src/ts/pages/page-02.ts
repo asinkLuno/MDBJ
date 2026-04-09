@@ -6,6 +6,12 @@ import {
   createPageAnnotation,
 } from "../lib/typography";
 
+import songData from "../../../resources/song_data.json";
+const SONG_RELEASE_DATES = songData.SONG_RELEASE_DATES as Record<
+  string,
+  string
+>;
+
 const SONGS_5525 = [
   "OAOA",
   "孫悟空",
@@ -72,48 +78,6 @@ const SONGS_5526 = [
   "任意門",
 ];
 
-const SONG_RELEASE_DATES: Record<string, string> = {
-  OAOA: "2011-12-16",
-  孫悟空: "2004-11-05",
-  入陣曲: "2013-12-30",
-  乾杯: "2011-12-16",
-  瘋狂世界: "1999-07-07",
-  有些事現在不做一輩子都不會做了: "2011-12-16",
-  約翰藍儂: "2004-11-05",
-  志明與春嬌: "1999-07-07",
-  終結孤單: "2000-07-07",
-  憨人: "2000-07-07",
-  人生海海: "2001-07-06",
-  相信: "2001-07-06",
-  九號球: "2003-11-11",
-  恆星的恆心: "2003-11-11",
-  時光機: "2003-11-11",
-  讓我照顧你: "2004-11-05",
-  回來吧: "2004-11-05",
-  天使: "2006-12-29",
-  一千個世紀: "2006-12-29",
-  我心中尚未崩壞的地方: "2008-10-23",
-  我不願讓你一個人: "2011-12-16",
-  諾亞方舟: "2011-12-16",
-  成名在望: "2016-07-21",
-  DNA: "2009-06-17",
-  派對動物: "2016-07-21",
-  離開地球表面: "2007-07-20",
-  戀愛ING: "2005-08-26",
-  任性: "2022-11-01",
-  突然好想你: "2008-10-23",
-  轉眼: "2016-07-21",
-  任意門: "2016-07-21",
-  盛夏光年: "2006-10-13",
-  如果我們不曾相遇: "2016-07-21",
-  第二人生: "2011-12-16",
-  星空: "2011-12-16",
-  最重要的小事: "2006-12-29",
-  超人: "2004-11-05",
-  愛情萬歲: "2000-07-07",
-  軋車: "1999-07-07",
-};
-
 function getYearValue(song: string): number {
   const dateStr = SONG_RELEASE_DATES[song];
   if (!dateStr) return 0;
@@ -171,7 +135,6 @@ function createArrow(
 }
 
 const trajectories: TrajectoryPath[] = [];
-const annotations: Annotation[] = [];
 
 // ================= 背景色块区域 =================
 for (let x = 8; x <= 22.5; x += 0.5) {
@@ -220,7 +183,6 @@ trajectories.push({
   points: [pOrigin, pTimeEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  // dash: [1, 3],
   dash: [],
 });
 trajectories.push(createArrow(pOrigin, pTimeEnd, COLOR_BLACK));
@@ -229,7 +191,6 @@ trajectories.push({
   points: [pOrigin, pXEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  // dash: [1, 3],
   dash: [],
 });
 trajectories.push(createArrow(pOrigin, pXEnd, COLOR_BLACK));
@@ -238,7 +199,6 @@ trajectories.push({
   points: [pOrigin, pZEnd],
   color: COLOR_BLACK,
   lineWidth: 1.5,
-  // dash: [1, 3],
   dash: [],
 });
 trajectories.push(createArrow(pOrigin, pZEnd, COLOR_BLACK));
@@ -264,9 +224,8 @@ trajectories.push({
   dash: [6, 2, 1, 2],
 });
 
-// ================= 标签 & 图例 (仅排版优化) =================
+// ================= 标签 & 图例 =================
 
-// 修改：過濾掉連續相同的日期，只標記第一個
 let lastDate5525: string | null = null;
 const songAnnotations5525: Annotation[] = [];
 SONGS_5525.forEach((song, idx) => {
@@ -274,24 +233,22 @@ SONGS_5525.forEach((song, idx) => {
   if (currentDate !== lastDate5525) {
     const p = project(idx + 1, getYearValue(song), 0);
     songAnnotations5525.push({
-      x: p.x + 8, // 向外推，避免与散点重叠
-      y: p.y - 25, // 微调居中
+      x: p.x + 8,
+      y: p.y - 25,
       w: 55,
       h: 10,
       label: currentDate,
       color: COLOR_BLUE,
       noFrame: true,
       angle: -90,
-      fontSize: 9, // 缩小字号，增强精密感
+      fontSize: 9,
       fontFamily: "3270NerdFont-Regular",
       bold: true,
     });
-
-    lastDate5525 = currentDate; // 更新上一個日期
+    lastDate5525 = currentDate;
   }
 });
 
-// 修改：過濾掉連續相同的日期，只標記第一個
 let lastDate5526: string | null = null;
 const songAnnotations5526: Annotation[] = [];
 SONGS_5526.forEach((song, idx) => {
@@ -299,20 +256,19 @@ SONGS_5526.forEach((song, idx) => {
   if (currentDate !== lastDate5526) {
     const p = project(0, getYearValue(song), idx + 1);
     songAnnotations5526.push({
-      x: p.x - 16, // 向外推
+      x: p.x - 16,
       y: p.y - 25,
       w: 55,
       h: 10,
       label: currentDate,
       color: COLOR_BLUE,
       noFrame: true,
-      angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
-      fontSize: 9, // 缩小字号，增强精密感
+      angle: -120,
+      fontSize: 9,
       fontFamily: "3270NerdFont-Regular",
       bold: true,
     });
-
-    lastDate5526 = currentDate; // 更新上一個日期
+    lastDate5526 = currentDate;
   }
 });
 
@@ -322,12 +278,12 @@ const axisAnnotations: Annotation[] = [
     y: pTimeEnd.y - 50,
     w: 60,
     h: 10,
-    label: "TIME [YR]", // 增加工程感代号
+    label: "TIME [YR]",
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
     angle: -90,
-    fontSize: 14, // 缩小字号
+    fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
   {
@@ -352,7 +308,7 @@ const axisAnnotations: Annotation[] = [
     color: COLOR_BLACK,
     noFrame: true,
     bold: true,
-    angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
+    angle: -120,
     fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
@@ -366,9 +322,9 @@ const inChartTitleAndLegend: Annotation[] = [
     y: LEGEND_Y - 170,
     w: 400,
     h: 20,
-    label: "FIG.1 - SONGSET (5525 v.s. 5526)", // 全大写前缀编号
+    label: "FIG.1 - SONGSET (5525 v.s. 5526)",
     color: COLOR_BLACK,
-    fontSize: 18, // 收敛标题大小，作为图框标注
+    fontSize: 18,
     bold: true,
     fontFamily: "3270NerdFont-Regular",
     angle: -90,
@@ -376,15 +332,12 @@ const inChartTitleAndLegend: Annotation[] = [
   },
 ];
 
-// ================= 在背景图上增加趋势说明文字 =================
-// 取得蓝色块大致中上方的坐标，悬浮文本
 const pBlueTextCenter = project(18, 2010, 0);
-// 取得红色块大致中上方的坐标，悬浮文本
 const pRedTextCenter = project(0, 2010, 18);
 
 const trendTextAnnotations: Annotation[] = [
   {
-    x: pBlueTextCenter.x - 275, // 微调偏移量放置在色塊旁
+    x: pBlueTextCenter.x - 275,
     y: pBlueTextCenter.y,
     w: 160,
     h: 12,
@@ -393,70 +346,69 @@ const trendTextAnnotations: Annotation[] = [
     noFrame: true,
     bold: true,
     angle: -90,
-    fontSize: 14, // 说明文字字号介于数据点和坐标轴之间
+    fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
   {
     x: pRedTextCenter.x - 275,
-    y: pRedTextCenter.y - 30, // 注意这里是加号，基于 Canvas Y 轴向下
+    y: pRedTextCenter.y - 30,
     w: 160,
     h: 12,
     label: "TREND: DESCENDING [-]",
     color: COLOR_BLUE,
     noFrame: true,
     bold: true,
-    angle: -120, // 跟随 z 轴方向（atan2(cos(π/6), sin(π/6)) = 60°）
+    angle: -120,
     fontSize: 14,
     fontFamily: "3270NerdFont-Regular",
   },
 ];
 
-// ================= 生成 PageConfig =================
 const page: PageConfig = {
   id: "page-02",
   toTraditional: true,
   inkBleedRadius: 1,
-  leftPhotos: [],
-  dotMatrix: {
-    points: [
-      // 保持原始精确点位，不生成随机墨迹
-      ...points5525.map((p) => ({
-        x: p.x,
-        y: p.y,
-        color: COLOR_BLUE,
-        size: 4,
-      })),
-      ...points5526.map((p) => ({
-        x: p.x,
-        y: p.y,
-        color: COLOR_BLUE,
-        size: 4,
-      })),
+  right: {
+    sections: [
+      {
+        text: "图表以Y轴指示发行年份\nX轴与Z轴分别对应歌单5525和5526的曲目序号\n\n发行年份随曲目序号的分布特征显示\n两份歌单的演变趋势具有显著差异\n\n在蓝色背景标注的观测窗口内\n5525呈显著增长趋势\n而5526呈递减趋势\n\n该分布特征提示\n5525的选曲逻辑倾向于时序递进\n而5526则倾向于时序回溯",
+        options: {
+          x: 42,
+          y: 752 - 38 * 7,
+          fontSize: 36,
+          fontFamily: "ChenYuluoyan",
+          color: COLOR_BLUE,
+          wrapWidth: 600,
+          lineHeight: 38,
+        },
+      },
     ],
   },
-  rightSections: [
-    {
-      text: "图表以Y轴指示发行年份\nX轴与Z轴分别对应歌单5525和5526的曲目序号\n\n发行年份随曲目序号的分布特征显示\n两份歌单的演变趋势具有显著差异\n\n在蓝色背景标注的观测窗口内\n5525呈显著增长趋势\n而5526呈递减趋势\n\n该分布特征提示\n5525的选曲逻辑倾向于时序递进\n而5526则倾向于时序回溯",
-      options: {
-        x: 42,
-        y: 752 - 38 * 7,
-        fontSize: 36,
-        fontFamily: "ChenYuluoyan",
-        color: COLOR_BLUE,
-        wrapWidth: 600,
-        lineHeight: 38,
-        // bold: true,
-      },
+  spread: {
+    dotMatrix: {
+      points: [
+        ...points5525.map((p) => ({
+          x: p.x,
+          y: p.y,
+          color: COLOR_BLUE,
+          size: 4,
+        })),
+        ...points5526.map((p) => ({
+          x: p.x,
+          y: p.y,
+          color: COLOR_BLUE,
+          size: 4,
+        })),
+      ],
     },
-  ],
-  trajectories,
+    trajectories,
+  },
   annotations: [
-    ...annotations.map((a) => ({ ...a, noFrame: true, angle: -90 })),
     ...songAnnotations5525,
     ...songAnnotations5526,
     ...axisAnnotations,
     ...inChartTitleAndLegend,
-    ...trendTextAnnotations, // 加入图上的趋势说明文字
+    ...trendTextAnnotations,
     createPageAnnotation("2"),
   ],
 };

@@ -9,23 +9,8 @@ import type {
   TrajectoryPath,
   Annotation,
 } from "./types";
-import type { SharedAssets } from "./assets";
 import { FONT_TAPE_LABEL, COLOR_BLUE, FONT_ANNOTATION } from "./typography";
-
-/**
- * Reference dimensions from original field notes (per page)
- */
-export const REF_W = 680;
-export const REF_H = 1036;
-
-/**
- * Calculate scaling factors based on canvas dimensions
- */
-export function getScaling(canvasW: number, canvasH: number) {
-  const sx = canvasW / REF_W;
-  const sy = canvasH / REF_H;
-  return { sx, sy, ss: Math.min(sx, sy) };
-}
+import { REF_W, type RenderContext } from "./context";
 
 /**
  * A fast 1D box blur.
@@ -44,7 +29,6 @@ function boxBlur1D(
       g = 0,
       b = 0,
       a = 0;
-    // Initial window
     for (let j = -radius; j <= radius; j++) {
       const pos = Math.min(Math.max(j, 0), (horizontal ? w : h) - 1);
       const idx = (horizontal ? i * w + pos : pos * w + i) * 4;
@@ -53,7 +37,6 @@ function boxBlur1D(
       b += src[idx + 2];
       a += src[idx + 3];
     }
-    // Slide window
     for (let j = 0; j < (horizontal ? w : h); j++) {
       const idx = (horizontal ? i * w + j : j * w + i) * 4;
       dst[idx] = r / weight;
@@ -92,7 +75,6 @@ export function applyGaussianBlur(canvas: Canvas, sigma: number) {
   const src = imageData.data;
   const dst = new Uint8ClampedArray(src.length);
 
-  // Box radius for 3 passes to approx Gaussian
   const r = Math.floor(Math.sqrt((12 * sigma * sigma) / 3 + 1));
   const radius = Math.max(1, Math.floor((r - 1) / 2));
 
@@ -110,14 +92,9 @@ export function applyGaussianBlur(canvas: Canvas, sigma: number) {
 /**
  * Draw a photo with paper texture and optional tapes
  */
-export async function drawPhoto(
-  ctx: CanvasRenderingContext2D,
-  photoConfig: PhotoLayout,
-  assets: SharedAssets,
-  ss: number,
-  sx: number,
-  sy: number,
-) {
+export async function drawPhoto(rc: RenderContext, photoConfig: PhotoLayout) {
+  const { ctx, assets, scaling } = rc;
+  const { sx, sy, ss } = scaling;
   const {
     file,
     x,
@@ -153,21 +130,18 @@ export async function drawPhoto(
     -h / 2,
   );
 
-  drawTapes(ctx, assets.tapes, photoTapes, scaledW, h, assets.fontName);
+  drawTapes(rc, photoTapes, scaledW, h);
 
   ctx.restore();
 }
 
 export async function drawSpreadPhoto(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   sp: SpreadPhotoLayout,
-  assets: SharedAssets,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
-  sx_left: number,
-  sx_right: number,
 ) {
+  const { ctx, assets, scaling } = rc;
+  const { sy, ss, sx: sx_main } = scaling;
   const photo = await loadImage(sp.file);
   const scaledW = sp.w * ss;
   const h = Math.round((scaledW * photo.height) / photo.width);
@@ -180,16 +154,15 @@ export async function drawSpreadPhoto(
   ctx.rotate(angle);
   if (sp.scaleY !== undefined) ctx.scale(1, sp.scaleY);
 
-  // Composite plane + texture on an offscreen canvas first
   let off = applyPaperTexture(photo, assets.texture, 0.18, scaledW, h);
 
   if (sp.blur) {
     off = applyGaussianBlur(off, sp.blur * ss);
   }
 
+  const curSx = sp.x <= REF_W ? sx_main : sx_main; // sx_main is usually fine for spread
   (ctx as any).shadowBlur = (sp.shadowBlur ?? 8) * ss;
-  (ctx as any).shadowOffsetX =
-    (sp.shadowOffsetX ?? 2) * (sp.x <= REF_W ? sx_left : sx_right);
+  (ctx as any).shadowOffsetX = (sp.shadowOffsetX ?? 2) * curSx;
   (ctx as any).shadowOffsetY = (sp.shadowOffsetY ?? 4) * sy;
   (ctx as any).shadowColor = sp.shadowColor ?? "rgba(0,0,0,0.22)";
 
@@ -198,15 +171,14 @@ export async function drawSpreadPhoto(
 }
 
 export async function drawSpreadPhotoLabel(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   sp: SpreadPhotoLayout,
-  assets: SharedAssets,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
   colorOverride?: string,
 ) {
   if (!sp.label) return;
+  const { ctx, assets, scaling } = rc;
+  const { sy, ss } = scaling;
   const scaledW = sp.w * ss;
   const angle = (sp.rot * Math.PI) / 180;
 
@@ -230,16 +202,15 @@ export async function drawSpreadPhotoLabel(
 }
 
 export async function drawSpreadPhotoFrame(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   sp: SpreadPhotoLayout,
-  assets: SharedAssets,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
   curSx: number,
   colorOverride?: string,
 ) {
   if (!sp.showFrame) return;
+  const { ctx, assets, scaling } = rc;
+  const { sy, ss } = scaling;
   const photo = await loadImage(sp.file);
   const scaledW = sp.w * ss;
   const h = Math.round((scaledW * photo.height) / photo.width);
@@ -267,16 +238,15 @@ export async function drawSpreadPhotoFrame(
 }
 
 export async function drawSpreadPhotoSublabel(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   sp: SpreadPhotoLayout,
-  assets: SharedAssets,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
   curSx: number,
   colorOverride?: string,
 ) {
   if (!sp.sublabel) return;
+  const { ctx, assets, scaling } = rc;
+  const { sy, ss } = scaling;
   const photo = await loadImage(sp.file);
   const scaledW = sp.w * ss;
   const h = Math.round((scaledW * photo.height) / photo.width);
@@ -309,14 +279,14 @@ export async function drawSpreadPhotoSublabel(
 }
 
 export function drawTrajectory(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   traj: TrajectoryPath,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
   colorOverride?: string,
 ) {
   if (traj.points.length < 2) return;
+  const { ctx, scaling } = rc;
+  const { sy, ss } = scaling;
   const color = colorOverride ?? traj.color ?? "rgba(80,160,220,0.7)";
   ctx.save();
   ctx.globalAlpha = traj.opacity ?? 1.0;
@@ -356,14 +326,13 @@ export function drawTrajectory(
 }
 
 export function drawAnnotation(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   ann: Annotation,
-  assets: SharedAssets,
-  ss: number,
   scaleX: (x: number) => number,
-  sy: number,
   colorOverride?: string,
 ) {
+  const { ctx, assets, scaling } = rc;
+  const { sy, ss } = scaling;
   const ax = scaleX(ann.x);
   const ay = ann.y * sy;
   const color = colorOverride ?? ann.color ?? COLOR_BLUE;
@@ -376,7 +345,6 @@ export function drawAnnotation(
     drawTargetingFrame(ctx, ax, ay, scaledW, scaledH, color, ss);
   }
 
-  // Center crosshair (opt-in)
   if (ann.crosshair) {
     ctx.save();
     ctx.strokeStyle = color;
@@ -392,7 +360,6 @@ export function drawAnnotation(
     ctx.restore();
   }
 
-  // Label below box
   ctx.save();
   ctx.fillStyle = color;
   ctx.globalAlpha = 0.9;
@@ -421,17 +388,6 @@ export function drawAnnotation(
   ctx.restore();
 }
 
-/**
- * Apply paper texture onto an image or canvas.
- * Texture is clipped to existing pixels (source-atop), so transparent
- * backgrounds are unaffected. Returns the composited canvas.
- *
- * @param source   Image or Canvas to apply texture to
- * @param texture  Paper texture Image from SharedAssets
- * @param alpha    Texture opacity, default 0.18
- * @param targetW  Render width (defaults to source.width)
- * @param targetH  Render height (defaults to source.height)
- */
 export function applyPaperTexture(
   source: Canvas | Image,
   texture: Image,
@@ -444,7 +400,6 @@ export function applyPaperTexture(
   const off = createCanvas(w, h);
   const ctx = off.getContext("2d") as any;
   ctx.drawImage(source, 0, 0, w, h);
-  // Cover: scale texture to fill entire canvas (no uncovered edges)
   const natAspect = texture.width / texture.height;
   let texW: number, texH: number;
   if (w / h > natAspect) {
@@ -462,19 +417,6 @@ export function applyPaperTexture(
   return off;
 }
 
-/**
- * Draw a HUD-style targeting frame: full rectangle + bold corner brackets + mid-side ticks.
- * Coordinates are in the current canvas transform space (works in both rotated local space
- * and absolute canvas space).
- *
- * @param ctx    Canvas 2D context
- * @param x      Left edge of frame
- * @param y      Top edge of frame
- * @param w      Frame width
- * @param h      Frame height
- * @param color  Stroke color
- * @param ss     Scale factor (default 1.0)
- */
 export function drawTargetingFrame(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -484,7 +426,7 @@ export function drawTargetingFrame(
   color: string,
   ss = 1.0,
   cornersOnly = false,
-  lw?: number, // override line width (in screen px, already scaled)
+  lw?: number,
 ): void {
   const cLen = Math.round(Math.min(w, h) * 0.22);
   const tick = Math.round(Math.min(w, h) * 0.08);
@@ -496,14 +438,12 @@ export function drawTargetingFrame(
   ctx.setLineDash([]);
 
   if (!cornersOnly) {
-    // Full rectangle (semi-transparent)
     ctx.lineWidth = lw ? lw * 0.6 : 1.4 * ss;
     ctx.globalAlpha = 0.65;
     ctx.strokeRect(x, y, w, h);
     ctx.globalAlpha = 1;
   }
 
-  // Corner brackets
   ctx.lineWidth = lw ?? 2.4 * ss;
   [
     [
@@ -539,7 +479,6 @@ export function drawTargetingFrame(
     return;
   }
 
-  // Mid-side tick marks
   ctx.lineWidth = 1.0 * ss;
   [
     [
@@ -568,10 +507,6 @@ export function drawTargetingFrame(
   ctx.restore();
 }
 
-/**
- * Map each HanLP token to its {x, w} position in the rendered text by
- * scanning left-to-right and skipping gaps (spaces, punctuation not in tokens).
- */
 function computeTokenXPositions(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -583,7 +518,6 @@ function computeTokenXPositions(
   let curX = startX;
 
   for (const token of tokens) {
-    // Advance past characters that don't start this token
     while (charIdx < text.length && !text.startsWith(token, charIdx)) {
       curX += ctx.measureText(text[charIdx]).width;
       charIdx++;
@@ -597,10 +531,6 @@ function computeTokenXPositions(
   return positions;
 }
 
-/**
- * Draw a curved arc with arrowhead from (x1, y) to (x2, y), arcing upward.
- * cpDrop controls how far above y the bezier control point sits.
- */
 function drawArcArrow(
   ctx: CanvasRenderingContext2D,
   x1: number,
@@ -622,7 +552,6 @@ function drawArcArrow(
   ctx.quadraticCurveTo(mx, cpY, x2, y);
   ctx.stroke();
 
-  // Arrowhead: tangent at t=1 of quadratic bezier = 2*(end - cp)
   ctx.setLineDash([]);
   ctx.lineWidth = 1.2 * ss;
   const tdx = x2 - mx;
@@ -638,25 +567,20 @@ function drawArcArrow(
   ctx.restore();
 }
 
-/**
- * Draw text and overlay targeting-frame highlights on specified characters.
- * Renders the full string first, then measures per-character widths to place frames.
- * If relationArrows are provided they take priority: subject/predicate/object tokens
- * get individual frames and a curved arc arrow is drawn above the line.
- */
 export function drawHighlightedLine(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   text: string,
   x: number,
   baselineY: number,
   fontSize: number,
   highlights: CharHighlight[],
-  ss: number,
   relationArrows?: RelationArrow[],
   dotHighlights?: CharHighlight[],
-  colorFilter?: (color: string) => boolean,
   baseColor: string = COLOR_BLUE,
 ): void {
+  const { ctx, scaling, colorFilter } = rc;
+  const { ss } = scaling;
+
   if (!colorFilter || colorFilter(baseColor)) {
     ctx.fillText(text, x, baselineY);
   }
@@ -681,10 +605,8 @@ export function drawHighlightedLine(
           hl.char.length > 1 &&
           (hl.char.startsWith("我") || hl.char.startsWith("你"))
         ) {
-          // Center on first character
           charX += ctx.measureText(hl.char[0]).width / 2;
         } else {
-          // Center on whole highlight
           charX += ctx.measureText(hl.char).width / 2;
         }
 
@@ -746,7 +668,6 @@ export function drawHighlightedLine(
     return;
   }
 
-  // Fallback: plain character-level highlights
   const hlMap = new Map(highlights.map((h) => [h.char, h.color]));
   let curX = x;
   for (const char of text) {
@@ -771,25 +692,14 @@ export function drawHighlightedLine(
   }
 }
 
-/**
- * Draw tape stickers onto a photo.
- * Must be called inside a translated+rotated ctx (origin = photo center).
- *
- * @param ctx        Canvas context, already translated to photo center
- * @param tapes      Tape images from SharedAssets
- * @param configs    Tape configs from the photo layout
- * @param w          Photo display width
- * @param h          Photo display height
- * @param fontName   Font for tape labels
- */
 function drawTapes(
-  ctx: CanvasRenderingContext2D,
-  tapes: Image[],
+  rc: RenderContext,
   configs: TapeConfig[],
   w: number,
   h: number,
-  fontName: string,
 ): void {
+  const { ctx, assets } = rc;
+  const { tapes, fontName } = assets;
   for (const tc of configs) {
     const t = tapes[tc.idx % tapes.length];
     const tw = Math.round(w * (tc.tapeWidth ?? 0.6));
@@ -814,47 +724,84 @@ function drawTapes(
   }
 }
 
-/**
- * Draw a halftone dot pattern based on an image's luminance/alpha.
- *
- * @param ctx       Canvas context
- * @param source    Image file path, Image object, or Canvas object
- * @param centerX   Center X coordinate in canvas pixels
- * @param centerY   Center Y coordinate in canvas pixels
- * @param w_ref     Target width in REF units
- * @param color     Dot color (default COLOR_BLUE)
- * @param spacing   Dot spacing in pixels (default 10)
- * @param minDotSize Minimum dot radius for background (default 0)
- * @param maxDotSize Maximum dot radius for foreground (default 0.9 * spacing / 2)
- * @param opacity   Overall opacity (default 1.0)
- * @param ss        Min scale factor
- * @param blur      Optional blur radius in pixels
- */
 export async function drawHalftone(
-  ctx: CanvasRenderingContext2D,
-  source: string | Image | Canvas,
+  rc: RenderContext,
+  config: {
+    file?: string;
+    text?: string;
+    fontSize?: number;
+    fontFamily?: string;
+    bold?: boolean;
+    scaleY?: number;
+    color?: string;
+    spacing?: number;
+    minDotSize?: number;
+    maxDotSize?: number;
+    opacity?: number;
+    blur?: number;
+    w: number;
+  },
   centerX: number,
   centerY: number,
-  w_ref: number,
-  color: string = COLOR_BLUE,
-  spacing: number = 8,
-  minDotSize: number = 0,
-  maxDotSize: number = 4,
-  opacity: number = 1.0,
-  ss: number,
-  blur?: number,
 ) {
+  const { ctx, assets, scaling } = rc;
+  const { ss } = scaling;
+  const {
+    file,
+    text,
+    fontSize: fs_ref,
+    fontFamily: ff_ref,
+    bold,
+    scaleY,
+    color = COLOR_BLUE,
+    spacing = 8,
+    minDotSize = 0,
+    maxDotSize = 4,
+    opacity = 1.0,
+    blur,
+    w: w_ref,
+  } = config;
+
   let img: Image | Canvas;
-  if (typeof source === "string") {
-    img = await loadImage(source);
+  if (text) {
+    const fontSize = (fs_ref ?? 120) * ss;
+    const fontName = ff_ref ?? assets.fontName;
+    const isBold = bold ?? true;
+    const sy_val = scaleY ?? 1;
+    const font = `${isBold ? "bold " : ""}${fontSize}px "${fontName}"`;
+    const off = createCanvas(1, 1);
+    const octx = off.getContext("2d");
+    octx.font = font;
+    const metrics = octx.measureText(text);
+    const pad = Math.ceil(fontSize * 0.2);
+    const tw = Math.ceil(metrics.width) + pad * 2;
+    const th = Math.ceil(fontSize * 1.4 * sy_val) + pad * 2;
+
+    const textCanvas = createCanvas(tw, th);
+    const tctx = textCanvas.getContext("2d");
+    tctx.font = font;
+    tctx.fillStyle = "black";
+    tctx.textBaseline = "middle";
+    if (scaleY) {
+      tctx.scale(1, scaleY);
+    }
+    const drawY = th / 2 / sy_val;
+    tctx.fillText(text, pad, drawY);
+    if (isBold) {
+      tctx.strokeStyle = "black";
+      tctx.lineWidth = fontSize * 0.05;
+      tctx.strokeText(text, pad, drawY);
+    }
+    img = textCanvas;
+  } else if (file) {
+    img = await loadImage(file);
   } else {
-    img = source;
+    return;
   }
 
   const scaledW = Math.round(w_ref * ss);
   const scaledH = Math.round((scaledW * img.height) / img.width);
 
-  // Draw image to offscreen canvas to sample pixels
   let off = createCanvas(scaledW, scaledH);
   const octx = off.getContext("2d");
   octx.drawImage(img as any, 0, 0, scaledW, scaledH);
@@ -884,7 +831,6 @@ export async function drawHalftone(
       const b = pixels[idx + 2];
       const a = pixels[idx + 3];
 
-      // Luminance: 0 to 1, where 1 is white (no ink) and 0 is black (max ink)
       const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
       const alpha = a / 255;
       const density = (1 - luminance) * alpha;
@@ -901,27 +847,12 @@ export async function drawHalftone(
   ctx.restore();
 }
 
-/**
- * Draw a coarse grid with optional Gaussian blur directly on a canvas.
- */
 export async function drawBackgroundGrid(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
   ss: number,
-  config?: {
-    color?: string;
-    step?: number;
-    lineWidth?: number;
-    blur?: number;
-    opacity?: number;
-    margin?: number;
-    halftone?: {
-      spacing?: number;
-      minDotSize?: number;
-      maxDotSize?: number;
-    };
-  },
+  config?: any,
 ) {
   const color = config?.color ?? "rgb(145, 203, 174)";
   const step = Math.round((config?.step ?? 250) * ss);
@@ -935,20 +866,16 @@ export async function drawBackgroundGrid(
 
   if (innerW <= 0 || innerH <= 0) return;
 
-  // Bleed area to prevent edge darkness during blur
   const bleed = Math.round(blur * 3);
   const offW = innerW + bleed * 2;
   const offH = innerH + bleed * 2;
 
-  // Create an oversized temporary canvas
   let off = createCanvas(offW, offH);
   const octx = off.getContext("2d");
 
-  // If we're doing halftone, draw lines in black to get max density/sampling
   octx.strokeStyle = config?.halftone ? "black" : color;
   octx.lineWidth = lineWidth;
 
-  // Draw vertical lines with bleed offset
   for (let x = 0; x <= innerW; x += step) {
     const tx = x + bleed;
     octx.beginPath();
@@ -957,7 +884,6 @@ export async function drawBackgroundGrid(
     octx.stroke();
   }
 
-  // Draw horizontal lines with bleed offset
   for (let y = 0; y <= innerH; y += step) {
     const ty = y + bleed;
     octx.beginPath();
@@ -974,7 +900,6 @@ export async function drawBackgroundGrid(
   ctx.globalAlpha = opacity;
 
   if (config?.halftone) {
-    // Halftone dot rendering of the blurred grid (sampling from center of oversized canvas)
     const pixels = off.getContext("2d").getImageData(0, 0, offW, offH).data;
     const spacing = Math.max(
       1,
@@ -986,7 +911,6 @@ export async function drawBackgroundGrid(
     ctx.fillStyle = color;
     for (let ly = 0; ly < innerH; ly += spacing) {
       for (let lx = 0; lx < innerW; lx += spacing) {
-        // Sample from the center area (skip bleed)
         const sampleX = Math.floor(lx + bleed);
         const sampleY = Math.floor(ly + bleed);
         const idx = (sampleY * offW + sampleX) * 4;
@@ -1009,17 +933,16 @@ export async function drawBackgroundGrid(
       }
     }
   } else {
-    // Direct drawing of the central part of the blurred grid
     ctx.drawImage(
       off,
       bleed,
       bleed,
       innerW,
-      innerH, // source (skip bleed)
+      innerH,
       margin,
       margin,
       innerW,
-      innerH, // destination
+      innerH,
     );
   }
   ctx.restore();

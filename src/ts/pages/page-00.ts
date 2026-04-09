@@ -9,10 +9,8 @@ const page: PageConfig = {
   id: "page-00",
   toTraditional: true,
   inkBleedRadius: 0,
-  leftBgColor: bg_color,
-  rightBgColor: bg_color,
-  leftPhotos: [],
-  rightSections: [],
+  left: { bgColor: bg_color },
+  right: { bgColor: bg_color },
   backgroundGrid: {
     color: "rgb(145, 203, 174)",
     step: 17,
@@ -26,32 +24,34 @@ const page: PageConfig = {
       maxDotSize: 2,
     },
   },
-  halftones: [
-    {
-      text: "FIELD NOTES",
-      fontSize: 120,
-      fontFamily: "3270NerdFont-Regular",
-      blur: 7,
-      x: 1005, // Center of the right page
-      y: 200 - y_offset,
-      w: 660,
-      color: text_color,
-      spacing: 4,
-      maxDotSize: 2,
-      bold: true,
-      scaleY: 4,
-    },
-    {
-      file: "resources/虾片/mayday_logo.png",
-      x: 680,
-      y: 765 - y_offset,
-      w: 1000,
-      blur: 50,
-      color: text_color,
-      spacing: 4,
-      maxDotSize: 2,
-    },
-  ],
+  spread: {
+    halftones: [
+      {
+        text: "FIELD NOTES",
+        fontSize: 120,
+        fontFamily: "3270NerdFont-Regular",
+        blur: 7,
+        x: 1005,
+        y: 200 - y_offset,
+        w: 660,
+        color: text_color,
+        spacing: 4,
+        maxDotSize: 2,
+        bold: true,
+        scaleY: 4,
+      },
+      {
+        file: "resources/虾片/mayday_logo.png",
+        x: 680,
+        y: 765 - y_offset,
+        w: 1000,
+        blur: 50,
+        color: text_color,
+        spacing: 4,
+        maxDotSize: 2,
+      },
+    ],
+  },
 };
 
 export default page;

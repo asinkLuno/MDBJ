@@ -2,10 +2,10 @@
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "project": ["src/ts/**/*.ts"],
   "ignoreFiles": [
-    "src/ts/get-stats.ts",
     "src/ts/generate-grid-variants.ts"
   ],
   "ignoreIssues": {
-    "src/ts/lib/render-utils.ts": ["exports"]
+    "src/ts/lib/render-utils.ts": ["exports"],
+    "src/ts/lib/typography.ts": ["exports"]
   }
 }

@@ -1,10 +1,6 @@
 import type { PageConfig, SpreadPhotoLayout } from "../lib/types";
 import { COLOR_BLUE, createPageAnnotation } from "../lib/typography";
 
-// Shape: Left page = dot matrix wavy tide.
-// Right page: clean member ID column.
-// Left pile calculated via Python pymunk simulation.
-
 const pile: SpreadPhotoLayout[] = [
   {
     file: "resources/虾片/monster.png",
@@ -297,22 +293,25 @@ const page: PageConfig = {
   id: "page-01",
   toTraditional: true,
   inkBleedRadius: 1,
-  leftPhotos: [],
-  rightSections: [
-    {
-      text: "本次现场共采集纸质标本 5*5=25 件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能\n\n经研究，该图案代表\nMONSTER\nSTONE\nMASA\nMING\nASHIN\n\n我？我不在上面ㄟ\n我在写野簿",
-      options: {
-        x: 42,
-        y: 340 + 38 * 2,
-        fontSize: 36,
-        fontFamily: "ChenYuluoyan",
-        color: COLOR_BLUE,
-        wrapWidth: 600,
-        lineHeight: 38,
+  right: {
+    sections: [
+      {
+        text: "本次现场共采集纸质标本 5*5=25 件\n经交叉比对发现\n采集到的25件纸质标本在形态上可分为五类\n且每种形态分别对应特定的人物形象\n展现出明确的象征性功能\n\n经研究，该图案代表\nMONSTER\nSTONE\nMASA\nMING\nASHIN\n\n我？我不在上面ㄟ\n我在写野簿",
+        options: {
+          x: 42,
+          y: 340 + 38 * 2,
+          fontSize: 36,
+          fontFamily: "ChenYuluoyan",
+          color: COLOR_BLUE,
+          wrapWidth: 600,
+          lineHeight: 38,
+        },
       },
-    },
-  ],
-  spreadPhotos: pile,
+    ],
+  },
+  spread: {
+    photos: pile,
+  },
   annotations: [createPageAnnotation("1")],
 };
 

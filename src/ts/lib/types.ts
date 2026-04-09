@@ -76,22 +76,6 @@ export interface Annotation {
   bold?: boolean;
 }
 
-export interface LeftText {
-  text: string;
-  x: number;
-  y: number;
-  fontSize?: number;
-  color?: string;
-  letterSpacing?: number;
-  lineHeight?: number;
-  fontFamily?: string;
-  wrapWidth?: number;
-  blur?: number;
-  textAlign?: "left" | "center" | "right";
-  bold?: boolean;
-  highlights?: CharHighlight[];
-}
-
 export interface TrajectoryPath {
   points: Array<{ x: number; y: number }>; // polyline control points on spread canvas
   color?: string;
@@ -156,53 +140,57 @@ export interface HalftoneConfig {
   scaleY?: number;
 }
 
+export interface GridConfig {
+  color?: string;
+  step?: number;
+  lineWidth?: number;
+  blur?: number;
+  opacity?: number;
+  page?: "left" | "right" | "both";
+  margin?: number; // Inset from the edges in REF units
+  halftone?: {
+    spacing?: number;
+    minDotSize?: number;
+    maxDotSize?: number;
+  };
+}
+
+export interface DotMatrixConfig {
+  points?: { x: number; y: number; color?: string; size?: number }[];
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  spacing?: number;
+  color?: string;
+  waveAmplitude?: number;
+  waveFrequency?: number;
+  dotSize?: number;
+  opacity?: number;
+}
+
+export interface PageHalfConfig {
+  bgColor?: string;
+  photos?: PhotoLayout[];
+  sections?: Section[];
+  columns?: ColumnLayout;
+  halftones?: HalftoneConfig[];
+}
+
 export interface PageConfig {
   id: string;
-  leftBgColor?: string;
-  rightBgColor?: string;
-  leftPhotos: PhotoLayout[];
-  leftTexts?: LeftText[];
-  leftSections?: Section[]; // column-rendered sections on the left page
-  leftColumns?: ColumnLayout;
-  rightSections?: Section[];
-  rightColumns?: ColumnLayout;
-  rightPhotos?: PhotoLayout[];
-  /** Sections that flow across both pages as a single canvas. xStarts use
-   *  spread-space REF coordinates (0–2×REF_W), so right-page columns start
-   *  at REF_W + margin (e.g. REF_W=680, col at x=695). */
-  spreadSections?: Section[];
-  spreadColumns?: ColumnLayout;
-  annotations?: Annotation[];
-  spreadPhotos?: SpreadPhotoLayout[];
-  trajectories?: TrajectoryPath[];
-  dotMatrix?: {
-    points?: { x: number; y: number; color?: string; size?: number }[];
-    x?: number;
-    y?: number;
-    w?: number;
-    h?: number;
-    spacing?: number;
-    color?: string;
-    waveAmplitude?: number;
-    waveFrequency?: number;
-    dotSize?: number;
-    opacity?: number;
+  left?: PageHalfConfig;
+  right?: PageHalfConfig;
+  spread?: {
+    sections?: Section[];
+    columns?: ColumnLayout;
+    photos?: SpreadPhotoLayout[];
+    trajectories?: TrajectoryPath[];
+    dotMatrix?: DotMatrixConfig;
+    halftones?: HalftoneConfig[];
   };
+  backgroundGrid?: GridConfig;
   toTraditional?: boolean;
   inkBleedRadius?: number;
-  halftones?: HalftoneConfig[];
-  backgroundGrid?: {
-    color?: string;
-    step?: number;
-    lineWidth?: number;
-    blur?: number;
-    opacity?: number;
-    page?: "left" | "right" | "both";
-    margin?: number; // Inset from the edges in REF units
-    halftone?: {
-      spacing?: number;
-      minDotSize?: number;
-      maxDotSize?: number;
-    };
-  };
+  annotations?: Annotation[];
 }

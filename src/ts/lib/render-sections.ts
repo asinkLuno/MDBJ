@@ -1,29 +1,21 @@
-import type { CanvasRenderingContext2D } from "@napi-rs/canvas";
 import type { Section, ColumnLayout } from "./types";
 import { drawHighlightedLine } from "./render-utils";
 import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_SECTION_DEFAULT, COLOR_BLUE } from "./typography";
+import type { RenderContext } from "./context";
 
 /**
  * Flow-render sections into a multi-column layout on an existing canvas context.
- *
- * Coordinates are in REF-unit space: xStarts / colWidth are multiplied by sx,
- * vertical positions by sy, font sizes / line heights by ss (= min(sx, sy)).
- *
- * This is the single implementation used by renderLeft, renderRight, and the
- * full-spread renderer in build.ts.
  */
 export async function renderColumnSections(
-  ctx: CanvasRenderingContext2D,
+  rc: RenderContext,
   sections: Section[],
   columns: ColumnLayout,
-  sx: number,
-  sy: number,
-  ss: number,
-  fontName: string,
-  toTrad: boolean,
-  colorFilter?: (color: string) => boolean,
 ): Promise<void> {
+  const { ctx, assets, scaling, toTrad, colorFilter } = rc;
+  const { sx, sy, ss } = scaling;
+  const { fontName } = assets;
+
   const { count, xStarts, colWidth, maxHeight, startY: startYRef } = columns;
   const colNextY = Array.from({ length: count }, () => (startYRef ?? 40) * sy);
   const maxContentY = maxHeight != null ? maxHeight * sy : Infinity;
@@ -66,16 +58,14 @@ export async function renderColumnSections(
           opts.dotHighlights?.length
         ) {
           drawHighlightedLine(
-            ctx as any,
+            rc,
             line,
             currentXPos,
             currentY,
             fontSize,
             opts.highlights ?? [],
-            ss,
             opts.relationArrows,
             opts.dotHighlights,
-            colorFilter,
             color,
           );
         } else {

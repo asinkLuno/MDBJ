@@ -11,7 +11,7 @@ import {
   COLOR_BLUE,
   createPageAnnotation,
 } from "../lib/typography";
-import { REF_W } from "../lib/render-utils";
+import { REF_W } from "../lib/context";
 
 const RELATIONS_FILE = "resources/lyrics/pronoun_relations.json";
 
@@ -36,21 +36,17 @@ interface RelationsData {
 
 const data: RelationsData = JSON.parse(readFileSync(RELATIONS_FILE, "utf-8"));
 
-// ── typography ────────────────────────────────────────────────────────────
 const LYRIC_FONT = 14;
-const LYRIC_LH = 13.5; // negative leading for overlap
+const LYRIC_LH = 13.5;
 
 const HIGHLIGHTS: CharHighlight[] = [
   { char: "你", color: COLOR_BLUE },
   { char: "我", color: COLOR_BLUE },
 ];
 
-// ── 4 columns across the full spread (2 per page) ────────────────────────
-// xStarts are in spread-space REF coordinates (0–2×REF_W).
-// Right-page columns start at REF_W + left-margin.
 const COL_MARGIN = 50;
 const COL_W = 300;
-const COL_GAP = 360 - COL_MARGIN; // = 332: gap between col-0 and col-1 start
+const COL_GAP = 360 - COL_MARGIN;
 
 const spreadColumns: ColumnLayout = {
   count: 4,
@@ -62,11 +58,9 @@ const spreadColumns: ColumnLayout = {
   ],
   colWidth: [COL_W, COL_W, COL_W, COL_W],
   maxHeight: 980,
-  // Extra top margin so relation arrows arcing above the first baseline aren't clipped.
   startY: 90,
 };
 
-// ── build ALL sections ────────────────────────────────────────────────────
 const spreadSections: Section[] = [];
 
 for (const song of data.songs) {
@@ -86,11 +80,11 @@ for (const song of data.songs) {
       });
     }
 
-    const jitterX = (Math.random() - 0.5) * 3.0; // range [-1.5, 1.5]
-    const jitterY = (Math.random() - 0.5) * 2.0; // range [-1.0, 1.0]
+    const jitterX = (Math.random() - 0.5) * 3.0;
+    const jitterY = (Math.random() - 0.5) * 2.0;
 
     spreadSections.push({
-      text: lineData.line + "    ", // 4 spaces as separator
+      text: lineData.line + "    ",
       options: {
         fontSize: LYRIC_FONT,
         color: COLOR_BLACK,
@@ -115,9 +109,10 @@ const page: PageConfig = {
   id: "page-04",
   toTraditional: false,
   inkBleedRadius: 0,
-  leftPhotos: [],
-  spreadSections,
-  spreadColumns,
+  spread: {
+    sections: spreadSections,
+    columns: spreadColumns,
+  },
   annotations: [createPageAnnotation("4")],
 };
 

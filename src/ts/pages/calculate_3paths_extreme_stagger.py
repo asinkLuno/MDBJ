@@ -227,15 +227,15 @@ for i in range(40):
     traj_pts.append(f"{{ x: {int(tx)}, y: {int(ty)} }}")
 
 traj_points_str = ",\n    ".join(traj_pts)
-traj_block = f"""const trajectories: PageConfig["trajectories"] = [
+traj_block = f"""const trajectories: PageConfig["spread"]["trajectories"] = [
   {{
     points: [
     {traj_points_str}
     ],
     dash: [0, 8],
-    lineWidth: 5,
+    lineWidth: 2,
     lineCap: "round",
-    color: COLOR_DEFAULT,
+    color: COLOR_BLUE,
   }},
 ];"""
 
@@ -253,7 +253,13 @@ if os.path.exists(ts_path):
         content,
     )
     content = re.sub(
-        r"const trajectories: PageConfig\['trajectories'\] = \[[\s\S]*?\];",
+        r"const trajectories: PageConfig\['spread'\]\['trajectories'\] = \[[\s\S]*?\];",
+        lambda _: traj_block,
+        content,
+    )
+    # Also handle double quotes in regex
+    content = re.sub(
+        r'const trajectories: PageConfig\["spread"\]\["trajectories"\] = \[[\s\S]*?\];',
         lambda _: traj_block,
         content,
     )
