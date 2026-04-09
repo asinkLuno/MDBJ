@@ -138,6 +138,7 @@ export interface HalftoneConfig {
   opacity?: number;
   bold?: boolean;
   scaleY?: number;
+  solid?: boolean; // skip halftone dots, draw image/text directly
 }
 
 export interface GridConfig {

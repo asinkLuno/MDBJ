@@ -61,7 +61,13 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
       }
     }
 
-    await drawBackgroundGrid(ctx as any, W, H, ss, config.backgroundGrid);
+    const gridColor = config.backgroundGrid.color;
+    if (!colorFilter || (gridColor && colorFilter(gridColor))) {
+      const gridConfig = colorFilter
+        ? { ...config.backgroundGrid, halftone: undefined }
+        : config.backgroundGrid;
+      await drawBackgroundGrid(ctx as any, W, H, ss, gridConfig);
+    }
   }
 
   // Draw halves onto final
@@ -120,7 +126,13 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   // 5. Halftones
   if (config.spread?.halftones) {
     for (const ht of config.spread.halftones) {
-      await drawHalftone(rcFull, ht, scaleX(ht.x), ht.y * sy);
+      if (colorFilter && ht.color && !colorFilter(ht.color)) continue;
+      await drawHalftone(
+        rcFull,
+        colorFilter ? { ...ht, solid: true } : ht,
+        scaleX(ht.x),
+        ht.y * sy,
+      );
     }
   }
 

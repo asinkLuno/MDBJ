@@ -20,6 +20,7 @@ export async function drawHalftone(
     opacity?: number;
     blur?: number;
     w: number;
+    solid?: boolean;
   },
   centerX: number,
   centerY: number,
@@ -40,6 +41,7 @@ export async function drawHalftone(
     opacity = 1.0,
     blur,
     w: w_ref,
+    solid = false,
   } = config;
 
   let img: any;
@@ -90,36 +92,41 @@ export async function drawHalftone(
     off = applyGaussianBlur(off, blur * ss);
   }
 
-  const pixels = off.getContext("2d").getImageData(0, 0, scaledW, scaledH).data;
+  const px = centerX - scaledW / 2;
+  const py = centerY - scaledH / 2;
 
   ctx.save();
   ctx.globalAlpha = opacity;
-  ctx.fillStyle = color;
 
-  const px = centerX - scaledW / 2;
-  const py = centerY - scaledH / 2;
-  const step = Math.round(spacing * ss);
+  if (solid) {
+    // Draw image/text directly with color tint, no halftone dots
+    (ctx as any).drawImage(off, px, py, scaledW, scaledH);
+  } else {
+    const pixels = off.getContext("2d").getImageData(0, 0, scaledW, scaledH).data;
+    ctx.fillStyle = color;
 
-  const minR = minDotSize * ss;
-  const maxR = maxDotSize * ss;
+    const step = Math.round(spacing * ss);
+    const minR = minDotSize * ss;
+    const maxR = maxDotSize * ss;
 
-  for (let ly = 0; ly < scaledH; ly += step) {
-    for (let lx = 0; lx < scaledW; lx += step) {
-      const idx = (ly * scaledW + lx) * 4;
-      const r = pixels[idx];
-      const g = pixels[idx + 1];
-      const b = pixels[idx + 2];
-      const a = pixels[idx + 3];
+    for (let ly = 0; ly < scaledH; ly += step) {
+      for (let lx = 0; lx < scaledW; lx += step) {
+        const idx = (ly * scaledW + lx) * 4;
+        const r = pixels[idx];
+        const g = pixels[idx + 1];
+        const b = pixels[idx + 2];
+        const a = pixels[idx + 3];
 
-      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      const alpha = a / 255;
-      const density = (1 - luminance) * alpha;
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        const alpha = a / 255;
+        const density = (1 - luminance) * alpha;
 
-      const radius = minR + (maxR - minR) * density;
-      if (radius > 0.1) {
-        ctx.beginPath();
-        ctx.arc(px + lx, py + ly, radius, 0, Math.PI * 2);
-        ctx.fill();
+        const radius = minR + (maxR - minR) * density;
+        if (radius > 0.1) {
+          ctx.beginPath();
+          ctx.arc(px + lx, py + ly, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
     }
   }

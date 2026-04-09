@@ -7,7 +7,7 @@ import sharp from "sharp";
 import { loadSharedAssets } from "./lib/assets";
 import { renderPage } from "./lib/renderer";
 import { getScaling } from "./lib/context";
-import { COLOR_BLACK, COLOR_BLUE, COLOR_BG_BLUE_TRANS } from "./lib/typography";
+import { COLOR_BLACK, COLOR_BLUE, COLOR_GREEN, COLOR_BG_BLUE_TRANS } from "./lib/typography";
 const OUTPUT_DIR_NORMAL = "resources/field_notes/output";
 const OUTPUT_DIR_RISO = "resources/field_notes/output_riso";
 
@@ -19,6 +19,7 @@ const PRE_BUILD_SCRIPTS = [
 const RISO_LAYERS = [
   { id: "black", colors: [COLOR_BLACK, "#272727", "#333333"] },
   { id: "blue", colors: [COLOR_BLUE, "#4455ee"] },
+  { id: "green", colors: [COLOR_GREEN] },
   { id: "light_blue", colors: [COLOR_BG_BLUE_TRANS] },
 ];
 
@@ -126,9 +127,8 @@ async function runBuild() {
   }
 
   // Dynamically import pages to get the updated data written by Python scripts
-  const { pages } = await import("./pages/index.js");
-
   const isRiso = process.argv.includes("--riso");
+  const { pages } = await import("./pages/index.js");
   const filter = process.argv.find((arg) => arg.startsWith("page-"));
   const targets = filter ? pages.filter((p: any) => p.id === filter) : pages;
 
