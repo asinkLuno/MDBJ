@@ -1,7 +1,6 @@
 import { PageConfig } from "../lib/types";
-import { COLOR_BLUE } from "../lib/typography";
+import { COLOR_BLUE, COLOR_GREEN } from "../lib/typography";
 
-const y_offset = 100;
 const bg_color = "#fff";
 const text_color = COLOR_BLUE;
 
@@ -12,7 +11,7 @@ const page: PageConfig = {
   left: { bgColor: bg_color },
   right: { bgColor: bg_color },
   backgroundGrid: {
-    color: "rgb(145, 203, 174)",
+    color: COLOR_GREEN,
     step: 17,
     lineWidth: 3,
     blur: 20,
@@ -32,7 +31,7 @@ const page: PageConfig = {
         fontFamily: "3270NerdFont-Regular",
         blur: 7,
         x: 1005,
-        y: 200 - y_offset,
+        y: 100,
         w: 660,
         color: text_color,
         spacing: 4,
@@ -43,7 +42,7 @@ const page: PageConfig = {
       {
         file: "resources/虾片/mayday_logo.png",
         x: 680,
-        y: 765 - y_offset,
+        y: 665,
         w: 1000,
         blur: 50,
         color: text_color,

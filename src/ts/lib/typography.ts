@@ -10,6 +10,9 @@ export const COLOR_BLACK = "#272727";
 /** Default text color across all pages (blue screen/print style) */
 export const COLOR_BLUE = "#4455ee";
 
+/** Green — background grid accent color */
+export const COLOR_GREEN = "#91cbae";
+
 /** Transparent background block colors (based on default blue and accent red) */
 export const COLOR_BG_BLUE_TRANS = "rgba(68, 85, 238, 0.12)";
 
