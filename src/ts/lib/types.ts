@@ -198,5 +198,10 @@ export interface PageConfig {
     blur?: number;
     opacity?: number;
     page?: "left" | "right" | "both";
+    halftone?: {
+      spacing?: number;
+      minDotSize?: number;
+      maxDotSize?: number;
+    };
   };
 }

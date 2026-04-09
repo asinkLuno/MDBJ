@@ -915,6 +915,11 @@ export async function drawBackgroundGrid(
     lineWidth?: number;
     blur?: number;
     opacity?: number;
+    halftone?: {
+      spacing?: number;
+      minDotSize?: number;
+      maxDotSize?: number;
+    };
   },
 ) {
   const color = config?.color ?? "rgb(145, 203, 174)";
@@ -927,7 +932,8 @@ export async function drawBackgroundGrid(
   let off = createCanvas(w, h);
   const octx = off.getContext("2d");
 
-  octx.strokeStyle = color;
+  // If we're doing halftone, draw lines in black to get max density/sampling
+  octx.strokeStyle = config?.halftone ? "black" : color;
   octx.lineWidth = lineWidth;
 
   // Draw vertical lines
@@ -952,6 +958,38 @@ export async function drawBackgroundGrid(
 
   ctx.save();
   ctx.globalAlpha = opacity;
-  ctx.drawImage(off, 0, 0);
+
+  if (config?.halftone) {
+    // Halftone dot rendering of the blurred grid
+    const pixels = off.getContext("2d").getImageData(0, 0, w, h).data;
+    const spacing = Math.round((config.halftone.spacing ?? 10) * ss);
+    const minR = (config.halftone.minDotSize ?? 0) * ss;
+    const maxR = (config.halftone.maxDotSize ?? 4) * ss;
+
+    ctx.fillStyle = color;
+    for (let ly = 0; ly < h; ly += spacing) {
+      for (let lx = 0; lx < w; lx += spacing) {
+        const idx = (ly * w + lx) * 4;
+        const r = pixels[idx];
+        const g = pixels[idx + 1];
+        const b = pixels[idx + 2];
+        const a = pixels[idx + 3];
+
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        const alpha = a / 255;
+        const density = (1 - luminance) * alpha;
+
+        const radius = minR + (maxR - minR) * density;
+        if (radius > 0.1) {
+          ctx.beginPath();
+          ctx.arc(lx, ly, radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+  } else {
+    // Direct drawing of the blurred grid
+    ctx.drawImage(off, 0, 0);
+  }
   ctx.restore();
 }

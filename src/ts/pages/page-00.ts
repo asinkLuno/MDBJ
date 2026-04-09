@@ -15,18 +15,22 @@ const page: PageConfig = {
   rightSections: [],
   backgroundGrid: {
     color: "rgb(145, 203, 174)",
-    step: 15,
-    lineWidth: 1,
-    blur: 2,
-    opacity: 0.5,
+    step: 20,
+    lineWidth: 4,
+    blur: 4,
+    opacity: 0.8,
     page: "both",
+    halftone: {
+      spacing: 2,
+      maxDotSize: 1,
+    },
   },
   halftones: [
     {
       text: "FIELD NOTES",
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
-      blur: 7, // Restored blur
+      blur: 7,
       x: 1005, // Center of the right page
       y: 200 - y_offset,
       w: 660,
