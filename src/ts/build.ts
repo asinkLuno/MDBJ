@@ -17,7 +17,6 @@ import {
 import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
 import { renderColumnSections } from "./lib/render-sections";
-import { ensureBlurredLogo } from "./lib/image-utils";
 import { pages } from "./pages";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
 import type { PageConfig, Annotation, SpreadPhotoLayout } from "./lib/types";
@@ -333,9 +332,6 @@ async function main() {
     );
     process.exit(1);
   }
-
-  // Ensure any necessary blurred assets are generated
-  await ensureBlurredLogo();
 
   console.log("Loading shared assets...");
   const assets = await loadSharedAssets();
