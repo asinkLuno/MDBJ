@@ -90,40 +90,40 @@ export async function renderRight(
           ? wrapTextLine(ctx, converted, wrapWidth)
           : [converted];
         for (const line of drawLines) {
-          if (colorFilter && !colorFilter(color)) {
-            // Skip rendering but still advance currentY
-          } else {
-            let xPos = (opts.x ?? 50) * sx;
-            if (opts.textAlign === "center") {
-              xPos -= ctx.measureText(line).width / 2;
-            } else if (opts.textAlign === "right") {
-              xPos -= ctx.measureText(line).width;
-            }
+          let xPos = (opts.x ?? 50) * sx;
+          if (opts.textAlign === "center") {
+            xPos -= ctx.measureText(line).width / 2;
+          } else if (opts.textAlign === "right") {
+            xPos -= ctx.measureText(line).width;
+          }
 
-            if (bold) {
-              ctx.save();
-              ctx.globalAlpha = 0.4;
-              ctx.fillText(line, xPos - 0.5, currentY);
-              ctx.fillText(line, xPos + 0.5, currentY);
-              ctx.restore();
-            }
-            if (
-              opts.highlights?.length ||
-              opts.relationArrows?.length ||
-              opts.dotHighlights?.length
-            ) {
-              drawHighlightedLine(
-                ctx as any,
-                line,
-                xPos,
-                currentY,
-                fontSize,
-                opts.highlights ?? [],
-                ss,
-                opts.relationArrows,
-                opts.dotHighlights,
-              );
-            } else {
+          if (
+            opts.highlights?.length ||
+            opts.relationArrows?.length ||
+            opts.dotHighlights?.length
+          ) {
+            drawHighlightedLine(
+              ctx as any,
+              line,
+              xPos,
+              currentY,
+              fontSize,
+              opts.highlights ?? [],
+              ss,
+              opts.relationArrows,
+              opts.dotHighlights,
+              colorFilter,
+              color,
+            );
+          } else {
+            if (!colorFilter || colorFilter(color)) {
+              if (bold) {
+                ctx.save();
+                ctx.globalAlpha = 0.4;
+                ctx.fillText(line, xPos - 0.5, currentY);
+                ctx.fillText(line, xPos + 0.5, currentY);
+                ctx.restore();
+              }
               ctx.fillText(line, xPos, currentY);
             }
           }

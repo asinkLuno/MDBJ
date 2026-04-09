@@ -84,9 +84,15 @@ export async function renderLeft(
               fontSize,
               lt.highlights,
               ss,
+              undefined,
+              undefined,
+              colorFilter,
+              itemColor,
             );
           } else {
-            ctx.fillText(line, xPos, currentY);
+            if (!colorFilter || colorFilter(itemColor)) {
+              ctx.fillText(line, xPos, currentY);
+            }
           }
           currentY += lineHeight;
         }

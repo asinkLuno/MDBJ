@@ -60,26 +60,26 @@ export async function renderColumnSections(
       const converted = toTrad ? await toTraditional(rawLine) : rawLine;
       const drawLines = wrapTextLine(ctx as any, converted, wrapWidth);
       for (const line of drawLines) {
-        if (colorFilter && !colorFilter(color)) {
-          // Skip
+        if (
+          opts.highlights?.length ||
+          opts.relationArrows?.length ||
+          opts.dotHighlights?.length
+        ) {
+          drawHighlightedLine(
+            ctx as any,
+            line,
+            currentXPos,
+            currentY,
+            fontSize,
+            opts.highlights ?? [],
+            ss,
+            opts.relationArrows,
+            opts.dotHighlights,
+            colorFilter,
+            color,
+          );
         } else {
-          if (
-            opts.highlights?.length ||
-            opts.relationArrows?.length ||
-            opts.dotHighlights?.length
-          ) {
-            drawHighlightedLine(
-              ctx as any,
-              line,
-              currentXPos,
-              currentY,
-              fontSize,
-              opts.highlights ?? [],
-              ss,
-              opts.relationArrows,
-              opts.dotHighlights,
-            );
-          } else {
+          if (!colorFilter || colorFilter(color)) {
             ctx.fillText(line, currentXPos, currentY);
           }
         }

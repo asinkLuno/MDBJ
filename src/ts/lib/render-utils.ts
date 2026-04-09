@@ -571,8 +571,12 @@ export function drawHighlightedLine(
   ss: number,
   relationArrows?: RelationArrow[],
   dotHighlights?: CharHighlight[],
+  colorFilter?: (color: string) => boolean,
+  baseColor: string = COLOR_BLUE,
 ): void {
-  ctx.fillText(text, x, baselineY);
+  if (!colorFilter || colorFilter(baseColor)) {
+    ctx.fillText(text, x, baselineY);
+  }
 
   const frameH = fontSize * 1.0;
   const frameTop = baselineY - fontSize * 0.85;
@@ -582,6 +586,7 @@ export function drawHighlightedLine(
     const dotRadius = fontSize * 0.38;
     const dotY = baselineY - fontSize * 0.35;
     for (const hl of dotHighlights) {
+      if (colorFilter && !colorFilter(hl.color)) continue;
       let startPos = 0;
       while (true) {
         const idx = text.indexOf(hl.char, startPos);
@@ -613,6 +618,9 @@ export function drawHighlightedLine(
 
   if (relationArrows?.length) {
     for (const rel of relationArrows) {
+      const dotColor = COLOR_BLUE;
+      if (colorFilter && !colorFilter(dotColor)) continue;
+
       const pos = computeTokenXPositions(ctx, text, rel.tokens, x);
       const subj = pos[rel.subjectIdx];
       const obj = pos[rel.objectIdx];
@@ -621,7 +629,6 @@ export function drawHighlightedLine(
       const subjToken = rel.tokens[rel.subjectIdx];
       const objToken = rel.tokens[rel.objectIdx];
 
-      const dotColor = COLOR_BLUE;
       const dotRadius = fontSize * 0.38;
       const dotY = baselineY - fontSize * 0.35;
 
@@ -662,17 +669,20 @@ export function drawHighlightedLine(
   for (const char of text) {
     const cw = ctx.measureText(char).width;
     if (hlMap.has(char)) {
-      drawTargetingFrame(
-        ctx,
-        curX,
-        frameTop,
-        cw,
-        frameH,
-        hlMap.get(char)!,
-        ss,
-        true,
-        frameLW,
-      );
+      const hlColor = hlMap.get(char)!;
+      if (!colorFilter || colorFilter(hlColor)) {
+        drawTargetingFrame(
+          ctx,
+          curX,
+          frameTop,
+          cw,
+          frameH,
+          hlColor,
+          ss,
+          true,
+          frameLW,
+        );
+      }
     }
     curX += cw;
   }
