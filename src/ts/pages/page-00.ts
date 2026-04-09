@@ -15,9 +15,9 @@ const page: PageConfig = {
   rightSections: [],
   backgroundGrid: {
     color: "rgb(145, 203, 174)",
-    step: 20,
-    lineWidth: 4,
-    blur: 4,
+    step: 18,
+    lineWidth: 7,
+    blur: 6,
     opacity: 0.8,
     page: "both",
     halftone: {

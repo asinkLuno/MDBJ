@@ -3,7 +3,8 @@
   "project": ["src/ts/**/*.ts"],
   "ignoreFiles": [
     "src/ts/generate-coarse-grid.ts",
-    "src/ts/get-stats.ts"
+    "src/ts/get-stats.ts",
+    "src/ts/generate-grid-variants.ts"
   ],
   "ignoreIssues": {
     "src/ts/lib/render-utils.ts": ["exports"]

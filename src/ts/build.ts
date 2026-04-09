@@ -231,8 +231,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
         const octx = off.getContext("2d");
         octx.font = font;
         const metrics = octx.measureText(ht.text);
-        const w = Math.ceil(metrics.width);
-        const h = Math.ceil(fontSize * 1.4 * sy_val);
+        const pad = Math.ceil(fontSize * 0.2);
+        const w = Math.ceil(metrics.width) + pad * 2;
+        const h = Math.ceil(fontSize * 1.4 * sy_val) + pad * 2;
 
         const textCanvas = createCanvas(w, h);
         const tctx = textCanvas.getContext("2d");
@@ -243,11 +244,11 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
           tctx.scale(1, ht.scaleY);
         }
         const drawY = h / 2 / sy_val;
-        tctx.fillText(ht.text, 0, drawY);
+        tctx.fillText(ht.text, pad, drawY);
         if (isBold) {
           tctx.strokeStyle = "black";
           tctx.lineWidth = fontSize * 0.05;
-          tctx.strokeText(ht.text, 0, drawY);
+          tctx.strokeText(ht.text, pad, drawY);
         }
         source = textCanvas;
       }
