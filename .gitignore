@@ -14,7 +14,5 @@ wheels/
 node_modules/
 
 # Page output images (generated, not source)
-resources/field_notes/output/page-*.png
-resources/field_notes/output_riso/page-*.png
-
-# Riso print masters (generated)
+resources/field_notes/output/**/*.png
+resources/field_notes/output_riso/*.png
