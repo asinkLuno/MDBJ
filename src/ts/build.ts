@@ -12,6 +12,7 @@ import {
   drawSpreadPhotoSublabel,
   drawTrajectory,
   drawAnnotation,
+  drawBackgroundGrid,
 } from "./lib/render-utils";
 import { renderLeft } from "./lib/render-left";
 import { renderRight } from "./lib/render-right";
@@ -102,8 +103,9 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.toTraditional ?? true,
       config.leftSections,
       config.leftColumns,
-      config.leftBgColor,
-      config.halftone, // Pass halftone config to renderLeft
+      config.backgroundGrid ? "transparent" : config.leftBgColor,
+      config.halftones,
+      undefined,
     ),
     renderRight(
       config.rightSections ?? [],
@@ -111,7 +113,8 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
       config.toTraditional ?? true,
       config.rightPhotos,
       config.rightColumns,
-      config.rightBgColor,
+      config.backgroundGrid ? "transparent" : config.rightBgColor,
+      undefined,
     ),
   ]);
 
@@ -119,12 +122,32 @@ async function buildPage(config: PageConfig, assets: SharedAssets) {
   const H = Math.max(leftCanvas.height, rightCanvas.height);
   const final = createCanvas(W, H);
   const ctx = final.getContext("2d");
-  ctx.drawImage(leftCanvas, 0, 0);
-  ctx.drawImage(rightCanvas, leftCanvas.width, 0);
 
   const { sx: sx_left, sy } = getScaling(leftCanvas.width, leftCanvas.height);
   const sx_right = rightCanvas.width / REF_W;
   const ss = Math.min(sx_left, sy);
+
+  // If a grid is used, draw a continuous background first
+  if (config.backgroundGrid) {
+    if (config.leftBgColor) {
+      ctx.fillStyle = config.leftBgColor;
+      ctx.fillRect(0, 0, leftCanvas.width, H);
+    } else {
+      ctx.drawImage(assets.bgLeft, 0, 0);
+    }
+
+    if (config.rightBgColor) {
+      ctx.fillStyle = config.rightBgColor;
+      ctx.fillRect(leftCanvas.width, 0, rightCanvas.width, H);
+    } else {
+      ctx.drawImage(assets.bgRight, leftCanvas.width, 0);
+    }
+
+    await drawBackgroundGrid(ctx as any, W, H, ss, config.backgroundGrid);
+  }
+
+  ctx.drawImage(leftCanvas, 0, 0);
+  ctx.drawImage(rightCanvas, leftCanvas.width, 0);
 
   // ── Spread sections: flow text across both pages as one canvas ───────────
   if (config.spreadSections?.length && config.spreadColumns) {

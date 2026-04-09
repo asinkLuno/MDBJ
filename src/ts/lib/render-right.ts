@@ -1,7 +1,12 @@
 import { createCanvas } from "@napi-rs/canvas";
 import type { Section, PhotoLayout, ColumnLayout } from "./types";
 import type { SharedAssets } from "./assets";
-import { getScaling, drawPhoto, drawHighlightedLine } from "./render-utils";
+import {
+  getScaling,
+  drawPhoto,
+  drawHighlightedLine,
+  drawBackgroundGrid,
+} from "./render-utils";
 import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_SECTION_DEFAULT, COLOR_BLUE } from "./typography";
@@ -13,13 +18,16 @@ export async function renderRight(
   photos?: PhotoLayout[],
   columns?: ColumnLayout,
   bgColor?: string,
+  backgroundGrid?: any, // Removed local drawing
   colorFilter?: (color: string) => boolean,
 ) {
   const { bgRight, fontName } = assets;
   const canvas = createCanvas(bgRight.width, bgRight.height);
   const ctx = canvas.getContext("2d");
 
-  if (bgColor) {
+  if (bgColor === "transparent") {
+    // Skip background drawing
+  } else if (bgColor) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (!colorFilter) {

@@ -191,4 +191,12 @@ export interface PageConfig {
   toTraditional?: boolean;
   inkBleedRadius?: number;
   halftones?: HalftoneConfig[];
+  backgroundGrid?: {
+    color?: string;
+    step?: number;
+    lineWidth?: number;
+    blur?: number;
+    opacity?: number;
+    page?: "left" | "right" | "both";
+  };
 }

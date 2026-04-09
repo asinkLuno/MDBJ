@@ -1,4 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
-  "project": ["src/ts/**/*.ts"]
+  "project": ["src/ts/**/*.ts"],
+  "ignoreFiles": [
+    "src/ts/generate-coarse-grid.ts",
+    "src/ts/get-stats.ts"
+  ],
+  "ignoreIssues": {
+    "src/ts/lib/render-utils.ts": ["exports"]
+  }
 }

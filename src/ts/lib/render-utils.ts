@@ -28,6 +28,86 @@ export function getScaling(canvasW: number, canvasH: number) {
 }
 
 /**
+ * A fast 1D box blur.
+ */
+function boxBlur1D(
+  src: Uint8ClampedArray,
+  dst: Uint8ClampedArray,
+  w: number,
+  h: number,
+  radius: number,
+  horizontal: boolean,
+) {
+  const weight = 2 * radius + 1;
+  for (let i = 0; i < (horizontal ? h : w); i++) {
+    let r = 0,
+      g = 0,
+      b = 0,
+      a = 0;
+    // Initial window
+    for (let j = -radius; j <= radius; j++) {
+      const pos = Math.min(Math.max(j, 0), (horizontal ? w : h) - 1);
+      const idx = (horizontal ? i * w + pos : pos * w + i) * 4;
+      r += src[idx];
+      g += src[idx + 1];
+      b += src[idx + 2];
+      a += src[idx + 3];
+    }
+    // Slide window
+    for (let j = 0; j < (horizontal ? w : h); j++) {
+      const idx = (horizontal ? i * w + j : j * w + i) * 4;
+      dst[idx] = r / weight;
+      dst[idx + 1] = g / weight;
+      dst[idx + 2] = b / weight;
+      dst[idx + 3] = a / weight;
+
+      const prevPos = Math.min(
+        Math.max(j - radius, 0),
+        (horizontal ? w : h) - 1,
+      );
+      const nextPos = Math.min(
+        Math.max(j + radius + 1, 0),
+        (horizontal ? w : h) - 1,
+      );
+      const prevIdx = (horizontal ? i * w + prevPos : prevPos * w + i) * 4;
+      const nextIdx = (horizontal ? i * w + nextPos : nextPos * w + i) * 4;
+
+      r += src[nextIdx] - src[prevIdx];
+      g += src[nextIdx + 1] - src[prevIdx + 1];
+      b += src[nextIdx + 2] - src[prevIdx + 2];
+      a += src[nextIdx + 3] - src[prevIdx + 3];
+    }
+  }
+}
+
+/**
+ * Approximate Gaussian blur using 3 passes of box blur.
+ */
+export function applyGaussianBlur(canvas: Canvas, sigma: number) {
+  if (sigma <= 0) return canvas;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const src = imageData.data;
+  const dst = new Uint8ClampedArray(src.length);
+
+  // Box radius for 3 passes to approx Gaussian
+  const r = Math.floor(Math.sqrt((12 * sigma * sigma) / 3 + 1));
+  const radius = Math.max(1, Math.floor((r - 1) / 2));
+
+  for (let pass = 0; pass < 3; pass++) {
+    boxBlur1D(src, dst, w, h, radius, true);
+    src.set(dst);
+    boxBlur1D(src, dst, w, h, radius, false);
+    src.set(dst);
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  return canvas;
+}
+
+/**
  * Draw a photo with paper texture and optional tapes
  */
 export async function drawPhoto(
@@ -95,14 +175,17 @@ export async function drawSpreadPhoto(
 
   ctx.save();
   if (sp.opacity !== undefined) ctx.globalAlpha = sp.opacity;
-  if (sp.blur) (ctx as any).filter = `blur(${sp.blur * ss}px)`;
 
   ctx.translate(scaleX(sp.x), sp.y * sy);
   ctx.rotate(angle);
   if (sp.scaleY !== undefined) ctx.scale(1, sp.scaleY);
 
   // Composite plane + texture on an offscreen canvas first
-  const off = applyPaperTexture(photo, assets.texture, 0.18, scaledW, h);
+  let off = applyPaperTexture(photo, assets.texture, 0.18, scaledW, h);
+
+  if (sp.blur) {
+    off = applyGaussianBlur(off, sp.blur * ss);
+  }
 
   (ctx as any).shadowBlur = (sp.shadowBlur ?? 8) * ss;
   (ctx as any).shadowOffsetX =
@@ -772,13 +855,15 @@ export async function drawHalftone(
   const scaledH = Math.round((scaledW * img.height) / img.width);
 
   // Draw image to offscreen canvas to sample pixels
-  const off = createCanvas(scaledW, scaledH);
+  let off = createCanvas(scaledW, scaledH);
   const octx = off.getContext("2d");
-  if (blur) {
-    (octx as any).filter = `blur(${blur * ss}px)`;
-  }
   octx.drawImage(img as any, 0, 0, scaledW, scaledH);
-  const pixels = octx.getImageData(0, 0, scaledW, scaledH).data;
+
+  if (blur) {
+    off = applyGaussianBlur(off, blur * ss);
+  }
+
+  const pixels = off.getContext("2d").getImageData(0, 0, scaledW, scaledH).data;
 
   ctx.save();
   ctx.globalAlpha = opacity;
@@ -813,5 +898,60 @@ export async function drawHalftone(
     }
   }
 
+  ctx.restore();
+}
+
+/**
+ * Draw a coarse grid with optional Gaussian blur directly on a canvas.
+ */
+export async function drawBackgroundGrid(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  ss: number,
+  config?: {
+    color?: string;
+    step?: number;
+    lineWidth?: number;
+    blur?: number;
+    opacity?: number;
+  },
+) {
+  const color = config?.color ?? "rgb(145, 203, 174)";
+  const step = (config?.step ?? 250) * ss;
+  const lineWidth = (config?.lineWidth ?? 15) * ss;
+  const blur = (config?.blur ?? 20) * ss;
+  const opacity = config?.opacity ?? 1.0;
+
+  // Create a temporary canvas for the grid to apply blur if needed
+  let off = createCanvas(w, h);
+  const octx = off.getContext("2d");
+
+  octx.strokeStyle = color;
+  octx.lineWidth = lineWidth;
+
+  // Draw vertical lines
+  for (let x = 0; x <= w; x += step) {
+    octx.beginPath();
+    octx.moveTo(x, 0);
+    octx.lineTo(x, h);
+    octx.stroke();
+  }
+
+  // Draw horizontal lines
+  for (let y = 0; y <= h; y += step) {
+    octx.beginPath();
+    octx.moveTo(0, y);
+    octx.lineTo(w, y);
+    octx.stroke();
+  }
+
+  if (blur > 0) {
+    off = applyGaussianBlur(off, blur);
+  }
+
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.drawImage(off, 0, 0);
   ctx.restore();
 }

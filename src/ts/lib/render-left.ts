@@ -12,6 +12,7 @@ import {
   drawPhoto,
   drawHighlightedLine,
   drawHalftone,
+  drawBackgroundGrid,
 } from "./render-utils";
 import { renderColumnSections } from "./render-sections";
 import { toTraditional, wrapTextLine } from "./text-utils";
@@ -26,13 +27,16 @@ export async function renderLeft(
   columns?: ColumnLayout,
   bgColor?: string,
   halftones?: HalftoneConfig[],
+  backgroundGrid?: any, // Removed local drawing
   colorFilter?: (color: string) => boolean,
 ) {
   const { bgLeft, fontName } = assets;
   const canvas = createCanvas(bgLeft.width, bgLeft.height);
   const ctx = canvas.getContext("2d");
 
-  if (bgColor) {
+  if (bgColor === "transparent") {
+    // Skip background drawing
+  } else if (bgColor) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   } else if (!colorFilter) {
