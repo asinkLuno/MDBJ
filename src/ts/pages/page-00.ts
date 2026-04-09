@@ -18,7 +18,7 @@ const page: PageConfig = {
       text: "FIELD NOTES",
       fontSize: 120,
       fontFamily: "3270NerdFont-Regular",
-      blur: 7,
+      blur: 0,
       x: 1005, // Center of the right page
       y: 200 - y_offset,
       w: 660,

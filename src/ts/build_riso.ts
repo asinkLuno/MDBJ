@@ -20,7 +20,7 @@ import {
 } from "./lib/render-utils";
 import type { PageConfig } from "./lib/types";
 
-const OUTPUT_DIR = "outputs_riso";
+const OUTPUT_DIR = "resources/field_notes/output_riso";
 
 const RISO_LAYERS = [
   { id: "black", colors: [COLOR_BLACK, "#272727", "#333333"] },
