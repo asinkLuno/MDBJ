@@ -17,7 +17,8 @@ const page: PageConfig = {
     blur: 20,
     opacity: 0.8,
     page: "both",
-    margin: 40,
+    marginX: 0.05,
+    marginY: 0.05,
     halftone: {
       spacing: 4,
       maxDotSize: 2,
@@ -44,7 +45,7 @@ const page: PageConfig = {
         x: 680,
         y: 665,
         w: 1000,
-        blur: 50,
+        blur: 40,
         color: text_color,
         spacing: 4,
         maxDotSize: 2,

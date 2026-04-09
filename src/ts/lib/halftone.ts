@@ -1,5 +1,6 @@
 import { createCanvas, loadImage } from "@napi-rs/canvas";
 import type { RenderContext } from "./context";
+import { REF_W, REF_H } from "./context";
 import { COLOR_BLUE } from "./typography";
 import { applyGaussianBlur } from "./effects";
 
@@ -132,10 +133,19 @@ export async function drawBackgroundGrid(ctx: any, w: number, h: number, ss: num
   const lineWidth = Math.round((config?.lineWidth ?? 15) * ss);
   const blur = (config?.blur ?? 20) * ss;
   const opacity = config?.opacity ?? 1.0;
-  const margin = Math.round((config?.margin ?? 0) * ss);
 
-  const innerW = Math.floor(w - margin * 2);
-  const innerH = Math.floor(h - margin * 2);
+  let marginX_ref = config?.marginX ?? config?.margin ?? 0;
+  let marginY_ref = config?.marginY ?? config?.margin ?? 0;
+
+  // Treat values <= 1 as percentages of REF dimensions
+  if (marginX_ref > 0 && marginX_ref <= 1) marginX_ref *= REF_W;
+  if (marginY_ref > 0 && marginY_ref <= 1) marginY_ref *= REF_H;
+
+  const marginX = Math.round(marginX_ref * ss);
+  const marginY = Math.round(marginY_ref * ss);
+
+  const innerW = Math.floor(w - marginX * 2);
+  const innerH = Math.floor(h - marginY * 2);
 
   if (innerW <= 0 || innerH <= 0) return;
 
@@ -197,13 +207,13 @@ export async function drawBackgroundGrid(ctx: any, w: number, h: number, ss: num
         const radius = minR + (maxR - minR) * density;
         if (radius > 0.1) {
           ctx.beginPath();
-          ctx.arc(margin + lx, margin + ly, radius, 0, Math.PI * 2);
+          ctx.arc(marginX + lx, marginY + ly, radius, 0, Math.PI * 2);
           ctx.fill();
         }
       }
     }
   } else {
-    ctx.drawImage(off, bleed, bleed, innerW, innerH, margin, margin, innerW, innerH);
+    ctx.drawImage(off, bleed, bleed, innerW, innerH, marginX, marginY, innerW, innerH);
   }
   ctx.restore();
 }
