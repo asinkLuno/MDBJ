@@ -120,7 +120,7 @@ async function runBuild() {
     console.log(`  -> Executing ${script}`);
     try {
       execSync(`python3 ${script}`, { stdio: "inherit" });
-    } catch (_e) {
+    } catch {
       console.warn(`Warning: Failed to run ${script}. Using existing data.`);
     }
   }

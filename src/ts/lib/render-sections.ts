@@ -1,5 +1,5 @@
 import type { Section, ColumnLayout } from "./types";
-import { drawHighlightedLine } from "./render-utils";
+import { drawHighlightedLine } from "./annotations";
 import { toTraditional, wrapTextLine } from "./text-utils";
 import { FONT_SECTION_DEFAULT, COLOR_BLUE } from "./typography";
 import type { RenderContext } from "./context";

@@ -4,16 +4,14 @@ import type { PageConfig } from "./types";
 import type { RenderContext } from "./context";
 import { getScaling, REF_W, createSpreadXScaler } from "./context";
 import { renderPageHalf } from "./render-page-half";
+import { drawBackgroundGrid, drawHalftone } from "./halftone";
 import {
-  drawBackgroundGrid,
-  drawHalftone,
   drawSpreadPhoto,
   drawSpreadPhotoLabel,
   drawSpreadPhotoFrame,
   drawSpreadPhotoSublabel,
-  drawTrajectory,
-  drawAnnotation,
-} from "./render-utils";
+} from "./photo-renderer";
+import { drawTrajectory, drawAnnotation } from "./annotations";
 import { renderColumnSections } from "./render-sections";
 import { COLOR_BLUE } from "./typography";
 
@@ -21,8 +19,10 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   const { assets, colorFilter } = rc;
 
   // 1. Render halves
-  const leftCanvas = await renderPageHalf(config.left, rc, "left");
-  const rightCanvas = await renderPageHalf(config.right, rc, "right");
+  // When backgroundGrid is set, render halves with transparent bg so the grid shows through
+  const halfBgOverride = config.backgroundGrid ? { bgColor: "transparent" as const } : {};
+  const leftCanvas = await renderPageHalf({ ...config.left, ...halfBgOverride }, rc, "left");
+  const rightCanvas = await renderPageHalf({ ...config.right, ...halfBgOverride }, rc, "right");
 
   const W = leftCanvas.width + rightCanvas.width;
   const H = Math.max(leftCanvas.height, rightCanvas.height);
