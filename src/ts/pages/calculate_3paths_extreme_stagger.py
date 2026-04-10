@@ -219,24 +219,14 @@ planes_block = (
     "const planes: SpreadPhotoLayout[] = [\n" + "\n".join(plane_lines) + "\n];"
 )
 
-traj_pts = []
-for i in range(40):
-    t = i / 39.0
-    tx = bezier(t, spine[0][0], spine[1][0], spine[2][0], spine[3][0])
-    ty = bezier(t, spine[0][1], spine[1][1], spine[2][1], spine[3][1])
-    traj_pts.append(f"{{ x: {int(tx)}, y: {int(ty)} }}")
-
-traj_points_str = ",\n    ".join(traj_pts)
-traj_block = f"""const trajectories: NonNullable<PageConfig["spread"]>["trajectories"] = [
-  {{
-    points: [
-    {traj_points_str}
-    ],
+traj_block = """const trajectories: NonNullable<PageConfig["spread"]>["trajectories"] = [
+  {
+    points: planes.map((p) => ({ x: p.x, y: p.y })),
     dash: [0, 8],
     lineWidth: 2,
     lineCap: "round",
     color: COLOR_BLUE,
-  }},
+  },
 ];"""
 
 # === 写入文件 ===
