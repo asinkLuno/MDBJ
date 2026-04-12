@@ -17,6 +17,7 @@ export interface RenderContext {
   scaling: Scaling;
   toTrad: boolean;
   colorFilter?: (color: string) => boolean;
+  photosOnly?: boolean;
 }
 
 /**

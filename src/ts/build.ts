@@ -159,6 +159,13 @@ async function runBuild() {
           colorFilter: (c) => layerDef.colors.includes(c),
         });
 
+        const imageData = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height);
+        const hasContent = imageData.data.some((v, i) => i % 4 === 3 && v > 0);
+        if (!hasContent) {
+          console.log(`  -> Skipped layer: ${layerDef.id} (empty)`);
+          continue;
+        }
+
         const buffer = canvas.toBuffer("image/png");
         const outPath = path.join(OUTPUT_DIR_RISO, `${page.id}_${layerDef.id}_master.png`);
         await sharp(buffer)
@@ -166,6 +173,23 @@ async function runBuild() {
           .linear([0, 0, 0, 1], [0, 0, 0, 0]) // Black on transparent
           .toFile(outPath);
         console.log(`  -> Saved layer: ${layerDef.id}`);
+      }
+
+      // Export color photos layer if the page has spread photos
+      const hasSpreadPhotos = (page.spread?.photos?.length ?? 0) > 0;
+      const hasHalfPhotos =
+        (page.left?.photos?.length ?? 0) + (page.right?.photos?.length ?? 0) > 0;
+      if (hasSpreadPhotos || hasHalfPhotos) {
+        const photoCanvas = await renderPage(page, {
+          ctx: null as any,
+          assets,
+          scaling: getScaling(assets.bgLeft.width, assets.bgLeft.height),
+          toTrad: page.toTraditional ?? true,
+          photosOnly: true,
+        });
+        const photoPath = path.join(OUTPUT_DIR_RISO, `${page.id}_photos_color.png`);
+        writeFileSync(photoPath, photoCanvas.toBuffer("image/png"));
+        console.log(`  -> Saved color photos: photos_color`);
       }
     } else {
       const canvas = await renderPage(page, {

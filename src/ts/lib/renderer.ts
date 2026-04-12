@@ -16,13 +16,26 @@ import { renderColumnSections } from "./render-sections";
 import { COLOR_BLUE } from "./typography";
 
 export async function renderPage(config: PageConfig, rc: RenderContext): Promise<Canvas> {
-  const { assets, colorFilter } = rc;
+  const { assets, colorFilter, photosOnly } = rc;
 
   // 1. Render halves
   // When backgroundGrid is set, render halves with transparent bg so the grid shows through
-  const halfBgOverride = config.backgroundGrid ? { bgColor: "transparent" as const } : {};
-  const leftCanvas = await renderPageHalf({ ...config.left, ...halfBgOverride }, rc, "left");
-  const rightCanvas = await renderPageHalf({ ...config.right, ...halfBgOverride }, rc, "right");
+  // In photosOnly mode, skip page halves entirely (only spread photos matter)
+  const halfBgOverride = photosOnly
+    ? { bgColor: "transparent" as const }
+    : config.backgroundGrid
+      ? { bgColor: "transparent" as const }
+      : {};
+  const leftCanvas = await renderPageHalf(
+    photosOnly ? { bgColor: "transparent" } : { ...config.left, ...halfBgOverride },
+    rc,
+    "left",
+  );
+  const rightCanvas = await renderPageHalf(
+    photosOnly ? { bgColor: "transparent" } : { ...config.right, ...halfBgOverride },
+    rc,
+    "right",
+  );
 
   const W = leftCanvas.width + rightCanvas.width;
   const H = Math.max(leftCanvas.height, rightCanvas.height);
@@ -43,7 +56,7 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   const scaleX = createSpreadXScaler(leftCanvas.width, sx_left, sx_right);
 
   // 2. Background Grid
-  if (config.backgroundGrid) {
+  if (!photosOnly && config.backgroundGrid) {
     // Only draw background colors if not in Riso mode (colorFilter)
     if (!colorFilter) {
       if (config.left?.bgColor) {
@@ -63,10 +76,7 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
 
     const gridColor = config.backgroundGrid.color;
     if (!colorFilter || (gridColor && colorFilter(gridColor))) {
-      const gridConfig = colorFilter
-        ? { ...config.backgroundGrid, halftone: undefined }
-        : config.backgroundGrid;
-      await drawBackgroundGrid(ctx as any, W, H, ss, gridConfig);
+      await drawBackgroundGrid(ctx as any, W, H, ss, config.backgroundGrid);
     }
   }
 
@@ -75,12 +85,12 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   ctx.drawImage(rightCanvas, leftCanvas.width, 0);
 
   // 3. Spread Sections
-  if (config.spread?.sections?.length && config.spread.columns) {
+  if (!photosOnly && config.spread?.sections?.length && config.spread.columns) {
     await renderColumnSections(rcFull, config.spread.sections, config.spread.columns);
   }
 
   // 4. Dot Matrix
-  if (config.spread?.dotMatrix) {
+  if (!photosOnly && config.spread?.dotMatrix) {
     const dm = config.spread.dotMatrix;
     const color = dm.color ?? COLOR_BLUE;
     const dotSize = (dm.dotSize ?? 2) * ss;
@@ -124,7 +134,7 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   }
 
   // 5. Halftones
-  if (config.spread?.halftones) {
+  if (!photosOnly && config.spread?.halftones) {
     for (const ht of config.spread.halftones) {
       if (colorFilter && ht.color && !colorFilter(ht.color)) continue;
       await drawHalftone(
@@ -139,29 +149,49 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   // 6. Spread Photos
   if (config.spread?.photos) {
     for (const sp of config.spread.photos) {
-      if (!colorFilter) {
+      if (!colorFilter || photosOnly) {
         await drawSpreadPhoto(rcFull, sp, scaleX);
       }
-      await drawSpreadPhotoLabel(rcFull, sp, scaleX, colorFilter ? "black" : undefined);
+      if (!photosOnly) {
+        const labelColor = sp.labelColor ?? COLOR_BLUE;
+        if (!colorFilter || colorFilter(labelColor)) {
+          await drawSpreadPhotoLabel(rcFull, sp, scaleX, colorFilter ? "black" : undefined);
+        }
+      }
     }
 
-    for (const sp of config.spread.photos) {
-      const curSx = sp.x <= REF_W ? sx_left : sx_right;
-      await drawSpreadPhotoFrame(rcFull, sp, scaleX, curSx, colorFilter ? "black" : undefined);
-      await drawSpreadPhotoSublabel(rcFull, sp, scaleX, curSx, colorFilter ? "black" : undefined);
+    if (!photosOnly) {
+      for (const sp of config.spread.photos) {
+        const curSx = sp.x <= REF_W ? sx_left : sx_right;
+        const frameColor = sp.frameColor ?? COLOR_BLUE;
+        if (!colorFilter || colorFilter(frameColor)) {
+          await drawSpreadPhotoFrame(rcFull, sp, scaleX, curSx, colorFilter ? "black" : undefined);
+          await drawSpreadPhotoSublabel(
+            rcFull,
+            sp,
+            scaleX,
+            curSx,
+            colorFilter ? "black" : undefined,
+          );
+        }
+      }
     }
   }
 
   // 7. Trajectories
-  if (config.spread?.trajectories) {
+  if (!photosOnly && config.spread?.trajectories) {
     for (const traj of config.spread.trajectories) {
+      const trajColor = traj.color ?? "rgba(80,160,220,0.7)";
+      if (colorFilter && !colorFilter(trajColor)) continue;
       await drawTrajectory(rcFull, traj, scaleX, colorFilter ? "black" : undefined);
     }
   }
 
   // 8. Annotations
-  if (config.annotations) {
+  if (!photosOnly && config.annotations) {
     for (const ann of config.annotations) {
+      const annColor = ann.color ?? COLOR_BLUE;
+      if (colorFilter && !colorFilter(annColor)) continue;
       await drawAnnotation(rcFull, ann, scaleX, colorFilter ? "black" : undefined);
     }
   }
