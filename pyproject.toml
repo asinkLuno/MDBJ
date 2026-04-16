@@ -19,6 +19,7 @@ dependencies = [
     "transformers<4.55",
     "matplotlib>=3.10.8",
     "opencv-contrib-python>=4.13.0.92",
+    "pyqt6>=6.11.0",
 ]
 
 [project.scripts]
