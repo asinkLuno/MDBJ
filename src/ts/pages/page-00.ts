@@ -32,7 +32,7 @@ const page: PageConfig = {
         fontSize: 120,
         fontFamily: "3270NerdFont-Regular",
         blur: 7,
-        x: 1020,
+        x: 1120,
         y: 100,
         w: 660,
         color: text_color,
