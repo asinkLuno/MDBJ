@@ -3,7 +3,7 @@ import type { SharedAssets } from "./assets";
 
 /** Reference dimensions from original field notes (per page) */
 export const REF_W = 680;
-export const REF_H = 1036;
+export const REF_H = 958; // B6 portrait: 680 × (3840/2727) ≈ 957.6
 
 export interface Scaling {
   sx: number;

@@ -42,7 +42,7 @@ const spreadColumns: ColumnLayout = {
   count: 4,
   xStarts: [COL_MARGIN, COL_MARGIN + COL_GAP, REF_W + COL_MARGIN, REF_W + COL_MARGIN + COL_GAP],
   colWidth: [COL_W, COL_W, COL_W, COL_W],
-  maxHeight: 980,
+  maxHeight: 850,
   startY: 90,
 };
 

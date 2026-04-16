@@ -41,7 +41,7 @@ COPIES_PER_FACE = 5  # 30 total
 
 # 容器 REF 尺寸（左页）
 BOX_X0, BOX_X1 = 40, 640
-BOX_Y0, BOX_Y1 = 50, 970  # 顶部开口，底部 = 1030
+BOX_Y0, BOX_Y1 = 50, 900  # 顶部开口，底部 = 958 (B6 REF_H)
 
 FACE_RADIUS = 60  # 碰撞半径（对应显示宽度 100）
 FACE_W = 120  # 统一显示宽度

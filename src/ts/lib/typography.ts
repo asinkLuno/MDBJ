@@ -34,7 +34,7 @@ export const FONT_LEFT_TEXT_DEFAULT = 22;
 export function createPageAnnotation(pageNo: string): Annotation {
   return {
     x: 340, // Left-page middle
-    y: 960, // Near bottom
+    y: 920, // Near bottom (fits B6 REF_H=958)
     w: 0,
     h: 0,
     label: pageNo,

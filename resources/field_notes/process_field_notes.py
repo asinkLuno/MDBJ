@@ -52,7 +52,7 @@ def extract_content(path):
     return Image.fromarray(result)
 
 
-def process(inputs, margin_ratio=0.05, target_long_side=3840):
+def process(inputs, margin_ratio=0.03, target_long_side=3840):
     """
     将内容等比缩放后居中放置在标准 B6 比例画布（125:176）上。
     画布长边固定为 3840px (4K)，四周补白边。
