@@ -2,6 +2,8 @@ import sys
 import math
 import random
 import pymunk
+import ast
+import os
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QSlider, QGroupBox
 from PyQt6.QtCore import Qt, QPointF, pyqtSignal
 from PyQt6.QtGui import QPainter, QPen, QColor, QBrush, QFont
@@ -74,7 +76,6 @@ class PathCanvas(QWidget):
         add_wall(self.left_wall)
         add_wall(self.right_wall)
         
-        # 增加一个顶部的挡板，防止飞机飞出
         cap = pymunk.Segment(space.static_body, (1300, -50), (1300, 500), 20)
         space.add(cap)
 
@@ -93,19 +94,16 @@ class PathCanvas(QWidget):
             ratio = random.uniform(0.05, 0.95)
             body = pymunk.Body(1, math.inf)
             body.position = (lx*(1-ratio) + rx*ratio, ly*(1-ratio) + ry*ratio)
-            # 使用可调半径
             shape = pymunk.Circle(body, self.params["radius"])
             shape.elasticity = 0.1
             shape.friction = 0.7
             space.add(body, shape)
             bodies.append(body)
 
-        # 阶段一：吸引
         space.gravity = (self.params["gravity_x"], self.params["gravity_y"])
         for _ in range(self.params["steps_p1"]): 
             space.step(1/60.0)
             
-        # 阶段二：释放
         space.gravity = (0, 0)
         space.damping = 0.1
         for _ in range(self.params["steps_p2"]): 
@@ -130,28 +128,23 @@ class PathCanvas(QWidget):
         painter.save()
         painter.translate(self.OFFSET)
 
-        # 边界
         painter.setPen(QPen(QColor(80, 80, 80), 1, Qt.PenStyle.DashLine))
         painter.drawRect(0, 0, 1280, 950)
 
-        # 路径
         self.draw_path(painter, self.left_wall, QColor(255, 100, 100))
         self.draw_path(painter, self.right_wall, QColor(100, 255, 100))
         self.draw_path(painter, self.spine, QColor(100, 200, 255), dashed=True)
 
-        # 飞机落点
         radius = self.params["radius"]
         for x, y, angle in self.plane_results:
             painter.save()
             painter.translate(x, y)
             painter.rotate(math.degrees(angle) + 180)
             
-            # 绘制真实的碰撞体积预览
             painter.setPen(QPen(QColor(100, 150, 255, 50), 1))
             painter.setBrush(QBrush(QColor(100, 150, 255, 20)))
             painter.drawEllipse(QPointF(0,0), radius, radius)
             
-            # 绘制飞机图标
             painter.setPen(QPen(QColor(255, 255, 255), 2))
             painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawLine(-10, 0, 10, 0)
@@ -159,7 +152,6 @@ class PathCanvas(QWidget):
             painter.drawLine(10, 0, 5, 5)
             painter.restore()
 
-        # 目标点
         painter.setBrush(QBrush(QColor(255, 255, 0)))
         painter.drawEllipse(self.target_tip, 8, 8)
         painter.restore()
@@ -210,15 +202,15 @@ class PathCanvas(QWidget):
 class EditorWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Mayday Blue Plane Path Editor Pro")
+        self.setWindowTitle("Mayday Blue Plane Path Editor Pro (AST Sync)")
+        
+        self.target_file = os.path.join(os.path.dirname(__file__), "calculate_3paths_extreme_stagger.py")
         self.canvas = PathCanvas()
         
-        # 布局
         main_widget = QWidget()
         layout = QHBoxLayout(main_widget)
         layout.addWidget(self.canvas, 1)
         
-        # 控制面板
         panel = QVBoxLayout()
         panel.setContentsMargins(10, 10, 10, 10)
         
@@ -226,13 +218,17 @@ class EditorWindow(QMainWindow):
         self.info_label.setStyleSheet("font-family: monospace; font-size: 11px; color: #0f0; background: black; padding: 10px;")
         panel.addWidget(self.info_label)
         
-        # 物理滑杆
         self.add_slider(panel, "Radius (碰撞半径)", 20, 120, "radius")
         self.add_slider(panel, "Gravity X (吸引力X)", 0, 1000, "gravity_x")
         self.add_slider(panel, "Gravity Y (吸引力Y)", -800, 200, "gravity_y")
         self.add_slider(panel, "Steps P1 (阶段1步数)", 50, 1000, "steps_p1")
         self.add_slider(panel, "Steps P2 (阶段2步数)", 50, 1000, "steps_p2")
         
+        save_btn = QPushButton("💾 保存到源文件 (AST Sync)")
+        save_btn.setStyleSheet("background: #060; color: white; font-weight: bold; padding: 10px;")
+        save_btn.clicked.connect(self.save_to_file)
+        panel.addWidget(save_btn)
+
         copy_btn = QPushButton("复制所有代码")
         copy_btn.clicked.connect(self.copy_code)
         panel.addWidget(copy_btn)
@@ -263,6 +259,54 @@ class EditorWindow(QMainWindow):
         l.addWidget(slider)
         group.setLayout(l)
         layout.addWidget(group)
+
+    def save_to_file(self):
+        if not os.path.exists(self.target_file):
+            print(f"Error: {self.target_file} not found.")
+            return
+
+        with open(self.target_file, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            source = "".join(lines)
+
+        tree = ast.parse(source)
+        def qp_to_tuple(qpt): return (int(qpt.x()), int(qpt.y()))
+        
+        updates = {
+            "spine": [qp_to_tuple(pt) for pt in self.canvas.spine],
+            "left_wall": [qp_to_tuple(pt) for pt in self.canvas.left_wall],
+            "right_wall": [qp_to_tuple(pt) for pt in self.canvas.right_wall],
+            "TARGET_TIP_POS": qp_to_tuple(self.canvas.target_tip),
+            "radius": self.canvas.params["radius"],
+            "gravity": (self.canvas.params["gravity_x"], self.canvas.params["gravity_y"]),
+            "steps": (self.canvas.params["steps_p1"], self.canvas.params["steps_p2"])
+        }
+
+        sorted_nodes = []
+        for node in tree.body:
+            if isinstance(node, ast.Assign) and len(node.targets) == 1:
+                target = node.targets[0]
+                if isinstance(target, ast.Name) and target.id in updates:
+                    sorted_nodes.append((node, target.id))
+
+        sorted_nodes.sort(key=lambda x: x[0].lineno, reverse=True)
+
+        for node, var_name in sorted_nodes:
+            new_val = updates[var_name]
+            if var_name in ["spine", "left_wall", "right_wall"]:
+                new_line = f"{var_name} = [\n    " + ",\n    ".join([str(p) for p in new_val]) + "\n]\n"
+            else:
+                new_line = f"{var_name} = {new_val}\n"
+            
+            start_idx = node.lineno - 1
+            end_idx = node.end_lineno
+            lines[start_idx:end_idx] = [new_line]
+
+        with open(self.target_file, "w", encoding="utf-8") as f:
+            f.writelines(lines)
+        
+        print(f"✅ 已通过 AST 成功写回 {self.target_file}")
+        self.statusBar().showMessage(f"已保存到 {os.path.basename(self.target_file)}", 3000)
 
     def format_pts(self, pts):
         return "[" + ", ".join([f"({int(p.x())}, {int(p.y())})" for p in pts]) + "]"
