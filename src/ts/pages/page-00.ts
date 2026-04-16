@@ -19,7 +19,7 @@ const page: PageConfig = {
     page: "both",
     marginX: 0.05,
     marginTop: 0.05,
-    marginBottom: 0,
+    marginBottom: 0.05,
     halftone: {
       spacing: 4,
       maxDotSize: 2,

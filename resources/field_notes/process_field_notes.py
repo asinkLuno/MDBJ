@@ -52,38 +52,52 @@ def extract_content(path):
     return Image.fromarray(result)
 
 
-def process(inputs, margin_ratio=0.05, target_min_long_side=3840):
+def process(inputs, margin_ratio=0.05, target_long_side=3840):
     """
-    保持原图比例，但将长边放大到 3840px (4K)。
-    四周添加基于长边比例的白边。
+    将内容等比缩放后居中放置在标准 B6 比例画布（125:176）上。
+    画布长边固定为 3840px (4K)，四周补白边。
     """
+    # B6 短边:长边 = 125:176
+    B6_SHORT = 125
+    B6_LONG = 176
+
     contents = [extract_content(p) for p in inputs]
 
     output_paths = []
     for path, content in zip(inputs, contents):
         w, h = content.size
 
-        # 计算放大倍率，使长边达到 3840
-        upscale = max(1.0, target_min_long_side / max(w, h))
+        # 根据内容方向确定 B6 画布尺寸（竖向/横向）
+        if h >= w:
+            # 竖向：高为长边
+            canvas_h = target_long_side
+            canvas_w = round(target_long_side * B6_SHORT / B6_LONG)
+        else:
+            # 横向：宽为长边
+            canvas_w = target_long_side
+            canvas_h = round(target_long_side * B6_SHORT / B6_LONG)
 
-        new_w, new_h = int(w * upscale), int(h * upscale)
+        # 内容可用区域（扣除四周边距）
+        pad = round(target_long_side * margin_ratio)
+        avail_w = canvas_w - 2 * pad
+        avail_h = canvas_h - 2 * pad
+
+        # 等比缩放内容以填入可用区域
+        scale = min(avail_w / w, avail_h / h)
+        new_w, new_h = round(w * scale), round(h * scale)
         content = content.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-        # 边距 (基于 4K 尺寸的 5%)
-        pad = int(target_min_long_side * margin_ratio)
-        canvas_w, canvas_h = new_w + 2 * pad, new_h + 2 * pad
-
-        # 创建白色画布
+        # 创建白色 B6 画布，居中放置内容
         canvas = Image.new("RGB", (canvas_w, canvas_h), (255, 255, 255))
-
-        # 居中放置
-        canvas.paste(content, (pad, pad))
+        offset_x = (canvas_w - new_w) // 2
+        offset_y = (canvas_h - new_h) // 2
+        canvas.paste(content, (offset_x, offset_y))
 
         stem = path.rsplit(".", 1)[0]
         out_path = stem + "_final.png"
         canvas.save(out_path)
         print(
-            f"saved: {out_path} (Canvas: {canvas_w}x{canvas_h}, Content: {new_w}x{new_h})"
+            f"saved: {out_path} (B6 Canvas: {canvas_w}x{canvas_h}, Content: {new_w}x{new_h}, pad: {pad}px)"
         )
         output_paths.append(out_path)
 
