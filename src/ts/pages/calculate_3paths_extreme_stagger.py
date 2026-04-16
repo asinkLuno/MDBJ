@@ -78,29 +78,29 @@ all_labels = [
     ("臺北", "I wonder if this is the end,\nor the start of something new."),
 ]
 spine = [
-    (-79, 852),
-    (562, 782),
-    (988, 640),
-    (1345, 127)
+    (-57, 683),
+    (595, 744),
+    (929, 582),
+    (1225, 153)
 ]
 left_wall = [
-    (41, 278),
-    (703, 410),
-    (999, 113),
-    (1207, 42)
+    (-52, 241),
+    (688, 410),
+    (913, 241),
+    (1107, 74)
 ]
 right_wall = [
-    (-32, 953),
-    (343, 991),
-    (1307, 731),
-    (1257, 163)
+    (27, 1045),
+    (427, 978),
+    (1212, 841),
+    (1303, 228)
 ]
-TARGET_TIP_POS = (1272, 27)
+TARGET_TIP_POS = (1244, 81)
 
 # Physical Params:
 radius = 70
-gravity = (550, -53)
-steps = (350, 147)
+gravity = (550, -320)
+steps = (450, 350)
 # === 物理引擎初始化 ===
 space = pymunk.Space()
 space.damping = 0.4
@@ -128,7 +128,7 @@ def add_bezier_wall(space, p0, p1, p2, p3):
 add_bezier_wall(space, *left_wall)
 add_bezier_wall(space, *right_wall)
 
-cap_top = pymunk.Segment(space.static_body, (1300, -20), (1300, 300), 20)
+cap_top = pymunk.Segment(space.static_body, (1360, -20), (1360, 1000), 20)
 space.add(cap_top)
 
 # === 投入飞机实体 ===
@@ -160,7 +160,7 @@ for i, (city, dates) in enumerate(all_labels):
 
     body = pymunk.Body(1, math.inf)
 
-    if city == "臺北" and "coming soon" in dates:
+    if city == "臺北" and "the end" in dates:
         body.position = TARGET_TIP_POS
         anchor_body = body
     else:
@@ -212,8 +212,8 @@ for p in planes_data:
     rot = int(angle + 180 + random.uniform(-8, 8))
 
     # 画布锁定放宽，允许散得开的飞机在底部边缘有充足的空间
-    px = max(20, min(1320, px))
-    py = max(20, min(950, py))
+    px = max(20, min(1360, px))
+    py = max(20, min(958, py))
 
     raw.append([px, py, rot, city, dates])
 

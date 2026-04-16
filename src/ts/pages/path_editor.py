@@ -33,7 +33,7 @@ class PathCanvas(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setMinimumSize(1300, 950)
+        self.setMinimumSize(1460, 1060)
         self.setMouseTracking(True)
         
         # 初始几何数据
@@ -76,7 +76,7 @@ class PathCanvas(QWidget):
         add_wall(self.left_wall)
         add_wall(self.right_wall)
         
-        cap = pymunk.Segment(space.static_body, (1300, -50), (1300, 500), 20)
+        cap = pymunk.Segment(space.static_body, (1360, -50), (1360, 1000), 20)
         space.add(cap)
 
         bodies = []
@@ -129,7 +129,7 @@ class PathCanvas(QWidget):
         painter.translate(self.OFFSET)
 
         painter.setPen(QPen(QColor(80, 80, 80), 1, Qt.PenStyle.DashLine))
-        painter.drawRect(0, 0, 1280, 950)
+        painter.drawRect(0, 0, 1360, 958)
 
         self.draw_path(painter, self.left_wall, QColor(255, 100, 100))
         self.draw_path(painter, self.right_wall, QColor(100, 255, 100))
