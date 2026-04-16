@@ -77,15 +77,15 @@ all_labels = [
     ),
     ("臺北", "I wonder if this is the end,\nor the start of something new."),
 ]
-
-spine = [(-15, 740), (695, 833), (991, 717), (1229, 110)]
-
-left_wall = [(-30, 350), (906, 659), (900, 250), (1207, 54)]
-
-right_wall = [(-48, 1039), (427, 967), (1191, 861), (1240, 147)]
-
+spine = [(-15, 740), (695, 833), (1052, 647), (1223, 97)]
+left_wall = [(-30, 350), (906, 659), (912, 256), (1205, 46)]
+right_wall = [(-61, 1009), (442, 971), (1307, 832), (1240, 147)]
 TARGET_TIP_POS = (1248, 29)
 
+# Physical Params:
+radius = 64
+gravity = (550, -320)
+steps = (450, 350)
 # === 物理引擎初始化 ===
 space = pymunk.Space()
 space.damping = 0.4
