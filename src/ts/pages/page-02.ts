@@ -82,11 +82,11 @@ function getYearValue(song: string): number {
   return date.getFullYear() + date.getMonth() / 12 + date.getDate() / 365;
 }
 
-const ORIGIN_X = 442;
-const ORIGIN_Y = 575;
-const TIME_SCALE = 16;
-const X_SCALE = 16;
-const Z_SCALE = 16;
+const ORIGIN_X = 437;
+const ORIGIN_Y = 534;
+const TIME_SCALE = 14;
+const X_SCALE = 14;
+const Z_SCALE = 14;
 const ANGLE = Math.PI / 6;
 
 function yearToVisual(year: number): number {
