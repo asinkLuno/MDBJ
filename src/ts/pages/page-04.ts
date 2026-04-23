@@ -34,15 +34,15 @@ const HIGHLIGHTS: CharHighlight[] = [
   { char: "我", color: COLOR_BLUE },
 ];
 
-const COL_MARGIN = 13;
-const COL_W = 310;
+const COL_MARGIN = 23;
+const COL_W = 304;
 const COL_GAP = 360 - COL_MARGIN;
 
 const spreadColumns: ColumnLayout = {
   count: 4,
   xStarts: [COL_MARGIN, COL_MARGIN + COL_GAP, REF_W + COL_MARGIN, REF_W + COL_MARGIN + COL_GAP],
   colWidth: [COL_W, COL_W, COL_W, COL_W],
-  maxHeight: 930,
+  maxHeight: 940,
   startY: 55,
 };
 
