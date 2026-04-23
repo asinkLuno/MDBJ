@@ -195,6 +195,7 @@ export interface PageConfig {
     trajectories?: TrajectoryPath[];
     dotMatrix?: DotMatrixConfig;
     halftones?: HalftoneConfig[];
+    zoom?: number; // uniform scale applied to all spread content, centered on canvas
   };
   backgroundGrid?: GridConfig;
   toTraditional?: boolean;

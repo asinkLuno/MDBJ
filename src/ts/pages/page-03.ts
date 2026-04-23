@@ -61,6 +61,7 @@ const page: PageConfig = {
   spread: {
     photos: planes,
     trajectories,
+    zoom: 0.95,
   },
   annotations: [createPageAnnotation("3")],
 };

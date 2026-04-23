@@ -84,6 +84,15 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
   ctx.drawImage(leftCanvas, 0, 0);
   ctx.drawImage(rightCanvas, leftCanvas.width, 0);
 
+  // Apply spread zoom centered on canvas (background is unaffected)
+  const spreadZoom = config.spread?.zoom ?? 1;
+  if (spreadZoom !== 1) {
+    ctx.save();
+    ctx.translate(W / 2, H / 2);
+    ctx.scale(spreadZoom, spreadZoom);
+    ctx.translate(-W / 2, -H / 2);
+  }
+
   // 3. Spread Sections
   if (!photosOnly && config.spread?.sections?.length && config.spread.columns) {
     await renderColumnSections(rcFull, config.spread.sections, config.spread.columns);
@@ -194,6 +203,10 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
       if (colorFilter && !colorFilter(annColor)) continue;
       await drawAnnotation(rcFull, ann, scaleX, colorFilter ? "black" : undefined);
     }
+  }
+
+  if (spreadZoom !== 1) {
+    ctx.restore();
   }
 
   return final;
