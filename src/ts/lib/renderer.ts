@@ -196,17 +196,19 @@ export async function renderPage(config: PageConfig, rc: RenderContext): Promise
     }
   }
 
-  // 8. Annotations
+  if (spreadZoom !== 1) {
+    ctx.restore();
+  }
+  // Explicitly reset to identity so annotations are never affected by spread zoom
+  ctx.resetTransform();
+
+  // 8. Annotations (outside zoom transform so they are unaffected by spread zoom)
   if (!photosOnly && config.annotations) {
     for (const ann of config.annotations) {
       const annColor = ann.color ?? COLOR_BLUE;
       if (colorFilter && !colorFilter(annColor)) continue;
       await drawAnnotation(rcFull, ann, scaleX, colorFilter ? "black" : undefined);
     }
-  }
-
-  if (spreadZoom !== 1) {
-    ctx.restore();
   }
 
   return final;
